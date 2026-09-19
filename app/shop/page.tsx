@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import ProductGallery from "@/components/ProductGallery";
 
 export const metadata: Metadata = {
@@ -6,10 +7,7 @@ export const metadata: Metadata = {
   description: "Get your Kineticube 6-Pack. Reactive powder targets with instant colorful visual feedback. Made in the USA.",
 };
 
-// ── REPLACE THIS with your actual Stripe Payment Link URL ──
-const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/REPLACE_WITH_YOUR_LINK";
-
-const PRICE = 12.99; // Update when finalized
+const PRICE = 12.99;
 
 const perks = [
   "6 cubes per pack",
@@ -37,7 +35,7 @@ export default function ShopPage() {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-12">
-        {/* ── PRODUCT CARD ── */}
+        {/* PRODUCT CARD */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* Images */}
           <div>
@@ -66,7 +64,7 @@ export default function ShopPage() {
 
             {/* Size callout */}
             <div className="flex items-center gap-3 bg-[#1a1a1a] border border-[#2a2a2a] px-4 py-3 mb-6">
-              <span className="text-lg">📏</span>
+              <span className="text-lg">📐</span>
               <p className="text-gray-400 text-sm">
                 Each cube is <strong className="text-white">1 inch (25mm)</strong> in size.
               </p>
@@ -82,7 +80,7 @@ export default function ShopPage() {
               ))}
             </ul>
 
-            {/* Performance disclaimer — prominent callout above buy button */}
+            {/* Cartridge compatibility disclaimer */}
             <div className="bg-[#1a1200] border border-yellow-600/40 px-4 py-4 mb-6">
               <div className="flex items-start gap-3">
                 <span className="text-yellow-400 text-base mt-0.5">⚠️</span>
@@ -98,20 +96,20 @@ export default function ShopPage() {
             </div>
 
             {/* Buy button */}
-            <a
-              href={STRIPE_PAYMENT_LINK}
-              className="btn-orange block w-full bg-[#f05a1a] hover:bg-[#c44a12] text-white font-[family-name:var(--font-display)] font-800 tracking-widest text-xl text-center py-5 transition-colors mb-4"
+            <Link
+              href="/checkout"
+              className="block w-full bg-[#f05a1a] hover:bg-[#c44a12] text-white font-[family-name:var(--font-display)] font-black tracking-widest text-xl text-center py-5 transition-colors mb-4"
             >
               BUY NOW — ${PRICE.toFixed(2)}
-            </a>
+            </Link>
 
             <p className="text-gray-600 text-xs text-center mb-8">
-              Secure checkout powered by Stripe. Free shipping over $40.
+              Secure checkout powered by Stripe. Ships USPS from Austin, TX.
             </p>
 
             {/* Color info */}
             <div className="border-t border-[#1a1a1a] pt-6">
-              <h3 className="font-[family-name:var(--font-display)] font-700 tracking-widest text-sm text-gray-400 mb-3">
+              <h3 className="font-[family-name:var(--font-display)] font-bold tracking-widest text-sm text-gray-400 mb-3">
                 10 COLORS — RANDOMLY ASSORTED
               </h3>
               <p className="text-gray-500 text-sm leading-relaxed">
@@ -120,12 +118,10 @@ export default function ShopPage() {
                 know what you&apos;re grabbing before you peel.
               </p>
             </div>
-
-
           </div>
         </div>
 
-        {/* ── COMING SOON ── */}
+        {/* COMING SOON */}
         <div className="mt-20 border-t border-[#1a1a1a] pt-12">
           <div className="text-center mb-8">
             <h3 className="font-[family-name:var(--font-display)] font-black text-3xl tracking-tight text-gray-600">
