@@ -232,6 +232,59 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ─── TRAINING CALLOUT ─── */}
+      <section className="bg-[#111111] border-y border-[#1a1a1a] relative overflow-hidden">
+        <div className="absolute inset-0 bg-[#f05a1a] opacity-[0.03] blur-[80px] pointer-events-none" />
+        <div className="max-w-[1440px] mx-auto px-6 py-20 2xl:py-28">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+            {/* Left: text */}
+            <div>
+              <p className="text-[#f05a1a] font-[family-name:var(--font-display)] tracking-[0.3em] text-xs mb-4">
+                FREE RANGE GUIDE
+              </p>
+              <h2 className="font-[family-name:var(--font-display)] font-black text-4xl md:text-5xl 2xl:text-6xl tracking-wide mb-5 leading-tight">
+                DON&apos;T JUST SHOOT.<br />
+                <span className="text-[#f05a1a]">TRAIN.</span>
+              </h2>
+              <p className="text-gray-400 text-base 2xl:text-lg mb-8 max-w-md" style={{ lineHeight: "1.85" }}>
+                Every cube gets one shot — so make it count. We built a full library of drills,
+                courses of fire, and range tips designed specifically around the way KinetiCubes work.
+              </p>
+              <Link
+                href="/training"
+                className="inline-block border-2 border-[#f05a1a] hover:bg-[#f05a1a] text-[#f05a1a] hover:text-white font-[family-name:var(--font-display)] font-black tracking-widest text-base px-8 py-3.5 transition-colors"
+              >
+                VIEW DRILLS &amp; COURSES →
+              </Link>
+            </div>
+
+            {/* Right: drill preview cards */}
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { icon: "🎯", name: "Cold Shot", desc: "One cube. One shot. No warm-up." },
+                { icon: "⬜", name: "The Box", desc: "4 cubes, non-linear transitions." },
+                { icon: "💪", name: "Strong / Weak", desc: "Dominant and support hand drills." },
+                { icon: "⚡", name: "The Draw", desc: "Obsess over your draw stroke." },
+              ].map((drill) => (
+                <Link
+                  key={drill.name}
+                  href="/training"
+                  className="bg-[#0d0d0d] border border-[#2a2a2a] hover:border-[#f05a1a]/50 p-5 transition-colors group"
+                >
+                  <div className="text-2xl mb-2">{drill.icon}</div>
+                  <p className="font-[family-name:var(--font-display)] font-black tracking-wide text-sm text-white group-hover:text-[#f05a1a] transition-colors mb-1">
+                    {drill.name}
+                  </p>
+                  <p className="text-gray-600 text-xs" style={{ lineHeight: "1.6" }}>{drill.desc}</p>
+                </Link>
+              ))}
+            </div>
+
+          </div>
+        </div>
+      </section>
+
       {/* ─── FEATURES ─── */}
       <section className="py-32 2xl:py-44 bg-[#0d0d0d] relative">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#f05a1a]/40 to-transparent" />
