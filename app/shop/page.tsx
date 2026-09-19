@@ -67,9 +67,13 @@ export default async function ShopPage() {
                 <span className="inline-block bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-[family-name:var(--font-display)] tracking-widest px-3 py-1">
                   OUT OF STOCK
                 </span>
+              ) : stock !== null && stock <= 20 ? (
+                <span className="inline-block bg-yellow-500/10 border border-yellow-500/40 text-yellow-400 text-xs font-[family-name:var(--font-display)] tracking-widest px-3 py-1">
+                  HURRY — ONLY {stock} LEFT IN STOCK
+                </span>
               ) : (
                 <span className="inline-block bg-[#f05a1a]/10 border border-[#f05a1a]/30 text-[#f05a1a] text-xs font-[family-name:var(--font-display)] tracking-widest px-3 py-1">
-                  {stock !== null ? `${stock} PACKS IN STOCK` : 'IN STOCK'} · MADE IN THE USA
+                  IN STOCK · MADE IN THE USA
                 </span>
               )}
             </div>
