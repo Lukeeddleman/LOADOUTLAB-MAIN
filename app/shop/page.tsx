@@ -1,6 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import ProductGallery from "@/components/ProductGallery";
+import { Redis } from "@upstash/redis";
+
+export const dynamic = 'force-dynamic';
+
+async function getStock(): Promise<number | null> {
+  try {
+    const redis = new Redis({
+      url: process.env.UPSTASH_REDIS_REST_URL!,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+    });
+    return await redis.get<number>('kineticube:stock');
+  } catch {
+    return null;
+  }
+}
 
 export const metadata: Metadata = {
   title: "Shop — Kineticube™ Reactive Powder Targets",
@@ -21,7 +36,10 @@ const perks = [
   "Made in the USA",
 ];
 
-export default function ShopPage() {
+export default async function ShopPage() {
+  const stock = await getStock();
+  const outOfStock = stock !== null && stock === 0;
+
   return (
     <div className="min-h-screen bg-[#0d0d0d]">
       {/* Page header */}
@@ -44,8 +62,16 @@ export default function ShopPage() {
 
           {/* Product details */}
           <div className="lg:sticky lg:top-20">
-            <div className="inline-block bg-[#f05a1a]/10 border border-[#f05a1a]/30 text-[#f05a1a] text-xs font-[family-name:var(--font-display)] tracking-widest px-3 py-1 mb-4">
-              IN STOCK · MADE IN THE USA
+            <div className="flex flex-wrap gap-2 mb-4">
+              {outOfStock ? (
+                <span className="inline-block bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-[family-name:var(--font-display)] tracking-widest px-3 py-1">
+                  OUT OF STOCK
+                </span>
+              ) : (
+                <span className="inline-block bg-[#f05a1a]/10 border border-[#f05a1a]/30 text-[#f05a1a] text-xs font-[family-name:var(--font-display)] tracking-widest px-3 py-1">
+                  {stock !== null ? `${stock} PACKS IN STOCK` : 'IN STOCK'} · MADE IN THE USA
+                </span>
+              )}
             </div>
 
             <h2 className="font-[family-name:var(--font-display)] font-black text-4xl md:text-5xl tracking-tight mb-2">
@@ -96,12 +122,18 @@ export default function ShopPage() {
             </div>
 
             {/* Buy button */}
-            <Link
-              href="/checkout"
-              className="block w-full bg-[#f05a1a] hover:bg-[#c44a12] text-white font-[family-name:var(--font-display)] font-black tracking-widest text-xl text-center py-5 transition-colors mb-4"
-            >
-              BUY NOW — ${PRICE.toFixed(2)}
-            </Link>
+            {outOfStock ? (
+              <div className="block w-full bg-[#2a2a2a] text-gray-600 font-[family-name:var(--font-display)] font-black tracking-widest text-xl text-center py-5 mb-4 cursor-not-allowed">
+                OUT OF STOCK
+              </div>
+            ) : (
+              <Link
+                href="/checkout"
+                className="block w-full bg-[#f05a1a] hover:bg-[#c44a12] text-white font-[family-name:var(--font-display)] font-black tracking-widest text-xl text-center py-5 transition-colors mb-4"
+              >
+                BUY NOW — ${PRICE.toFixed(2)}
+              </Link>
+            )}
 
             <p className="text-gray-600 text-xs text-center mb-8">
               Secure checkout powered by Stripe. Ships USPS from Austin, TX.

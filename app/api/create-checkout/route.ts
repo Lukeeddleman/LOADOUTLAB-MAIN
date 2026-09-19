@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { Redis } from '@upstash/redis';
 
 const PRODUCT_PRICE_CENTS = 1299; // $12.99
 
@@ -19,6 +20,20 @@ interface Rate {
 }
 
 export async function POST(req: NextRequest) {
+  // Check stock before creating a session
+  try {
+    const redis = new Redis({
+      url: process.env.UPSTASH_REDIS_REST_URL!,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+    });
+    const stock = await redis.get<number>('kineticube:stock');
+    if (stock !== null && stock === 0) {
+      return NextResponse.json({ error: 'Out of stock' }, { status: 409 });
+    }
+  } catch {
+    // Redis unavailable — allow checkout to proceed
+  }
+
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
   const body = await req.json();
   const { address, rate, quantity = 1 }: { address: Address; rate: Rate; quantity: number } = body;
