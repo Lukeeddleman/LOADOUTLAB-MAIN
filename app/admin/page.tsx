@@ -11,7 +11,7 @@ export default function AdminPage() {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
-  // Fetch current stock once authed
+  // Fetch current stock once authenticated
   useEffect(() => {
     if (!authed) return;
     fetch('/api/stock')
@@ -19,13 +19,31 @@ export default function AdminPage() {
       .then(d => {
         setCurrentStock(d.stock);
         if (d.stock !== null) setNewStock(String(d.stock));
-      });
+      })
+      .catch(() => setError('Could not load stock — check Upstash Redis is connected in Vercel.'));
   }, [authed]);
 
-  function handleAuth(e: React.FormEvent) {
+  // Verify password against server before granting access
+  async function handleAuth(e: React.FormEvent) {
     e.preventDefault();
-    if (!secret.trim()) return;
-    setAuthed(true);
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch('/api/admin/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ secret }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Incorrect password');
+      }
+      setAuthed(true);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Incorrect password');
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function handleUpdate(e: React.FormEvent) {
@@ -42,25 +60,31 @@ export default function AdminPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to update');
       setCurrentStock(data.stock);
+      setNewStock(String(data.stock));
       setMessage(`Stock updated to ${data.stock} pack${data.stock !== 1 ? 's' : ''}`);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
-      if ((err instanceof Error) && err.message === 'Unauthorized') {
-        setAuthed(false);
-        setSecret('');
-      }
     } finally {
       setLoading(false);
     }
   }
 
-  const inputClass = 'w-full bg-[#0d0d0d] border border-[#2a2a2a] text-white px-4 py-3 text-sm focus:border-[#f05a1a] focus:outline-none transition-colors placeholder:text-gray-700';
+  function signOut() {
+    setAuthed(false);
+    setSecret('');
+    setMessage('');
+    setError('');
+    setCurrentStock(null);
+    setNewStock('');
+  }
+
+  const inputClass =
+    'w-full bg-[#0d0d0d] border border-[#2a2a2a] text-white px-4 py-3 text-sm focus:border-[#f05a1a] focus:outline-none transition-colors placeholder:text-gray-700';
 
   return (
     <div className="min-h-screen bg-[#0d0d0d] flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
 
-        {/* Header */}
         <div className="mb-8">
           <p className="text-[#f05a1a] font-[family-name:var(--font-display)] tracking-widest text-xs mb-2">
             KINETICUBE
@@ -71,7 +95,7 @@ export default function AdminPage() {
         </div>
 
         {!authed ? (
-          /* Password gate */
+          /* ── Password gate ── */
           <form onSubmit={handleAuth} className="space-y-4">
             <div>
               <label className="block text-xs font-[family-name:var(--font-display)] tracking-widest text-gray-500 mb-1">
@@ -80,41 +104,48 @@ export default function AdminPage() {
               <input
                 type="password"
                 required
+                autoFocus
                 className={inputClass}
                 placeholder="••••••••"
                 value={secret}
                 onChange={e => setSecret(e.target.value)}
               />
             </div>
+            {error && (
+              <div className="bg-red-950/40 border border-red-700/40 text-red-300 px-4 py-3 text-sm">
+                {error}
+              </div>
+            )}
             <button
               type="submit"
-              className="w-full bg-[#f05a1a] hover:bg-[#c44a12] text-white font-[family-name:var(--font-display)] font-black tracking-widest py-3 transition-colors"
+              disabled={loading || !secret.trim()}
+              className="w-full bg-[#f05a1a] hover:bg-[#c44a12] disabled:opacity-40 text-white font-[family-name:var(--font-display)] font-black tracking-widest py-3 transition-colors"
             >
-              ENTER →
+              {loading ? 'CHECKING...' : 'ENTER →'}
             </button>
           </form>
         ) : (
-          /* Stock manager */
+          /* ── Stock manager ── */
           <form onSubmit={handleUpdate} className="space-y-6">
 
             {/* Current stock display */}
             <div className="bg-[#111111] border border-[#1a1a1a] px-5 py-4">
-              <p className="text-xs font-[family-name:var(--font-display)] tracking-widest text-gray-500 mb-1">
+              <p className="text-xs font-[family-name:var(--font-display)] tracking-widest text-gray-500 mb-2">
                 CURRENT STOCK
               </p>
-              {currentStock === null ? (
+              {currentStock === null && !error ? (
                 <p className="text-gray-600 text-sm">Loading...</p>
               ) : (
                 <p className={`font-[family-name:var(--font-display)] font-black text-4xl tracking-wide ${
-                  currentStock === 0 ? 'text-red-400' : 'text-white'
+                  currentStock === 0 ? 'text-red-400' : currentStock !== null && currentStock <= 20 ? 'text-yellow-400' : 'text-white'
                 }`}>
-                  {currentStock}
+                  {currentStock ?? '—'}
                   <span className="text-gray-600 text-lg font-normal tracking-normal ml-2">packs</span>
                 </p>
               )}
               {currentStock === 0 && (
                 <p className="text-red-400 text-xs mt-1 font-[family-name:var(--font-display)] tracking-widest">
-                  OUT OF STOCK — buy button is disabled on site
+                  BUY BUTTON IS DISABLED ON SITE
                 </p>
               )}
             </div>
@@ -157,8 +188,8 @@ export default function AdminPage() {
 
             <button
               type="button"
-              onClick={() => { setAuthed(false); setSecret(''); setMessage(''); setError(''); }}
-              className="w-full text-gray-700 hover:text-gray-400 text-xs font-[family-name:var(--font-display)] tracking-widest transition-colors"
+              onClick={signOut}
+              className="w-full text-gray-700 hover:text-gray-400 text-xs font-[family-name:var(--font-display)] tracking-widest transition-colors py-1"
             >
               SIGN OUT
             </button>
