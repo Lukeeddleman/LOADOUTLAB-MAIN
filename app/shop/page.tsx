@@ -12,7 +12,7 @@ const PRICE = 12.99;
 const perks = [
   "6 cubes per pack",
   "1 inch targets — built for precision",
-  "10 vivid powder colors — randomly assorted",
+  "6 vivid powder colors — randomly assorted",
   "Color-matched corners so you always know what's inside",
   "Instant visual feedback on every shot",
   "3M adhesive — sticks to any surface",
@@ -110,10 +110,10 @@ export default function ShopPage() {
             {/* Color info */}
             <div className="border-t border-[#1a1a1a] pt-6">
               <h3 className="font-[family-name:var(--font-display)] font-bold tracking-widest text-sm text-gray-400 mb-3">
-                10 COLORS — RANDOMLY ASSORTED
+                6 COLORS — RANDOMLY ASSORTED
               </h3>
               <p className="text-gray-500 text-sm leading-relaxed">
-                Every 6-pack contains a surprise mix of our 10 vivid powder colors.
+                Every 6-pack contains a surprise mix of our 6 vivid powder colors.
                 Each cube&apos;s corners are color-matched to the powder inside — so you always
                 know what you&apos;re grabbing before you peel.
               </p>
