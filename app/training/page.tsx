@@ -141,16 +141,17 @@ const tips = [
 export default function TrainingPage() {
   return (
     <div className="min-h-screen bg-[#0d0d0d]">
+
       {/* Header */}
-      <div className="bg-[#111111] border-b border-[#1a1a1a] py-12">
+      <div className="bg-[#111111] border-b border-[#1a1a1a] py-14">
         <div className="max-w-5xl mx-auto px-4">
-          <p className="text-[#f05a1a] font-[family-name:var(--font-display)] tracking-widest text-xs mb-3">
+          <p className="text-[#f05a1a] font-[family-name:var(--font-display)] tracking-widest text-xs mb-4">
             RANGE GUIDE
           </p>
-          <h1 className="font-[family-name:var(--font-display)] font-black text-5xl md:text-6xl tracking-tight mb-4">
+          <h1 className="font-[family-name:var(--font-display)] font-black text-5xl md:text-6xl tracking-wide mb-5">
             TRAINING
           </h1>
-          <p className="text-gray-400 text-lg max-w-2xl leading-relaxed">
+          <p className="text-gray-400 text-base max-w-2xl" style={{ lineHeight: "1.8" }}>
             Drills and courses of fire built around the way KinetiCubes work.
           </p>
         </div>
@@ -158,15 +159,15 @@ export default function TrainingPage() {
 
       {/* Philosophy callout */}
       <div className="border-b border-[#1a1a1a] bg-[#0f0f0f]">
-        <div className="max-w-5xl mx-auto px-4 py-10">
+        <div className="max-w-5xl mx-auto px-4 py-12">
           <div className="border-l-4 border-[#f05a1a] pl-6">
-            <p className="font-[family-name:var(--font-display)] font-black text-2xl md:text-3xl tracking-tight text-white mb-2">
+            <p className="font-[family-name:var(--font-display)] font-black text-2xl md:text-3xl tracking-normal text-white mb-2">
               Every cube gets one shot.
             </p>
-            <p className="font-[family-name:var(--font-display)] font-black text-2xl md:text-3xl tracking-tight text-[#f05a1a]">
+            <p className="font-[family-name:var(--font-display)] font-black text-2xl md:text-3xl tracking-normal text-[#f05a1a]">
               That&apos;s not a limitation — that&apos;s the point.
             </p>
-            <p className="text-gray-500 text-sm mt-4 max-w-2xl leading-relaxed">
+            <p className="text-gray-500 text-sm mt-5 max-w-2xl" style={{ lineHeight: "1.9" }}>
               Paper targets let you be sloppy. A ragged hole tells you nothing about which shot was the miss.
               KinetiCubes give you instant, unambiguous feedback on every single round. Hit it and it&apos;s gone.
               Miss it and everyone on the line knows. That pressure is the training.
@@ -175,23 +176,26 @@ export default function TrainingPage() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 py-16 space-y-20">
+      <div className="max-w-5xl mx-auto px-4 py-16 space-y-24">
 
         {/* Courses of Fire */}
         <section>
-          <div className="mb-8">
-            <h2 className="font-[family-name:var(--font-display)] font-black text-3xl tracking-tight mb-1">
+          <div className="mb-10">
+            <h2 className="font-[family-name:var(--font-display)] font-black text-3xl tracking-wide mb-2">
               COURSES OF FIRE
             </h2>
-            <p className="text-gray-600 text-sm">Full structured sessions. Run these start to finish.</p>
+            <p className="text-gray-500 text-sm" style={{ lineHeight: "1.8" }}>
+              Full structured sessions. Run these start to finish.
+            </p>
           </div>
 
           <div className="space-y-6">
             {courses.map((course) => (
-              <div key={course.name} className="bg-[#111111] border border-[#1a1a1a] p-6 md:p-8">
+              <div key={course.name} className="bg-[#111111] border border-[#1a1a1a] p-7 md:p-9">
+
                 {/* Title row */}
-                <div className="flex flex-wrap items-start gap-3 mb-5">
-                  <h3 className="font-[family-name:var(--font-display)] font-black text-2xl tracking-tight">
+                <div className="flex flex-wrap items-start gap-3 mb-6">
+                  <h3 className="font-[family-name:var(--font-display)] font-black text-2xl tracking-normal">
                     {course.name}
                   </h3>
                   <span className={`text-xs font-[family-name:var(--font-display)] tracking-widest border px-2 py-0.5 mt-1 ${course.difficultyColor}`}>
@@ -200,33 +204,33 @@ export default function TrainingPage() {
                 </div>
 
                 {/* Stats */}
-                <div className="flex gap-6 mb-5">
+                <div className="flex gap-8 mb-6">
                   <div>
-                    <p className="text-gray-600 text-xs font-[family-name:var(--font-display)] tracking-widest mb-0.5">PACKS</p>
-                    <p className="text-white font-bold">{course.packs}</p>
+                    <p className="text-gray-600 text-xs font-[family-name:var(--font-display)] tracking-widest mb-1">PACKS</p>
+                    <p className="text-white font-bold text-lg">{course.packs}</p>
                   </div>
                   <div>
-                    <p className="text-gray-600 text-xs font-[family-name:var(--font-display)] tracking-widest mb-0.5">ROUNDS</p>
-                    <p className="text-white font-bold">{course.rounds}</p>
+                    <p className="text-gray-600 text-xs font-[family-name:var(--font-display)] tracking-widest mb-1">ROUNDS</p>
+                    <p className="text-white font-bold text-lg">{course.rounds}</p>
                   </div>
                   <div>
-                    <p className="text-gray-600 text-xs font-[family-name:var(--font-display)] tracking-widest mb-0.5">FOCUS</p>
-                    <p className="text-white font-bold text-sm">{course.focus}</p>
+                    <p className="text-gray-600 text-xs font-[family-name:var(--font-display)] tracking-widest mb-1">FOCUS</p>
+                    <p className="text-white font-bold text-sm" style={{ lineHeight: "1.6" }}>{course.focus}</p>
                   </div>
                 </div>
 
                 {/* Setup */}
-                <div className="mb-4">
+                <div className="mb-5">
                   <p className="text-xs font-[family-name:var(--font-display)] tracking-widest text-gray-500 mb-2">SETUP</p>
-                  <p className="text-gray-300 text-sm leading-relaxed">{course.setup}</p>
+                  <p className="text-gray-300 text-sm" style={{ lineHeight: "1.85" }}>{course.setup}</p>
                 </div>
 
                 {/* Execution */}
-                <div className="mb-5">
-                  <p className="text-xs font-[family-name:var(--font-display)] tracking-widest text-gray-500 mb-2">HOW TO RUN IT</p>
-                  <ol className="space-y-1.5">
+                <div className="mb-6">
+                  <p className="text-xs font-[family-name:var(--font-display)] tracking-widest text-gray-500 mb-3">HOW TO RUN IT</p>
+                  <ol className="space-y-2">
                     {course.execution.map((step, i) => (
-                      <li key={i} className="flex gap-3 text-gray-300 text-sm">
+                      <li key={i} className="flex gap-3 text-gray-300 text-sm" style={{ lineHeight: "1.85" }}>
                         <span className="text-[#f05a1a] font-bold shrink-0">{i + 1}.</span>
                         {step}
                       </li>
@@ -235,10 +239,11 @@ export default function TrainingPage() {
                 </div>
 
                 {/* Tip */}
-                <div className="bg-[#1a1a1a] border border-[#2a2a2a] px-4 py-3">
-                  <p className="text-xs font-[family-name:var(--font-display)] tracking-widest text-[#f05a1a] mb-1">PIP&apos;S TIP</p>
-                  <p className="text-gray-400 text-sm leading-relaxed">{course.tip}</p>
+                <div className="bg-[#1a1a1a] border border-[#2a2a2a] px-5 py-4">
+                  <p className="text-xs font-[family-name:var(--font-display)] tracking-widest text-[#f05a1a] mb-2">PIP&apos;S TIP</p>
+                  <p className="text-gray-400 text-sm" style={{ lineHeight: "1.85" }}>{course.tip}</p>
                 </div>
+
               </div>
             ))}
           </div>
@@ -246,31 +251,33 @@ export default function TrainingPage() {
 
         {/* Drills */}
         <section>
-          <div className="mb-8">
-            <h2 className="font-[family-name:var(--font-display)] font-black text-3xl tracking-tight mb-1">
+          <div className="mb-10">
+            <h2 className="font-[family-name:var(--font-display)] font-black text-3xl tracking-wide mb-2">
               DRILL LIBRARY
             </h2>
-            <p className="text-gray-600 text-sm">Plug these into any range session. Mix and match.</p>
+            <p className="text-gray-500 text-sm" style={{ lineHeight: "1.8" }}>
+              Plug these into any range session. Mix and match.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {drills.map((drill) => (
               <div key={drill.name} className="bg-[#111111] border border-[#1a1a1a] p-6">
-                <div className="flex items-center gap-3 mb-3">
+                <div className="flex items-center gap-3 mb-4">
                   <span className="text-2xl">{drill.icon}</span>
                   <div>
-                    <h3 className="font-[family-name:var(--font-display)] font-black text-xl tracking-tight">
+                    <h3 className="font-[family-name:var(--font-display)] font-black text-xl tracking-normal">
                       {drill.name}
                     </h3>
-                    <p className="text-gray-600 text-xs">
+                    <p className="text-gray-600 text-xs mt-0.5">
                       {drill.cubes} cube{drill.cubes !== 1 ? "s" : ""}
                     </p>
                   </div>
                 </div>
-                <p className="text-gray-400 text-sm leading-relaxed mb-4">{drill.description}</p>
-                <div className="border-t border-[#1a1a1a] pt-3">
-                  <p className="text-xs font-[family-name:var(--font-display)] tracking-widest text-[#f05a1a] mb-1">TIP</p>
-                  <p className="text-gray-500 text-xs leading-relaxed">{drill.tip}</p>
+                <p className="text-gray-400 text-sm mb-5" style={{ lineHeight: "1.85" }}>{drill.description}</p>
+                <div className="border-t border-[#1a1a1a] pt-4">
+                  <p className="text-xs font-[family-name:var(--font-display)] tracking-widest text-[#f05a1a] mb-2">TIP</p>
+                  <p className="text-gray-500 text-xs" style={{ lineHeight: "1.85" }}>{drill.tip}</p>
                 </div>
               </div>
             ))}
@@ -279,32 +286,34 @@ export default function TrainingPage() {
 
         {/* Tips */}
         <section>
-          <div className="mb-8">
-            <h2 className="font-[family-name:var(--font-display)] font-black text-3xl tracking-tight mb-1">
+          <div className="mb-10">
+            <h2 className="font-[family-name:var(--font-display)] font-black text-3xl tracking-wide mb-2">
               SETUP & TIPS
             </h2>
-            <p className="text-gray-600 text-sm">Get the most out of every pack.</p>
+            <p className="text-gray-500 text-sm" style={{ lineHeight: "1.8" }}>
+              Get the most out of every pack.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {tips.map((tip) => (
-              <div key={tip.title} className="bg-[#111111] border border-[#1a1a1a] p-5">
-                <div className="text-2xl mb-3">{tip.icon}</div>
-                <h4 className="font-[family-name:var(--font-display)] font-bold tracking-widest text-sm text-white mb-2">
+              <div key={tip.title} className="bg-[#111111] border border-[#1a1a1a] p-6">
+                <div className="text-2xl mb-4">{tip.icon}</div>
+                <h4 className="font-[family-name:var(--font-display)] font-bold tracking-widest text-sm text-white mb-3">
                   {tip.title.toUpperCase()}
                 </h4>
-                <p className="text-gray-500 text-sm leading-relaxed">{tip.body}</p>
+                <p className="text-gray-500 text-sm" style={{ lineHeight: "1.85" }}>{tip.body}</p>
               </div>
             ))}
           </div>
         </section>
 
         {/* CTA */}
-        <section className="border-t border-[#1a1a1a] pt-12 text-center">
-          <h3 className="font-[family-name:var(--font-display)] font-black text-3xl tracking-tight mb-3">
+        <section className="border-t border-[#1a1a1a] pt-14 text-center">
+          <h3 className="font-[family-name:var(--font-display)] font-black text-3xl tracking-wide mb-4">
             READY TO RUN IT?
           </h3>
-          <p className="text-gray-500 text-sm mb-8 max-w-md mx-auto">
+          <p className="text-gray-500 text-sm mb-10 max-w-md mx-auto" style={{ lineHeight: "1.8" }}>
             One pack. Six shots. Zero excuses.
           </p>
           <Link
