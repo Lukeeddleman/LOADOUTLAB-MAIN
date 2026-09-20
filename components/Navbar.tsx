@@ -33,6 +33,9 @@ export default function Navbar() {
           <Link href="/training" className="text-sm font-[family-name:var(--font-display)] font-600 tracking-widest text-gray-300 hover:text-white transition-colors">
             TRAINING
           </Link>
+          <Link href="/contact" className="text-sm font-[family-name:var(--font-display)] font-600 tracking-widest text-gray-300 hover:text-white transition-colors">
+            CONTACT
+          </Link>
           <Link
             href="/shop"
             className="bg-[#f05a1a] hover:bg-[#c44a12] text-white font-[family-name:var(--font-display)] font-700 tracking-widest text-sm px-5 py-2 transition-colors"
@@ -68,6 +71,7 @@ export default function Navbar() {
           <Link href="/shop" onClick={() => setOpen(false)} className="font-[family-name:var(--font-display)] tracking-widest text-gray-300 hover:text-white">SHOP</Link>
           <Link href="/#how-it-works" onClick={() => setOpen(false)} className="font-[family-name:var(--font-display)] tracking-widest text-gray-300 hover:text-white">HOW IT WORKS</Link>
           <Link href="/training" onClick={() => setOpen(false)} className="font-[family-name:var(--font-display)] tracking-widest text-gray-300 hover:text-white">TRAINING</Link>
+          <Link href="/contact" onClick={() => setOpen(false)} className="font-[family-name:var(--font-display)] tracking-widest text-gray-300 hover:text-white">CONTACT</Link>
           <Link href="/shop" onClick={() => setOpen(false)} className="bg-[#f05a1a] text-white font-[family-name:var(--font-display)] font-700 tracking-widest text-center py-2">BUY NOW</Link>
         </div>
       )}
