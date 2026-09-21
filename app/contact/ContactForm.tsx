@@ -40,10 +40,10 @@ export default function ContactForm() {
     return (
       <div className="bg-[#111111] border border-[#2a2a2a] px-8 py-12 text-center">
         <div className="text-5xl mb-4">🎯</div>
-        <h3 className="font-[family-name:var(--font-display)] font-black text-2xl tracking-tight mb-2">
+        <h3 className="font-[family-name:var(--font-display)] font-black text-2xl tracking-normal mb-2">
           MESSAGE SENT
         </h3>
-        <p className="text-gray-400 text-sm leading-relaxed">
+        <p className="text-gray-400 text-sm" style={{ lineHeight: '1.85' }}>
           We&apos;ve got it. Expect a reply within one business day.
         </p>
         <button

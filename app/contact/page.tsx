@@ -12,10 +12,10 @@ export default function ContactPage() {
       {/* Header */}
       <div className="bg-[#111111] border-b border-[#1a1a1a] py-8">
         <div className="max-w-6xl mx-auto px-4">
-          <h1 className="font-[family-name:var(--font-display)] font-black text-4xl tracking-tight">
+          <h1 className="font-[family-name:var(--font-display)] font-black text-4xl tracking-wide">
             CONTACT
           </h1>
-          <p className="text-gray-500 text-sm mt-1">We&apos;ll get back to you fast.</p>
+          <p className="text-gray-500 text-sm mt-1" style={{ lineHeight: '1.8' }}>We&apos;ll get back to you fast.</p>
         </div>
       </div>
 
@@ -24,10 +24,10 @@ export default function ContactPage() {
 
           {/* Left — info */}
           <div>
-            <h2 className="font-[family-name:var(--font-display)] font-black text-2xl tracking-tight mb-4">
+            <h2 className="font-[family-name:var(--font-display)] font-black text-2xl tracking-normal mb-4">
               GET IN TOUCH
             </h2>
-            <p className="text-gray-400 text-sm leading-relaxed mb-8">
+            <p className="text-gray-400 text-sm mb-8" style={{ lineHeight: '1.85' }}>
               Order issues, bulk inquiries, wholesale, press — whatever it is, we want to hear it.
               Drop us a message and we&apos;ll get back to you within one business day.
             </p>
