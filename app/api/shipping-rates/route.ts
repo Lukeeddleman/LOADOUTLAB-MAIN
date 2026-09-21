@@ -1,8 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// ── Parcel dimensions by quantity ──────────────────────────────────────────
+// 1 pack  → 6×9×1.5in bubble mailer
+// 2 packs → 7.25×11×1.5in bubble mailer
+// 3-10    → ⚠️  PLACEHOLDER — update when packaging is confirmed
+function getParcel(quantity: number) {
+  if (quantity === 1) {
+    return { length: '9', width: '6', height: '1.5', weight: '6', distance_unit: 'in', mass_unit: 'oz' };
+  }
+  if (quantity === 2) {
+    return { length: '11', width: '7.25', height: '1.5', weight: '11', distance_unit: 'in', mass_unit: 'oz' };
+  }
+  // TODO: finalize box dimensions for 3+ packs — these are rough estimates
+  const weight = Math.ceil(quantity * 5.5 + 3); // ~5.5oz per pack + 3oz box
+  return { length: '12', width: '10', height: '4', weight: String(weight), distance_unit: 'in', mass_unit: 'oz' };
+}
+
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { name, street1, street2, city, state, zip } = body;
+  const { name, street1, street2, city, state, zip, quantity = 1 } = body;
 
   if (!name || !street1 || !city || !state || !zip) {
     return NextResponse.json({ error: 'Missing required address fields' }, { status: 400 });
@@ -26,16 +42,7 @@ export async function POST(req: NextRequest) {
       zip,
       country: 'US',
     },
-    parcels: [
-      {
-        length: '3.75',
-        width: '2.75',
-        height: '1.5',
-        distance_unit: 'in',
-        weight: '5',  // oz — 95g product + ~50g packaging ≈ 5oz
-        mass_unit: 'oz',
-      },
-    ],
+    parcels: [getParcel(quantity)],
     async: false,
   };
 

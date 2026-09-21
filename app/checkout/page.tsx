@@ -57,7 +57,7 @@ export default function CheckoutPage() {
       const res = await fetch('/api/shipping-rates', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(address),
+        body: JSON.stringify({ ...address, quantity }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to get rates');
