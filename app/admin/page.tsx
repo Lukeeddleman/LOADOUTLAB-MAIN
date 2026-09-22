@@ -117,7 +117,7 @@ export default function AdminPage() {
     return (
       <div className="min-h-screen bg-[#0d0d0d] flex items-center justify-center px-4">
         <form onSubmit={login} className="w-full max-w-sm">
-          <h1 className="font-[family-name:var(--font-display)] font-black text-3xl tracking-tight mb-6">
+          <h1 className="font-[family-name:var(--font-display)] font-black text-3xl tracking-normal mb-6">
             STOCK ADMIN
           </h1>
           <label className={labelClass}>PASSWORD</label>
@@ -151,7 +151,7 @@ export default function AdminPage() {
       <div className="bg-[#111111] border-b border-[#1a1a1a] py-8">
         <div className="max-w-xl mx-auto px-4 flex items-end justify-between">
           <div>
-            <h1 className="font-[family-name:var(--font-display)] font-black text-4xl tracking-tight">
+            <h1 className="font-[family-name:var(--font-display)] font-black text-4xl tracking-normal">
               STOCK
             </h1>
             <p className="text-gray-500 text-sm mt-1">Packs on hand</p>
@@ -170,7 +170,7 @@ export default function AdminPage() {
           <p className="text-xs font-[family-name:var(--font-display)] tracking-label text-gray-500 mb-2">
             CURRENTLY LIVE
           </p>
-          <p className="font-[family-name:var(--font-display)] font-black text-6xl tracking-tight">
+          <p className="font-[family-name:var(--font-display)] font-black text-6xl tracking-normal">
             {stock === null ? '—' : stock}
           </p>
           <p className="text-gray-600 text-xs mt-2">

@@ -139,7 +139,7 @@ export default function CheckoutPage() {
       {/* Header */}
       <div className="bg-[#111111] border-b border-[#1a1a1a] py-8">
         <div className="max-w-2xl mx-auto px-4">
-          <h1 className="font-[family-name:var(--font-display)] font-black text-4xl tracking-tight">
+          <h1 className="font-[family-name:var(--font-display)] font-black text-4xl tracking-normal">
             CHECKOUT
           </h1>
           <p className="text-gray-500 text-sm mt-1">

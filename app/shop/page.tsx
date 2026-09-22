@@ -41,7 +41,7 @@ export default async function ShopPage() {
       {/* Page header */}
       <div className="bg-[#111111] border-b border-[#1a1a1a] py-8">
         <div className="max-w-6xl mx-auto px-4">
-          <h1 className="font-[family-name:var(--font-display)] font-black text-4xl tracking-tight">
+          <h1 className="font-[family-name:var(--font-display)] font-black text-4xl tracking-normal">
             SHOP
           </h1>
           <p className="text-gray-500 text-sm mt-1">Reactive Powder Targets</p>
@@ -78,7 +78,7 @@ export default async function ShopPage() {
               )}
             </div>
 
-            <h2 className="font-[family-name:var(--font-display)] font-black text-4xl md:text-5xl tracking-tight mb-2">
+            <h2 className="font-[family-name:var(--font-display)] font-black text-4xl md:text-5xl tracking-normal mb-2">
               KINETICUBE™
             </h2>
             <p className="text-gray-400 font-[family-name:var(--font-display)] tracking-label text-sm mb-4">
@@ -176,7 +176,7 @@ export default async function ShopPage() {
         {/* COMING SOON */}
         <div className="mt-20 border-t border-[#1a1a1a] pt-12">
           <div className="text-center mb-8">
-            <h3 className="font-[family-name:var(--font-display)] font-black text-3xl tracking-tight text-gray-600">
+            <h3 className="font-[family-name:var(--font-display)] font-black text-3xl tracking-normal text-gray-600">
               MORE PRODUCTS <span className="text-[#f05a1a]/50">COMING SOON</span>
             </h3>
             <p className="text-gray-600 text-sm mt-2">We&apos;re just getting started.</p>

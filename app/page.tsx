@@ -180,7 +180,7 @@ export default function Home() {
             <div className="inline-block bg-[#f05a1a]/10 border border-[#f05a1a]/30 text-[#f05a1a] text-xs font-[family-name:var(--font-display)] tracking-label px-3 py-1 mb-6">
               REACTIVE POWDER TARGETS
             </div>
-            <h1 className="font-[family-name:var(--font-display)] font-black text-6xl md:text-7xl lg:text-8xl 2xl:text-9xl leading-none tracking-tight mb-6 2xl:mb-8">
+            <h1 className="font-[family-name:var(--font-display)] font-black text-6xl md:text-7xl lg:text-8xl 2xl:text-9xl leading-none tracking-normal mb-6 2xl:mb-8">
               STICK IT.<br />
               SHOOT IT.<br />
               <span className="text-[#f05a1a]">SEE IT.</span>
@@ -291,7 +291,7 @@ export default function Home() {
         <div className="max-w-[1440px] mx-auto px-6">
           <div className="text-center mb-20">
             <p className="text-[#f05a1a] font-[family-name:var(--font-display)] tracking-[0.3em] text-sm mb-4">THE DIFFERENCE</p>
-            <h2 className="font-[family-name:var(--font-display)] font-black text-4xl md:text-5xl 2xl:text-6xl tracking-tight">
+            <h2 className="font-[family-name:var(--font-display)] font-black text-4xl md:text-5xl 2xl:text-6xl tracking-normal">
               WHY <span className="text-[#f05a1a]">KINETICUBE?</span>
             </h2>
           </div>
@@ -321,7 +321,7 @@ export default function Home() {
         <div className="max-w-[1440px] mx-auto px-6">
           <div className="text-center mb-20">
             <p className="text-[#f05a1a] font-[family-name:var(--font-display)] tracking-[0.3em] text-sm mb-4">THREE STEPS</p>
-            <h2 className="font-[family-name:var(--font-display)] font-black text-4xl md:text-5xl 2xl:text-6xl tracking-tight">
+            <h2 className="font-[family-name:var(--font-display)] font-black text-4xl md:text-5xl 2xl:text-6xl tracking-normal">
               HOW TO <span className="text-[#f05a1a]">USE</span>
             </h2>
           </div>
@@ -360,7 +360,7 @@ export default function Home() {
         <div className="max-w-[1440px] mx-auto px-6">
           <div className="text-center mb-20">
             <p className="text-[#f05a1a] font-[family-name:var(--font-display)] tracking-[0.3em] text-sm mb-4">3M ADHESIVE</p>
-            <h2 className="font-[family-name:var(--font-display)] font-black text-4xl md:text-5xl 2xl:text-6xl tracking-tight">
+            <h2 className="font-[family-name:var(--font-display)] font-black text-4xl md:text-5xl 2xl:text-6xl tracking-normal">
               STICKS TO <span className="text-[#f05a1a]">ANYTHING.</span>
             </h2>
             <p className="text-gray-500 mt-5 text-lg 2xl:text-xl max-w-xl mx-auto leading-relaxed">
@@ -389,7 +389,7 @@ export default function Home() {
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#f05a1a]/40 to-transparent" />
         <div className="absolute inset-0 bg-[#f05a1a] opacity-5 blur-[80px]" />
         <div className="relative max-w-3xl mx-auto px-6 text-center">
-          <h2 className="font-[family-name:var(--font-display)] font-black text-5xl md:text-6xl 2xl:text-7xl tracking-tight mb-6">
+          <h2 className="font-[family-name:var(--font-display)] font-black text-5xl md:text-6xl 2xl:text-7xl tracking-normal mb-6">
             READY TO <span className="text-[#f05a1a]">SHOOT?</span>
           </h2>
           <p className="text-gray-400 mb-10 text-lg 2xl:text-xl leading-relaxed">

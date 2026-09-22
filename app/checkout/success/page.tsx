@@ -10,7 +10,7 @@ export default function SuccessPage() {
     <div className="min-h-screen bg-[#0d0d0d] flex items-center justify-center px-4">
       <div className="text-center max-w-md">
         <div className="text-6xl mb-6">🎯</div>
-        <h1 className="font-[family-name:var(--font-display)] font-black text-4xl tracking-tight mb-4">
+        <h1 className="font-[family-name:var(--font-display)] font-black text-4xl tracking-normal mb-4">
           ORDER CONFIRMED
         </h1>
         <p className="text-gray-400 text-sm leading-relaxed mb-2">
