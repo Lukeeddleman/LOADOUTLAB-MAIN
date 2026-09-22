@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "dry-run": "node --env-file=.env.local scripts/dry-run-order.mjs"
   },
   "dependencies": {
     "next": "16.3.2",
