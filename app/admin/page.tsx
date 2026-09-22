@@ -21,6 +21,8 @@ export default function AdminPage() {
   const [error, setError] = useState('');
   const [saved, setSaved] = useState(false);
   const [config, setConfig] = useState('');
+  const [notify, setNotify] = useState(true);
+  const [sendResult, setSendResult] = useState('');
 
   const load = useCallback(async () => {
     try {
@@ -76,12 +78,19 @@ export default function AdminPage() {
       const res = await fetch('/api/admin/stock', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ stock: Number(draft) }),
+        body: JSON.stringify({ stock: Number(draft), notify }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Could not save.');
       setStock(data.stock);
       setSaved(true);
+
+      if (data.notifyError) {
+        setError(`Stock saved, but the restock email failed: ${data.notifyError}`);
+      } else if (typeof data.notified === 'number' && data.notified > 0) {
+        setSendResult(`Emailed ${data.notified} ${data.notified === 1 ? 'person' : 'people'} on the waitlist.`);
+      }
+      await load();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not save.');
     } finally {
@@ -131,6 +140,11 @@ export default function AdminPage() {
 
   const count = Number(draft);
   const preview = Number.isInteger(count) && count >= 0 ? count : null;
+
+  // The restock email only fires on a genuine sold-out → back-in-stock move,
+  // so only offer the option when that's what this save would do.
+  const willNotify =
+    (stock === 0 || stock === null) && preview !== null && preview > 0 && waitlist.length > 0;
 
   return (
     <div className="min-h-screen bg-[#0d0d0d]">
@@ -199,10 +213,31 @@ export default function AdminPage() {
                   : 'Shop will show the normal in-stock badge.'}
             </p>
           )}
+          {willNotify && (
+            <label className="flex items-start gap-3 mt-4 bg-[#111111] border border-[#2a2a2a] p-4 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={notify}
+                onChange={e => setNotify(e.target.checked)}
+                className="mt-0.5 accent-[#f05a1a] w-4 h-4"
+              />
+              <span>
+                <span className="block text-white text-sm font-medium">
+                  Email the {waitlist.length}{' '}
+                  {waitlist.length === 1 ? 'person' : 'people'} waiting
+                </span>
+                <span className="block text-gray-600 text-xs mt-0.5">
+                  Sends a “back in stock” email to everyone on the waitlist, then clears
+                  the list. Only happens when going from sold out to in stock.
+                </span>
+              </span>
+            </label>
+          )}
           {error && <p className="text-red-400 text-xs mt-2">{error}</p>}
           {saved && <p className="text-[#f05a1a] text-xs mt-2">Saved — the shop is updated.</p>}
+          {sendResult && <p className="text-[#f05a1a] text-xs mt-1">{sendResult}</p>}
           <button type="submit" disabled={busy} className={`${buttonClass} mt-4`}>
-            {busy ? 'SAVING…' : 'UPDATE STOCK'}
+            {busy ? (willNotify && notify ? 'SAVING & EMAILING…' : 'SAVING…') : 'UPDATE STOCK'}
           </button>
         </form>
 

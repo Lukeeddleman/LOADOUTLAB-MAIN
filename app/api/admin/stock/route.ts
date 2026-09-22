@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdmin } from '@/lib/admin-auth';
+import { sendRestockEmails } from '@/lib/restock-email';
 import {
   clearWaitlist,
   getStock,
@@ -8,6 +9,9 @@ import {
   stockConfigReport,
   StockUnavailableError,
 } from '@/lib/stock';
+
+// Emailing a large waitlist takes a moment; don't let the platform cut it off.
+export const maxDuration = 60;
 
 export async function GET() {
   if (!(await isAdmin())) {
@@ -30,8 +34,38 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    // Read before writing: the restock email should only fire on a genuine
+    // sold-out → back-in-stock transition, not every time the count is edited.
+    const previous = await getStock();
     const saved = await setStock(count);
-    return NextResponse.json({ stock: saved });
+
+    const cameBackInStock = (previous === 0 || previous === null) && saved > 0;
+    const wantsNotify = body.notify !== false;
+
+    if (!cameBackInStock || !wantsNotify) {
+      return NextResponse.json({ stock: saved });
+    }
+
+    const waiting = await getWaitlist();
+    if (waiting.length === 0) {
+      return NextResponse.json({ stock: saved });
+    }
+
+    const result = await sendRestockEmails(waiting);
+
+    // Only drop the list once everyone actually got their email. Keeping it on
+    // failure risks a duplicate if he retries, which beats losing the list.
+    if (result.failed === 0) {
+      await clearWaitlist();
+    }
+
+    return NextResponse.json({
+      stock: saved,
+      notified: result.sent,
+      failed: result.failed,
+      notifyError: result.error,
+      waitlistCleared: result.failed === 0,
+    });
   } catch (err) {
     // Say what actually went wrong — "not connected" was ambiguous between
     // missing variables and a failed call.
