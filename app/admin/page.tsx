@@ -242,9 +242,19 @@ export default function AdminPage() {
         </form>
 
         <div className="border-t border-[#1a1a1a] pt-8">
-          <p className="text-xs font-[family-name:var(--font-display)] tracking-widest text-gray-500 mb-3">
-            RESTOCK WAITLIST — {waitlist.length}
-          </p>
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-xs font-[family-name:var(--font-display)] tracking-widest text-gray-500">
+              RESTOCK WAITLIST — {waitlist.length}
+            </p>
+            <a
+              href="/api/admin/restock-preview"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-600 hover:text-[#f05a1a] text-xs font-[family-name:var(--font-display)] tracking-widest"
+            >
+              PREVIEW EMAIL ↗
+            </a>
+          </div>
           {waitlist.length === 0 ? (
             <p className="text-gray-600 text-sm">
               Nobody waiting. Emails collected while you&apos;re sold out show up here.

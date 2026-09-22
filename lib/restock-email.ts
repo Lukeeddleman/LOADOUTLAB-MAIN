@@ -9,36 +9,195 @@ export interface RestockSendResult {
   error?: string;
 }
 
-function restockHtml(shopUrl: string): string {
-  return `
-    <div style="font-family:sans-serif;max-width:600px;color:#222;">
-      <h2 style="color:#f05a1a;letter-spacing:1px;margin-bottom:4px;">BACK IN STOCK 🎯</h2>
-      <hr style="border-color:#eee;margin-bottom:16px;" />
+export const RESTOCK_SUBJECT = 'KinetiCube is back in stock';
 
-      <p style="font-size:16px;line-height:1.6;">
-        A fresh batch of KinetiCube™ reactive powder targets just came off the line —
-        made in small runs right here in Texas.
-      </p>
-      <p style="font-size:16px;line-height:1.6;">
-        You asked us to let you know the moment they were back. They tend to go quickly.
-      </p>
+// Email clients mostly ignore @font-face, so the brand's Barlow Condensed will
+// only load in a few (Apple Mail). The condensed fallbacks keep the tall,
+// narrow feel elsewhere, and the weight + letter-spacing carry the rest.
+const DISPLAY_FONT =
+  "'Barlow Condensed','Oswald','Arial Narrow',Arial,Helvetica,sans-serif";
+const BODY_FONT = "'Barlow','Helvetica Neue',Helvetica,Arial,sans-serif";
 
-      <p style="margin:28px 0;">
-        <a href="${shopUrl}"
-           style="background:#f05a1a;color:#ffffff;padding:14px 32px;text-decoration:none;
-                  font-weight:bold;letter-spacing:2px;display:inline-block;font-size:16px;">
-          SHOP NOW
-        </a>
-      </p>
+const ORANGE = '#f05a1a';
+const BG = '#0d0d0d';
+const PANEL = '#111111';
+const BORDER = '#1f1f1f';
 
-      <hr style="border-color:#eee;margin:24px 0 12px;" />
-      <p style="color:#999;font-size:12px;line-height:1.5;">
-        You're getting this because you signed up to be notified when KinetiCube was
-        restocked. This is a one-time notice — you've been taken off the list and
-        won't receive anything else from us.
-      </p>
-    </div>
-  `;
+/**
+ * Built on tables with inline styles and explicit bgcolor attributes, because
+ * Outlook ignores most modern CSS and would otherwise drop the dark background
+ * and leave black text on black.
+ */
+export function restockHtml(baseUrl: string): string {
+  const shopUrl = `${baseUrl}/shop`;
+  const businessLocation = process.env.BUSINESS_ADDRESS || 'Kyle, Texas, USA';
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="supported-color-schemes" content="dark">
+<title>${RESTOCK_SUBJECT}</title>
+</head>
+<body style="margin:0;padding:0;background-color:${BG};">
+
+<!-- Inbox preview line: shown next to the subject, hidden in the body. -->
+<div style="display:none;font-size:1px;color:${BG};line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">
+  Stick it. Shoot it. See it. A fresh batch just came off the printers in Texas.
+</div>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${BG}" style="background-color:${BG};">
+<tr>
+<td align="center" style="padding:28px 12px;">
+
+  <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;">
+
+    <!-- Wordmark -->
+    <tr>
+      <td align="center" style="padding:0 0 22px 0;">
+        <img src="${baseUrl}/logo.png" width="40" height="40" alt=""
+             style="display:block;border:0;outline:none;margin:0 auto 8px auto;" />
+        <div style="font-family:${DISPLAY_FONT};font-size:26px;font-weight:900;letter-spacing:5px;color:#ffffff;text-transform:uppercase;">
+          KINETICUBE
+        </div>
+        <div style="font-family:${BODY_FONT};font-size:11px;letter-spacing:3px;color:${ORANGE};text-transform:uppercase;padding-top:4px;">
+          Stick it. Shoot it. See it.
+        </div>
+      </td>
+    </tr>
+
+    <!-- Panel -->
+    <tr>
+      <td bgcolor="${PANEL}" style="background-color:${PANEL};border:1px solid ${BORDER};">
+
+        <!-- Product shot: if images are blocked, the headline below still carries it -->
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td align="center" style="padding:0;">
+              <img src="${baseUrl}/product-front.png" width="598" alt="KinetiCube reactive powder targets"
+                   style="display:block;border:0;outline:none;width:100%;max-width:598px;height:auto;" />
+            </td>
+          </tr>
+        </table>
+
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td style="padding:32px 32px 8px 32px;">
+
+              <div style="display:inline-block;background-color:${ORANGE};color:#ffffff;font-family:${DISPLAY_FONT};font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:5px 12px;">
+                Restocked
+              </div>
+
+              <h1 style="margin:18px 0 0 0;font-family:${DISPLAY_FONT};font-size:46px;line-height:1.02;font-weight:900;letter-spacing:-0.5px;color:#ffffff;text-transform:uppercase;">
+                Back in<br>stock
+              </h1>
+
+              <p style="margin:18px 0 0 0;font-family:${BODY_FONT};font-size:16px;line-height:1.65;color:#b5b5b5;">
+                A fresh batch of reactive powder targets just came off the printers.
+                One-inch cubes, six vivid colors, a burst of powder on every hit —
+                made in small runs right here in Texas.
+              </p>
+
+              <p style="margin:14px 0 0 0;font-family:${BODY_FONT};font-size:16px;line-height:1.65;color:#b5b5b5;">
+                You asked us to let you know the moment they were back. Batches are
+                small and they tend to move quickly.
+              </p>
+
+            </td>
+          </tr>
+
+          <!-- Bulletproof button: table-based so Outlook renders the orange block -->
+          <tr>
+            <td style="padding:26px 32px 34px 32px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td bgcolor="${ORANGE}" style="background-color:${ORANGE};">
+                    <a href="${shopUrl}"
+                       style="display:inline-block;padding:16px 42px;font-family:${DISPLAY_FONT};font-size:17px;font-weight:900;letter-spacing:3px;color:#ffffff;text-decoration:none;text-transform:uppercase;">
+                      Grab a pack
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+
+      </td>
+    </tr>
+
+    <!-- Reassurance strip -->
+    <tr>
+      <td style="padding:16px 8px 0 8px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td align="center" style="font-family:${BODY_FONT};font-size:11px;letter-spacing:2px;color:#6a6a6a;text-transform:uppercase;">
+              Made in the USA &nbsp;·&nbsp; Ships USPS from Texas &nbsp;·&nbsp; Non-explosive
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+    <!-- Footer -->
+    <tr>
+      <td style="padding:22px 16px 0 16px;">
+        <div style="border-top:1px solid ${BORDER};padding-top:16px;">
+          <p style="margin:0 0 10px 0;font-family:${BODY_FONT};font-size:12px;line-height:1.6;color:#6a6a6a;">
+            You're receiving this because you signed up on
+            <a href="${shopUrl}" style="color:${ORANGE};text-decoration:none;">kineticube.shop</a>
+            to be told when KinetiCube came back in stock. This is a one-time notice —
+            you've already been removed from that list and won't get anything else from us.
+          </p>
+          <p style="margin:0 0 10px 0;font-family:${BODY_FONT};font-size:12px;line-height:1.6;color:#6a6a6a;">
+            Questions? Just reply to this email — it reaches us directly.
+          </p>
+          <p style="margin:0;font-family:${BODY_FONT};font-size:12px;line-height:1.6;color:#4a4a4a;">
+            KinetiCube · ${businessLocation}
+          </p>
+        </div>
+      </td>
+    </tr>
+
+  </table>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>`;
+}
+
+/** Plain-text alternative. Its absence is itself a spam signal. */
+export function restockText(baseUrl: string): string {
+  const businessLocation = process.env.BUSINESS_ADDRESS || 'Kyle, Texas, USA';
+  return `KINETICUBE — STICK IT. SHOOT IT. SEE IT.
+
+BACK IN STOCK
+
+A fresh batch of reactive powder targets just came off the printers.
+One-inch cubes, six vivid colors, a burst of powder on every hit — made
+in small runs right here in Texas.
+
+You asked us to let you know the moment they were back. Batches are small
+and they tend to move quickly.
+
+Grab a pack: ${baseUrl}/shop
+
+Made in the USA · Ships USPS from Texas · Non-explosive
+
+---
+You're receiving this because you signed up on kineticube.shop to be told
+when KinetiCube came back in stock. This is a one-time notice — you've
+already been removed from that list and won't get anything else from us.
+
+Questions? Just reply to this email.
+
+KinetiCube · ${businessLocation}
+`;
 }
 
 /**
@@ -52,7 +211,8 @@ export async function sendRestockEmails(emails: string[]): Promise<RestockSendRe
 
   const resend = new Resend(process.env.RESEND_API_KEY);
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kineticube.shop';
-  const html = restockHtml(`${baseUrl}/shop`);
+  const html = restockHtml(baseUrl);
+  const text = restockText(baseUrl);
 
   let sent = 0;
   let failed = 0;
@@ -64,9 +224,12 @@ export async function sendRestockEmails(emails: string[]): Promise<RestockSendRe
       const result = await resend.batch.send(
         chunk.map(to => ({
           from: 'KinetiCube <noreply@kineticube.shop>',
+          // A monitored reply address is both useful and a trust signal.
+          replyTo: 'support@kineticube.shop',
           to,
-          subject: 'Back in stock — KinetiCube™ reactive targets',
+          subject: RESTOCK_SUBJECT,
           html,
+          text,
         })),
       );
 
