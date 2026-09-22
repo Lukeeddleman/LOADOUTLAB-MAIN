@@ -211,6 +211,16 @@ export async function POST(req: NextRequest) {
     if (rateId) await purchaseLabel(rateId);
   }
 
+  // USPS accepts a rate request without sender contact details, then refuses to
+  // issue the label for it. Name the missing setting rather than leaving USPS's
+  // raw complaint as the only clue.
+  if (!labelUrl && !process.env.SHIP_FROM_PHONE) {
+    errors.push(
+      'SHIP_FROM_PHONE is not set. USPS requires a sender phone number to issue a ' +
+        'label — add it in Vercel → Settings → Environment Variables, then redeploy.',
+    );
+  }
+
   // ── 2. Send label to PrintNode ───────────────────────────────────────────
   if (labelUrl) {
     try {
