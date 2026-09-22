@@ -18,6 +18,9 @@ export const maxDuration = 60;
 // leaving headroom under maxDuration for the Stripe and Resend calls. The
 // realistic path is well under 15s. Note that the duplicate guard is claimed
 // before any of this runs, so even blowing the budget can't double-buy a label.
+/** How long a 'processing' claim blocks retries before we assume that run died. */
+const STALE_CLAIM_MS = 10 * 60 * 1000;
+
 const RATE_TIMEOUT_MS = 12_000;
 const SHIPPO_TIMEOUT_MS = 18_000;
 const PDF_TIMEOUT_MS = 8_000;
@@ -75,15 +78,21 @@ export async function POST(req: NextRequest) {
   if (paymentIntentId) {
     try {
       const pi = await stripe.paymentIntents.retrieve(paymentIntentId);
-      if (pi.metadata?.kc_fulfillment) {
-        console.log(
-          `[webhook] ${session.id} already handled (kc_fulfillment=${pi.metadata.kc_fulfillment}) — skipping`,
-        );
-        return NextResponse.json({ received: true, skipped: 'already_fulfilled' });
+      const state = pi.metadata?.kc_fulfillment ?? '';
+      const claimedAt = Number(pi.metadata?.kc_claimed_at ?? 0);
+      const claimIsFresh = Number.isFinite(claimedAt) && Date.now() - claimedAt < STALE_CLAIM_MS;
+
+      // Only an order we actually bought a label for is closed for good. An
+      // attempt that failed, or one that died mid-flight, has to stay
+      // retryable — otherwise one bad run strands a paid order with no label
+      // and no way to ever try again.
+      if (state === 'done' || (state === 'processing' && claimIsFresh)) {
+        console.log(`[webhook] ${session.id} already handled (${state}) — skipping`);
+        return NextResponse.json({ received: true, skipped: 'already_fulfilled', state });
       }
       // Claim BEFORE spending money, so a retry can never race us to Shippo.
       await stripe.paymentIntents.update(paymentIntentId, {
-        metadata: { kc_fulfillment: 'processing' },
+        metadata: { kc_fulfillment: 'processing', kc_claimed_at: String(Date.now()) },
       });
       claimed = true;
     } catch (err) {
@@ -219,10 +228,11 @@ export async function POST(req: NextRequest) {
   }
 
   // ── 3. Email order summary to support (always — backup + paper trail) ────
+  let emailSent = false;
   try {
     const qty = Number(quantity ?? 1);
     const plural = qty > 1 ? 's' : '';
-    await resend.emails.send({
+    const sendResult = await resend.emails.send({
       from: 'KinetiCube Orders <noreply@kineticube.shop>',
       to: 'support@kineticube.shop',
       subject: labelUrl
@@ -277,6 +287,18 @@ export async function POST(req: NextRequest) {
         </div>
       `,
     });
+
+    // Resend reports API failures (unverified domain, bad key, rejected
+    // sender) in `error` rather than throwing, so a try/catch alone silently
+    // swallows them and the email just never arrives.
+    if (sendResult.error) {
+      console.error('[webhook] Resend refused the email:', sendResult.error);
+      errors.push(
+        `Email not sent — Resend said: ${sendResult.error.message ?? JSON.stringify(sendResult.error)}`,
+      );
+    } else {
+      emailSent = true;
+    }
   } catch (err) {
     console.error('[webhook] Resend error:', err);
     errors.push(`Resend error: ${String(err)}`);
@@ -287,7 +309,9 @@ export async function POST(req: NextRequest) {
     try {
       await stripe.paymentIntents.update(paymentIntentId, {
         metadata: {
-          kc_fulfillment: errors.length ? 'completed_with_errors' : 'done',
+          // Only a bought label closes the order permanently. Anything else
+          // stays open so the event can be resent once the cause is fixed.
+          kc_fulfillment: labelUrl ? 'done' : 'failed',
           kc_tracking: trackingNumber ?? '',
         },
       });
@@ -300,7 +324,17 @@ export async function POST(req: NextRequest) {
     console.error(`[webhook] ${session.id} completed with errors:`, errors);
   }
 
-  // Always return 200 — failures are surfaced in the order email above, and a
-  // Stripe retry would re-run a pipeline that has already spent money.
-  return NextResponse.json({ received: true });
+  // Always return 200 — failures are surfaced below and in the order email, and
+  // a Stripe retry would re-run a pipeline that has already spent money.
+  //
+  // The diagnostics go in the response body deliberately: Stripe shows it on
+  // the event in its dashboard, which is readable without a paid Vercel plan.
+  return NextResponse.json({
+    received: true,
+    label: labelUrl ? 'bought' : 'FAILED',
+    printer: labelQueued ? 'queued' : 'not queued',
+    email: emailSent ? 'sent' : 'FAILED',
+    tracking: trackingNumber,
+    errors: errors.map(e => e.slice(0, 300)),
+  });
 }

@@ -169,7 +169,7 @@ async function deliver(attempt) {
 
 // ── 4. Deliver it twice — the second one is the real test ──────────────────
 console.log('\n3. Delivering the order to your webhook...');
-const first = await deliver(1);
+await deliver(1);
 
 console.log('\n4. Delivering the SAME order again, the way Stripe would on a retry...');
 const second = await deliver(2);
