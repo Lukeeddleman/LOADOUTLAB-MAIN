@@ -50,13 +50,13 @@ export function restockHtml(baseUrl: string): string {
 
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${BG}" style="background-color:${BG};">
 <tr>
-<td align="center" style="padding:28px 12px;">
+<td align="center" bgcolor="${BG}" style="background-color:${BG};padding:28px 12px;">
 
-  <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;">
+  <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="${BG}" style="width:100%;max-width:600px;background-color:${BG};">
 
     <!-- Wordmark -->
     <tr>
-      <td align="center" style="padding:0 0 22px 0;">
+      <td align="center" bgcolor="${BG}" style="background-color:${BG};padding:24px 16px 22px 16px;">
         <img src="${baseUrl}/logo.png" width="40" height="40" alt=""
              style="display:block;border:0;outline:none;margin:0 auto 8px auto;" />
         <div style="font-family:${DISPLAY_FONT};font-size:26px;font-weight:900;letter-spacing:5px;color:#ffffff;text-transform:uppercase;">
@@ -75,7 +75,7 @@ export function restockHtml(baseUrl: string): string {
         <!-- Product shot: if images are blocked, the headline below still carries it -->
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr>
-            <td align="center" style="padding:0;">
+            <td align="center" bgcolor="${PANEL}" style="background-color:${PANEL};padding:0;">
               <img src="${baseUrl}/email-cube-red.jpg" width="598" alt="A red KinetiCube reactive powder target"
                    style="display:block;border:0;outline:none;width:100%;max-width:598px;height:auto;" />
             </td>
@@ -84,7 +84,7 @@ export function restockHtml(baseUrl: string): string {
 
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr>
-            <td style="padding:32px 32px 8px 32px;">
+            <td bgcolor="${PANEL}" style="background-color:${PANEL};padding:32px 32px 8px 32px;">
 
               <div style="display:inline-block;background-color:${ORANGE};color:#ffffff;font-family:${DISPLAY_FONT};font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:5px 12px;">
                 Restocked
@@ -110,7 +110,7 @@ export function restockHtml(baseUrl: string): string {
 
           <!-- Bulletproof button: table-based so Outlook renders the orange block -->
           <tr>
-            <td style="padding:26px 32px 34px 32px;">
+            <td bgcolor="${PANEL}" style="background-color:${PANEL};padding:26px 32px 34px 32px;">
               <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                   <td bgcolor="${ORANGE}" style="background-color:${ORANGE};">
@@ -130,10 +130,10 @@ export function restockHtml(baseUrl: string): string {
 
     <!-- Reassurance strip -->
     <tr>
-      <td style="padding:16px 8px 0 8px;">
+      <td bgcolor="${BG}" style="background-color:${BG};padding:16px 8px 0 8px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr>
-            <td align="center" style="font-family:${BODY_FONT};font-size:11px;letter-spacing:2px;color:#6a6a6a;text-transform:uppercase;">
+            <td align="center" bgcolor="${BG}" style="background-color:${BG};font-family:${BODY_FONT};font-size:11px;letter-spacing:2px;color:#6a6a6a;text-transform:uppercase;">
               Made in the USA &nbsp;·&nbsp; Ships USPS from Texas &nbsp;·&nbsp; Non-explosive
             </td>
           </tr>
@@ -143,7 +143,7 @@ export function restockHtml(baseUrl: string): string {
 
     <!-- Footer -->
     <tr>
-      <td style="padding:22px 16px 0 16px;">
+      <td bgcolor="${BG}" style="background-color:${BG};padding:22px 16px 24px 16px;">
         <div style="border-top:1px solid ${BORDER};padding-top:16px;">
           <p style="margin:0 0 10px 0;font-family:${BODY_FONT};font-size:12px;line-height:1.6;color:#6a6a6a;">
             You're receiving this because you signed up on
@@ -230,6 +230,12 @@ export async function sendRestockEmails(emails: string[]): Promise<RestockSendRe
           subject: RESTOCK_SUBJECT,
           html,
           text,
+          // Mailbox providers treat bulk mail that offers a machine-readable
+          // opt-out more favourably than mail that doesn't, even when the list
+          // is one-shot like this one.
+          headers: {
+            'List-Unsubscribe': '<mailto:support@kineticube.shop?subject=unsubscribe>',
+          },
         })),
       );
 
