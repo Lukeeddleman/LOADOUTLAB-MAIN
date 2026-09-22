@@ -27,6 +27,13 @@ const BORDER = '#1f1f1f';
  * Built on tables with inline styles and explicit bgcolor attributes, because
  * Outlook ignores most modern CSS and would otherwise drop the dark background
  * and leave black text on black.
+ *
+ * Everything lives inside one self-contained dark card. Gmail strips <body>
+ * and re-wraps the message, so the page background can't be relied on — but a
+ * card that carries its own background renders the same whatever surrounds it.
+ * On Gmail that reads as a dark card on white; where the page background does
+ * survive it's seamless. Both look deliberate, and no text is ever left
+ * sitting on a colour it can't be read against.
  */
 export function restockHtml(baseUrl: string): string {
   const shopUrl = `${baseUrl}/shop`;
@@ -52,25 +59,26 @@ export function restockHtml(baseUrl: string): string {
 <tr>
 <td align="center" bgcolor="${BG}" style="background-color:${BG};padding:28px 12px;">
 
-  <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="${BG}" style="width:100%;max-width:600px;background-color:${BG};">
+  <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="${PANEL}" style="width:100%;max-width:600px;background-color:${PANEL};border:1px solid ${BORDER};">
 
-    <!-- Wordmark -->
+    <!-- Wordmark, inside the card so it never lands on an unknown background.
+         The orange mark is used rather than the white one: it reads either way. -->
     <tr>
-      <td align="center" bgcolor="${BG}" style="background-color:${BG};padding:24px 16px 22px 16px;">
-        <img src="${baseUrl}/logo.png" width="40" height="40" alt=""
-             style="display:block;border:0;outline:none;margin:0 auto 8px auto;" />
+      <td align="center" bgcolor="${PANEL}" style="background-color:${PANEL};padding:28px 16px 24px 16px;">
+        <img src="${baseUrl}/logo-orange.png" width="40" height="40" alt=""
+             style="display:block;border:0;outline:none;margin:0 auto 10px auto;" />
         <div style="font-family:${DISPLAY_FONT};font-size:26px;font-weight:900;letter-spacing:5px;color:#ffffff;text-transform:uppercase;">
           KINETICUBE
         </div>
-        <div style="font-family:${BODY_FONT};font-size:11px;letter-spacing:3px;color:${ORANGE};text-transform:uppercase;padding-top:4px;">
+        <div style="font-family:${BODY_FONT};font-size:11px;letter-spacing:3px;color:${ORANGE};text-transform:uppercase;padding-top:5px;">
           Stick it. Shoot it. See it.
         </div>
       </td>
     </tr>
 
-    <!-- Panel -->
+    <!-- Body -->
     <tr>
-      <td bgcolor="${PANEL}" style="background-color:${PANEL};border:1px solid ${BORDER};">
+      <td bgcolor="${PANEL}" style="background-color:${PANEL};">
 
         <!-- Product shot: if images are blocked, the headline below still carries it -->
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -130,34 +138,26 @@ export function restockHtml(baseUrl: string): string {
 
     <!-- Reassurance strip -->
     <tr>
-      <td bgcolor="${BG}" style="background-color:${BG};padding:16px 8px 0 8px;">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-          <tr>
-            <td align="center" bgcolor="${BG}" style="background-color:${BG};font-family:${BODY_FONT};font-size:11px;letter-spacing:2px;color:#6a6a6a;text-transform:uppercase;">
-              Made in the USA &nbsp;·&nbsp; Ships USPS from Texas &nbsp;·&nbsp; Non-explosive
-            </td>
-          </tr>
-        </table>
+      <td align="center" bgcolor="${BG}" style="background-color:${BG};padding:14px 16px;font-family:${BODY_FONT};font-size:11px;letter-spacing:2px;color:#8a8a8a;text-transform:uppercase;">
+        Made in the USA &nbsp;·&nbsp; Ships USPS from Texas &nbsp;·&nbsp; Non-explosive
       </td>
     </tr>
 
-    <!-- Footer -->
+    <!-- Footer, also inside the card -->
     <tr>
-      <td bgcolor="${BG}" style="background-color:${BG};padding:22px 16px 24px 16px;">
-        <div style="border-top:1px solid ${BORDER};padding-top:16px;">
-          <p style="margin:0 0 10px 0;font-family:${BODY_FONT};font-size:12px;line-height:1.6;color:#6a6a6a;">
-            You're receiving this because you signed up on
-            <a href="${shopUrl}" style="color:${ORANGE};text-decoration:none;">kineticube.shop</a>
-            to be told when KinetiCube came back in stock. This is a one-time notice —
-            you've already been removed from that list and won't get anything else from us.
-          </p>
-          <p style="margin:0 0 10px 0;font-family:${BODY_FONT};font-size:12px;line-height:1.6;color:#6a6a6a;">
-            Questions? Just reply to this email — it reaches us directly.
-          </p>
-          <p style="margin:0;font-family:${BODY_FONT};font-size:12px;line-height:1.6;color:#4a4a4a;">
-            KinetiCube · ${businessLocation}
-          </p>
-        </div>
+      <td bgcolor="${PANEL}" style="background-color:${PANEL};padding:20px 32px 26px 32px;">
+        <p style="margin:0 0 10px 0;font-family:${BODY_FONT};font-size:12px;line-height:1.6;color:#8a8a8a;">
+          You're receiving this because you signed up on
+          <a href="${shopUrl}" style="color:${ORANGE};text-decoration:none;">kineticube.shop</a>
+          to be told when KinetiCube came back in stock. This is a one-time notice —
+          you've already been removed from that list and won't get anything else from us.
+        </p>
+        <p style="margin:0 0 10px 0;font-family:${BODY_FONT};font-size:12px;line-height:1.6;color:#8a8a8a;">
+          Questions? Just reply to this email — it reaches us directly.
+        </p>
+        <p style="margin:0;font-family:${BODY_FONT};font-size:12px;line-height:1.6;color:#6a6a6a;">
+          KinetiCube · ${businessLocation}
+        </p>
       </td>
     </tr>
 
