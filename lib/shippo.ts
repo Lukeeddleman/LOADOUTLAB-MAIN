@@ -7,6 +7,8 @@ export interface ShippingAddress {
   city: string;
   state: string;
   zip: string;
+  /** Shippo needs this to send the customer their tracking notifications. */
+  email?: string;
 }
 
 export interface NormalizedRate {
@@ -73,6 +75,7 @@ export function fallbackShippingCents(quotedCents?: unknown): number {
 /** Pull a shipping address out of an untrusted request body. Returns null if incomplete. */
 export function parseAddress(body: Record<string, unknown>): ShippingAddress | null {
   const str = (v: unknown) => (typeof v === 'string' ? v.trim() : '');
+  const email = str(body.email);
   const address = {
     name: str(body.name),
     street1: str(body.street1),
@@ -80,6 +83,9 @@ export function parseAddress(body: Record<string, unknown>): ShippingAddress | n
     city: str(body.city),
     state: str(body.state),
     zip: str(body.zip),
+    // Deliberately not required: orders placed before we collected an email
+    // must still be re-quotable from their stored metadata.
+    email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? email : undefined,
   };
   if (!address.name || !address.street1 || !address.city || !address.state || !address.zip) {
     return null;
@@ -130,6 +136,8 @@ export async function fetchUspsRates(
       state: address.state,
       zip: address.zip,
       country: 'US',
+      // Without this Shippo has no recipient to send tracking updates to.
+      ...(address.email ? { email: address.email } : {}),
     },
     parcels: [getParcel(quantity)],
     async: false,

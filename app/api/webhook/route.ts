@@ -106,6 +106,7 @@ export async function POST(req: NextRequest) {
   const meta = session.metadata ?? {};
   const {
     ship_to_name,
+    ship_to_email,
     ship_to_street1,
     ship_to_street2,
     ship_to_city,
@@ -158,6 +159,9 @@ export async function POST(req: NextRequest) {
   async function requote(): Promise<string> {
     const address = parseAddress({
       name: ship_to_name,
+      // Fall back to the email Stripe collected, for orders placed before our
+      // own form asked for one.
+      email: ship_to_email || session.customer_details?.email || '',
       street1: ship_to_street1,
       street2: ship_to_street2,
       city: ship_to_city,

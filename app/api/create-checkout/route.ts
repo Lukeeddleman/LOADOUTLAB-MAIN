@@ -87,6 +87,9 @@ export async function POST(req: NextRequest) {
   // can calculate correctly without re-asking the customer.
   const customer = await stripe.customers.create({
     name: address.name,
+    // Prefills Stripe's own email field, so the customer enters it once on our
+    // form and both Stripe and Shippo end up with it.
+    ...(address.email ? { email: address.email } : {}),
     shipping: {
       name: address.name,
       address: {
@@ -137,6 +140,7 @@ export async function POST(req: NextRequest) {
     cancel_url: `${baseUrl}/checkout`,
     metadata: {
       ship_to_name: address.name,
+      ship_to_email: address.email ?? '',
       ship_to_street1: address.street1,
       ship_to_street2: address.street2 || '',
       ship_to_city: address.city,

@@ -13,6 +13,7 @@ const PRODUCT_PRICE = 12.99;
 
 interface Address {
   name: string;
+  email: string;
   street1: string;
   street2: string;
   city: string;
@@ -39,7 +40,7 @@ const labelClass =
 export default function CheckoutPage() {
   const [step, setStep] = useState<1 | 2>(1);
   const [address, setAddress] = useState<Address>({
-    name: '', street1: '', street2: '', city: '', state: '', zip: '',
+    name: '', email: '', street1: '', street2: '', city: '', state: '', zip: '',
   });
   const [quantity, setQuantity] = useState(1);
   const [rates, setRates] = useState<Rate[]>([]);
@@ -192,6 +193,20 @@ export default function CheckoutPage() {
                 value={address.name}
                 onChange={e => setAddress(a => ({ ...a, name: e.target.value }))}
               />
+            </div>
+            <div>
+              <label className={labelClass}>EMAIL</label>
+              <input
+                required
+                type="email"
+                className={inputClass}
+                placeholder="you@example.com"
+                value={address.email}
+                onChange={e => setAddress(a => ({ ...a, email: e.target.value }))}
+              />
+              <p className="text-gray-700 text-xs mt-1">
+                For your shipping confirmation and tracking updates.
+              </p>
             </div>
             <div>
               <label className={labelClass}>ADDRESS LINE 1</label>
