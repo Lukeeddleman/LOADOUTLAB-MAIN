@@ -36,7 +36,7 @@ export default function ContactPage() {
               <div className="flex items-start gap-4">
                 <span className="text-[#f05a1a] text-lg mt-0.5">✉</span>
                 <div>
-                  <p className="text-gray-500 text-xs font-[family-name:var(--font-display)] tracking-widest mb-1">EMAIL</p>
+                  <p className="text-gray-500 text-xs font-[family-name:var(--font-display)] tracking-label mb-1">EMAIL</p>
                   <a
                     href="mailto:support@kineticube.shop"
                     className="text-white text-sm hover:text-[#f05a1a] transition-colors"
@@ -49,7 +49,7 @@ export default function ContactPage() {
               <div className="flex items-start gap-4">
                 <span className="text-[#f05a1a] text-lg mt-0.5">📍</span>
                 <div>
-                  <p className="text-gray-500 text-xs font-[family-name:var(--font-display)] tracking-widest mb-1">SHIPS FROM</p>
+                  <p className="text-gray-500 text-xs font-[family-name:var(--font-display)] tracking-label mb-1">SHIPS FROM</p>
                   <p className="text-white text-sm">Austin, TX</p>
                 </div>
               </div>
@@ -57,7 +57,7 @@ export default function ContactPage() {
               <div className="flex items-start gap-4">
                 <span className="text-[#f05a1a] text-lg mt-0.5">⏱</span>
                 <div>
-                  <p className="text-gray-500 text-xs font-[family-name:var(--font-display)] tracking-widest mb-1">RESPONSE TIME</p>
+                  <p className="text-gray-500 text-xs font-[family-name:var(--font-display)] tracking-label mb-1">RESPONSE TIME</p>
                   <p className="text-white text-sm">Within 1 business day</p>
                 </div>
               </div>

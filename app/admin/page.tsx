@@ -6,9 +6,9 @@ import { LOW_STOCK_THRESHOLD } from '@/lib/stock-config';
 const inputClass =
   'w-full bg-[#111111] border border-[#2a2a2a] text-white px-4 py-3 text-sm focus:border-[#f05a1a] focus:outline-none transition-colors placeholder:text-gray-700';
 const labelClass =
-  'block text-xs font-[family-name:var(--font-display)] tracking-widest text-gray-500 mb-1';
+  'block text-xs font-[family-name:var(--font-display)] tracking-label text-gray-500 mb-1';
 const buttonClass =
-  'w-full bg-[#f05a1a] hover:bg-[#c44a12] disabled:bg-[#2a2a2a] disabled:text-gray-600 text-white font-[family-name:var(--font-display)] font-black tracking-widest py-3 transition-colors';
+  'w-full bg-[#f05a1a] hover:bg-[#c44a12] disabled:bg-[#2a2a2a] disabled:text-gray-600 text-white font-[family-name:var(--font-display)] font-bold tracking-label py-3 transition-colors';
 
 export default function AdminPage() {
   const [authed, setAuthed] = useState(false);
@@ -106,7 +106,7 @@ export default function AdminPage() {
   if (checking) {
     return (
       <div className="min-h-screen bg-[#0d0d0d] flex items-center justify-center">
-        <p className="text-gray-600 text-sm font-[family-name:var(--font-display)] tracking-widest">
+        <p className="text-gray-600 text-sm font-[family-name:var(--font-display)] tracking-label">
           LOADING…
         </p>
       </div>
@@ -158,7 +158,7 @@ export default function AdminPage() {
           </div>
           <button
             onClick={logout}
-            className="text-gray-600 hover:text-white text-xs font-[family-name:var(--font-display)] tracking-widest"
+            className="text-gray-600 hover:text-white text-xs font-[family-name:var(--font-display)] tracking-label"
           >
             SIGN OUT
           </button>
@@ -167,7 +167,7 @@ export default function AdminPage() {
 
       <div className="max-w-xl mx-auto px-4 py-10">
         <div className="bg-[#111111] border border-[#1a1a1a] p-6 mb-8">
-          <p className="text-xs font-[family-name:var(--font-display)] tracking-widest text-gray-500 mb-2">
+          <p className="text-xs font-[family-name:var(--font-display)] tracking-label text-gray-500 mb-2">
             CURRENTLY LIVE
           </p>
           <p className="font-[family-name:var(--font-display)] font-black text-6xl tracking-tight">
@@ -243,14 +243,14 @@ export default function AdminPage() {
 
         <div className="border-t border-[#1a1a1a] pt-8">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-xs font-[family-name:var(--font-display)] tracking-widest text-gray-500">
+            <p className="text-xs font-[family-name:var(--font-display)] tracking-label text-gray-500">
               RESTOCK WAITLIST — {waitlist.length}
             </p>
             <a
               href="/api/admin/restock-preview"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-600 hover:text-[#f05a1a] text-xs font-[family-name:var(--font-display)] tracking-widest"
+              className="text-gray-600 hover:text-[#f05a1a] text-xs font-[family-name:var(--font-display)] tracking-label"
             >
               PREVIEW EMAIL ↗
             </a>
@@ -270,7 +270,7 @@ export default function AdminPage() {
               </div>
               <button
                 onClick={() => navigator.clipboard?.writeText(waitlist.join(', '))}
-                className="text-[#f05a1a] hover:underline text-xs font-[family-name:var(--font-display)] tracking-widest"
+                className="text-[#f05a1a] hover:underline text-xs font-[family-name:var(--font-display)] tracking-label"
               >
                 COPY ALL
               </button>

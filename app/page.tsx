@@ -177,7 +177,7 @@ export default function Home() {
 
         <div className="relative max-w-[1440px] mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 2xl:gap-20 items-center py-20 2xl:py-32">
           <div>
-            <div className="inline-block bg-[#f05a1a]/10 border border-[#f05a1a]/30 text-[#f05a1a] text-xs font-[family-name:var(--font-display)] tracking-widest px-3 py-1 mb-6">
+            <div className="inline-block bg-[#f05a1a]/10 border border-[#f05a1a]/30 text-[#f05a1a] text-xs font-[family-name:var(--font-display)] tracking-label px-3 py-1 mb-6">
               REACTIVE POWDER TARGETS
             </div>
             <h1 className="font-[family-name:var(--font-display)] font-black text-6xl md:text-7xl lg:text-8xl 2xl:text-9xl leading-none tracking-tight mb-6 2xl:mb-8">
@@ -192,13 +192,13 @@ export default function Home() {
             <div className="flex flex-wrap gap-4">
               <Link
                 href="/shop"
-                className="btn-orange bg-[#f05a1a] hover:bg-[#c44a12] text-white font-[family-name:var(--font-display)] font-800 tracking-widest text-lg px-8 py-4 transition-colors"
+                className="btn-orange bg-[#f05a1a] hover:bg-[#c44a12] text-white font-[family-name:var(--font-display)] font-extrabold tracking-widest text-lg px-8 py-4 transition-colors"
               >
                 SHOP NOW — 6-PACK
               </Link>
               <Link
                 href="/#how-it-works"
-                className="border border-gray-600 hover:border-white text-gray-300 hover:text-white font-[family-name:var(--font-display)] font-700 tracking-widest text-lg px-8 py-4 transition-colors"
+                className="border border-gray-600 hover:border-white text-gray-300 hover:text-white font-[family-name:var(--font-display)] font-bold tracking-widest text-lg px-8 py-4 transition-colors"
               >
                 HOW IT WORKS
               </Link>
@@ -273,7 +273,7 @@ export default function Home() {
                   className="bg-[#0d0d0d] border border-[#2a2a2a] hover:border-[#f05a1a]/50 p-5 transition-colors group"
                 >
                   <div className="text-2xl mb-2">{drill.icon}</div>
-                  <p className="font-[family-name:var(--font-display)] font-black tracking-wide text-sm text-white group-hover:text-[#f05a1a] transition-colors mb-1">
+                  <p className="font-[family-name:var(--font-display)] font-bold tracking-label text-sm text-white group-hover:text-[#f05a1a] transition-colors mb-1">
                     {drill.name}
                   </p>
                   <p className="text-gray-600 text-xs" style={{ lineHeight: "1.6" }}>{drill.desc}</p>
@@ -304,7 +304,7 @@ export default function Home() {
                 <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#f05a1a]/20 group-hover:bg-[#f05a1a]/70 transition-colors duration-300" />
                 <div className="shrink-0 mt-1 group-hover:scale-110 transition-transform duration-300">{f.icon}</div>
                 <div>
-                  <h3 className="font-[family-name:var(--font-display)] font-700 text-xl 2xl:text-2xl tracking-wide mb-3">
+                  <h3 className="font-[family-name:var(--font-display)] font-bold text-xl 2xl:text-2xl tracking-wide mb-3">
                     {f.title}
                   </h3>
                   <p className="text-gray-400 leading-relaxed 2xl:text-lg">{f.desc}</p>
@@ -344,7 +344,7 @@ export default function Home() {
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-[#f05a1a] font-[family-name:var(--font-display)] font-black text-3xl text-white mb-5">
                   {s.num}
                 </div>
-                <h3 className="font-[family-name:var(--font-display)] font-800 text-2xl 2xl:text-3xl tracking-widest mb-3">
+                <h3 className="font-[family-name:var(--font-display)] font-extrabold text-2xl 2xl:text-3xl tracking-widest mb-3">
                   {s.label}
                 </h3>
                 <p className="text-gray-400 leading-relaxed 2xl:text-lg">{s.desc}</p>
@@ -375,7 +375,7 @@ export default function Home() {
               >
                 <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#f05a1a]/0 group-hover:bg-[#f05a1a]/60 transition-colors duration-300" />
                 <div className="group-hover:scale-110 transition-transform duration-300">{s.icon}</div>
-                <span className="font-[family-name:var(--font-display)] tracking-widest text-sm text-gray-500 group-hover:text-gray-200 transition-colors">
+                <span className="font-[family-name:var(--font-display)] tracking-label text-sm text-gray-500 group-hover:text-gray-200 transition-colors">
                   {s.name}
                 </span>
               </div>
@@ -397,7 +397,7 @@ export default function Home() {
           </p>
           <Link
             href="/shop"
-            className="inline-block btn-orange bg-[#f05a1a] hover:bg-[#c44a12] text-white font-[family-name:var(--font-display)] font-800 tracking-widest text-xl px-12 py-5 transition-colors"
+            className="inline-block btn-orange bg-[#f05a1a] hover:bg-[#c44a12] text-white font-[family-name:var(--font-display)] font-extrabold tracking-widest text-xl px-12 py-5 transition-colors"
           >
             GET YOUR 6-PACK
           </Link>

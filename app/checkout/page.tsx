@@ -35,7 +35,7 @@ interface Rate {
 const inputClass =
   'w-full bg-[#111111] border border-[#2a2a2a] text-white px-4 py-3 text-sm focus:border-[#f05a1a] focus:outline-none transition-colors placeholder:text-gray-700';
 const labelClass =
-  'block text-xs font-[family-name:var(--font-display)] tracking-widest text-gray-500 mb-1';
+  'block text-xs font-[family-name:var(--font-display)] tracking-label text-gray-500 mb-1';
 
 export default function CheckoutPage() {
   const [step, setStep] = useState<1 | 2>(1);
@@ -152,7 +152,7 @@ export default function CheckoutPage() {
 
         {/* Order Summary Card */}
         <div className="bg-[#111111] border border-[#1a1a1a] p-5 mb-8">
-          <p className="text-xs font-[family-name:var(--font-display)] tracking-widest text-gray-500 mb-4">ORDER SUMMARY</p>
+          <p className="text-xs font-[family-name:var(--font-display)] tracking-label text-gray-500 mb-4">ORDER SUMMARY</p>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-white text-sm font-medium">KinetiCube™ 6-Pack</p>
@@ -176,7 +176,7 @@ export default function CheckoutPage() {
           </div>
 
           {available !== null && available > 0 && available <= 10 && (
-            <p className="text-[#f05a1a] text-sm font-[family-name:var(--font-display)] font-semibold tracking-[0.18em] mt-3">
+            <p className="text-[#f05a1a] text-sm font-[family-name:var(--font-display)] font-semibold tracking-label mt-3">
               ONLY {available} PACK{available === 1 ? '' : 'S'} LEFT IN THIS BATCH
             </p>
           )}
@@ -301,21 +301,21 @@ export default function CheckoutPage() {
             <div className="bg-[#111111] border border-[#1a1a1a] px-4 py-3 mb-6">
               <div className="flex items-start justify-between">
                 <div className="text-sm">
-                  <p className="text-xs font-[family-name:var(--font-display)] tracking-widest text-gray-500 mb-1">SHIPPING TO</p>
+                  <p className="text-xs font-[family-name:var(--font-display)] tracking-label text-gray-500 mb-1">SHIPPING TO</p>
                   <p className="text-white">{address.name}</p>
                   <p className="text-gray-400">{address.street1}{address.street2 ? `, ${address.street2}` : ''}</p>
                   <p className="text-gray-400">{address.city}, {address.state} {address.zip}</p>
                 </div>
                 <button
                   onClick={() => { setStep(1); setRates([]); setSelectedRate(null); }}
-                  className="text-[#f05a1a] hover:text-[#c44a12] text-xs font-[family-name:var(--font-display)] tracking-widest shrink-0 ml-4 mt-0.5"
+                  className="text-[#f05a1a] hover:text-[#c44a12] text-xs font-[family-name:var(--font-display)] tracking-label shrink-0 ml-4 mt-0.5"
                 >
                   EDIT
                 </button>
               </div>
             </div>
 
-            <p className="text-xs font-[family-name:var(--font-display)] tracking-widest text-gray-500 mb-3">SELECT SHIPPING METHOD</p>
+            <p className="text-xs font-[family-name:var(--font-display)] tracking-label text-gray-500 mb-3">SELECT SHIPPING METHOD</p>
             <div className="space-y-3 mb-8">
               {degraded && (
                 <p className="text-gray-500 text-xs mb-1">

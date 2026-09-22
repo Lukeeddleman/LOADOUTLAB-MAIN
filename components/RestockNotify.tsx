@@ -29,7 +29,7 @@ export default function RestockNotify() {
   if (state === 'done') {
     return (
       <div className="border border-[#f05a1a]/40 bg-[#f05a1a]/10 px-4 py-4 mb-4 text-center">
-        <p className="font-[family-name:var(--font-display)] font-black tracking-widest text-sm text-[#f05a1a]">
+        <p className="font-[family-name:var(--font-display)] font-bold tracking-label text-sm text-[#f05a1a]">
           YOU&apos;RE ON THE LIST
         </p>
         <p className="text-gray-400 text-xs mt-1">
@@ -41,7 +41,7 @@ export default function RestockNotify() {
 
   return (
     <form onSubmit={submit} className="mb-4">
-      <label className="block text-xs font-[family-name:var(--font-display)] tracking-widest text-gray-500 mb-2">
+      <label className="block text-xs font-[family-name:var(--font-display)] tracking-label text-gray-500 mb-2">
         GET NOTIFIED WHEN WE RESTOCK
       </label>
       <div className="flex gap-2">
@@ -56,7 +56,7 @@ export default function RestockNotify() {
         <button
           type="submit"
           disabled={state === 'sending'}
-          className="bg-[#f05a1a] hover:bg-[#c44a12] disabled:bg-[#2a2a2a] disabled:text-gray-600 text-white font-[family-name:var(--font-display)] font-black tracking-widest text-sm px-6 transition-colors"
+          className="bg-[#f05a1a] hover:bg-[#c44a12] disabled:bg-[#2a2a2a] disabled:text-gray-600 text-white font-[family-name:var(--font-display)] font-bold tracking-label text-sm px-6 transition-colors"
         >
           {state === 'sending' ? '...' : 'NOTIFY ME'}
         </button>

@@ -60,9 +60,9 @@ export default function ProductGallery() {
       </div>
 
       {/* Color label */}
-      <p className="text-center text-gray-500 font-[family-name:var(--font-display)] tracking-widest text-xs">
+      <p className="text-center text-gray-500 font-[family-name:var(--font-display)] tracking-label text-xs">
         SHOWING:{" "}
-        <span style={{ color: images[active].accent }} className="font-700">
+        <span style={{ color: images[active].accent }} className="font-bold">
           {images[active].label.toUpperCase()}
         </span>
         {" "}— COLORS ARE RANDOMLY ASSORTED IN EACH BOX

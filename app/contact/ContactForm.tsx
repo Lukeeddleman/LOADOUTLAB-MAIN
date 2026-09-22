@@ -48,7 +48,7 @@ export default function ContactForm() {
         </p>
         <button
           onClick={() => { setStatus('idle'); setForm({ name: '', email: '', subject: '', message: '' }); }}
-          className="mt-6 text-[#f05a1a] text-sm hover:underline font-[family-name:var(--font-display)] tracking-widest"
+          className="mt-6 text-[#f05a1a] text-sm hover:underline font-[family-name:var(--font-display)] tracking-label"
         >
           SEND ANOTHER
         </button>
@@ -60,7 +60,7 @@ export default function ContactForm() {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-gray-500 text-xs font-[family-name:var(--font-display)] tracking-widest mb-1">
+          <label className="block text-gray-500 text-xs font-[family-name:var(--font-display)] tracking-label mb-1">
             NAME <span className="text-[#f05a1a]">*</span>
           </label>
           <input
@@ -73,7 +73,7 @@ export default function ContactForm() {
           />
         </div>
         <div>
-          <label className="block text-gray-500 text-xs font-[family-name:var(--font-display)] tracking-widest mb-1">
+          <label className="block text-gray-500 text-xs font-[family-name:var(--font-display)] tracking-label mb-1">
             EMAIL <span className="text-[#f05a1a]">*</span>
           </label>
           <input
@@ -88,7 +88,7 @@ export default function ContactForm() {
       </div>
 
       <div>
-        <label className="block text-gray-500 text-xs font-[family-name:var(--font-display)] tracking-widest mb-1">
+        <label className="block text-gray-500 text-xs font-[family-name:var(--font-display)] tracking-label mb-1">
           SUBJECT
         </label>
         <select
@@ -107,7 +107,7 @@ export default function ContactForm() {
       </div>
 
       <div>
-        <label className="block text-gray-500 text-xs font-[family-name:var(--font-display)] tracking-widest mb-1">
+        <label className="block text-gray-500 text-xs font-[family-name:var(--font-display)] tracking-label mb-1">
           MESSAGE <span className="text-[#f05a1a]">*</span>
         </label>
         <textarea
@@ -127,7 +127,7 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={status === 'loading'}
-        className="w-full bg-[#f05a1a] hover:bg-[#c44a12] disabled:bg-[#7a3010] disabled:cursor-not-allowed text-white font-[family-name:var(--font-display)] font-black tracking-widest py-4 text-sm transition-colors"
+        className="w-full bg-[#f05a1a] hover:bg-[#c44a12] disabled:bg-[#7a3010] disabled:cursor-not-allowed text-white font-[family-name:var(--font-display)] font-bold tracking-label py-4 text-sm transition-colors"
       >
         {status === 'loading' ? 'SENDING...' : 'SEND MESSAGE'}
       </button>

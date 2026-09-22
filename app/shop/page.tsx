@@ -60,19 +60,19 @@ export default async function ShopPage() {
           <div className="lg:sticky lg:top-20">
             <div className="flex flex-wrap gap-2 mb-4">
               {soldOut ? (
-                <span className="inline-block bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-[family-name:var(--font-display)] tracking-widest px-3 py-1">
+                <span className="inline-block bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-[family-name:var(--font-display)] tracking-label px-3 py-1">
                   SOLD OUT
                 </span>
               ) : lowStock ? (
                 /* Barlow Condensed at weight 900 is narrow enough that small
                    sizes run together. Bigger, one weight lighter, and much
                    wider tracking keeps the urgency while staying readable. */
-                <span className="inline-flex items-center gap-2.5 bg-[#f05a1a] text-white text-sm font-[family-name:var(--font-display)] font-bold tracking-[0.2em] px-4 py-2 btn-orange">
+                <span className="inline-flex items-center gap-2.5 bg-[#f05a1a] text-white text-sm font-[family-name:var(--font-display)] font-bold tracking-label px-4 py-2 btn-orange">
                   <span className="w-2 h-2 rounded-full bg-white animate-pulse shrink-0" />
                   HURRY — ONLY {stock} LEFT
                 </span>
               ) : (
-                <span className="inline-block bg-[#f05a1a]/10 border border-[#f05a1a]/30 text-[#f05a1a] text-xs font-[family-name:var(--font-display)] tracking-widest px-3 py-1">
+                <span className="inline-block bg-[#f05a1a]/10 border border-[#f05a1a]/30 text-[#f05a1a] text-xs font-[family-name:var(--font-display)] tracking-label px-3 py-1">
                   IN STOCK · MADE IN THE USA
                 </span>
               )}
@@ -81,7 +81,7 @@ export default async function ShopPage() {
             <h2 className="font-[family-name:var(--font-display)] font-black text-4xl md:text-5xl tracking-tight mb-2">
               KINETICUBE™
             </h2>
-            <p className="text-gray-400 font-[family-name:var(--font-display)] tracking-widest text-sm mb-4">
+            <p className="text-gray-400 font-[family-name:var(--font-display)] tracking-label text-sm mb-4">
               REACTIVE POWDER TARGETS — 6-PACK — <span className="text-yellow-400">1 INCH</span>
             </p>
 
@@ -115,7 +115,7 @@ export default async function ShopPage() {
               <div className="flex items-start gap-3">
                 <span className="text-yellow-400 text-base mt-0.5">⚠️</span>
                 <div>
-                  <p className="text-yellow-400 font-[family-name:var(--font-display)] font-bold tracking-wider text-xs mb-1">
+                  <p className="text-yellow-400 font-[family-name:var(--font-display)] font-bold tracking-label text-xs mb-1">
                     CARTRIDGE COMPATIBILITY
                   </p>
                   <p className="text-yellow-200/80 text-sm leading-relaxed">
@@ -135,7 +135,7 @@ export default async function ShopPage() {
                   BUY NOW — ${PRICE.toFixed(2)}
                 </Link>
                 {lowStock && (
-                  <p className="text-[#f05a1a] text-sm font-[family-name:var(--font-display)] font-semibold tracking-[0.18em] text-center mb-4">
+                  <p className="text-[#f05a1a] text-sm font-[family-name:var(--font-display)] font-semibold tracking-label text-center mb-4">
                     {stock === 1
                       ? 'LAST ONE IN THIS BATCH'
                       : `LOW STOCK — ${stock} PACKS LEFT IN THIS BATCH`}
@@ -161,7 +161,7 @@ export default async function ShopPage() {
 
             {/* Color info */}
             <div className="border-t border-[#1a1a1a] pt-6">
-              <h3 className="font-[family-name:var(--font-display)] font-bold tracking-widest text-sm text-gray-400 mb-3">
+              <h3 className="font-[family-name:var(--font-display)] font-bold tracking-label text-sm text-gray-400 mb-3">
                 6 COLORS — RANDOMLY ASSORTED
               </h3>
               <p className="text-gray-500 text-sm leading-relaxed">
@@ -187,7 +187,7 @@ export default async function ShopPage() {
                 key={i}
                 className="bg-[#111111] border border-dashed border-[#2a2a2a] h-48 flex items-center justify-center"
               >
-                <span className="text-gray-700 font-[family-name:var(--font-display)] tracking-widest text-sm">
+                <span className="text-gray-700 font-[family-name:var(--font-display)] tracking-label text-sm">
                   COMING SOON
                 </span>
               </div>

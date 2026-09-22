@@ -23,7 +23,7 @@ export default function Footer() {
 
           {/* Links */}
           <div>
-            <h4 className="font-[family-name:var(--font-display)] font-700 tracking-widest text-[#f05a1a] mb-3 text-sm">
+            <h4 className="font-[family-name:var(--font-display)] font-bold tracking-label text-[#f05a1a] mb-3 text-sm">
               LINKS
             </h4>
             <ul className="space-y-2">
@@ -45,7 +45,7 @@ export default function Footer() {
 
           {/* Social */}
           <div>
-            <h4 className="font-[family-name:var(--font-display)] font-700 tracking-widest text-[#f05a1a] mb-3 text-sm">
+            <h4 className="font-[family-name:var(--font-display)] font-bold tracking-label text-[#f05a1a] mb-3 text-sm">
               FOLLOW US
             </h4>
             <ul className="space-y-2">

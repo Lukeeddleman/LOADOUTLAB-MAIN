@@ -145,7 +145,7 @@ export default function TrainingPage() {
       {/* Header */}
       <div className="bg-[#111111] border-b border-[#1a1a1a] py-14">
         <div className="max-w-5xl mx-auto px-4">
-          <p className="text-[#f05a1a] font-[family-name:var(--font-display)] tracking-widest text-xs mb-4">
+          <p className="text-[#f05a1a] font-[family-name:var(--font-display)] tracking-label text-xs mb-4">
             RANGE GUIDE
           </p>
           <h1 className="font-[family-name:var(--font-display)] font-black text-5xl md:text-6xl tracking-wide mb-5">
@@ -198,7 +198,7 @@ export default function TrainingPage() {
                   <h3 className="font-[family-name:var(--font-display)] font-black text-2xl tracking-normal">
                     {course.name}
                   </h3>
-                  <span className={`text-xs font-[family-name:var(--font-display)] tracking-widest border px-2 py-0.5 mt-1 ${course.difficultyColor}`}>
+                  <span className={`text-xs font-[family-name:var(--font-display)] tracking-label border px-2 py-0.5 mt-1 ${course.difficultyColor}`}>
                     {course.difficulty.toUpperCase()}
                   </span>
                 </div>
@@ -206,28 +206,28 @@ export default function TrainingPage() {
                 {/* Stats */}
                 <div className="flex gap-8 mb-6">
                   <div>
-                    <p className="text-gray-600 text-xs font-[family-name:var(--font-display)] tracking-widest mb-1">PACKS</p>
+                    <p className="text-gray-600 text-xs font-[family-name:var(--font-display)] tracking-label mb-1">PACKS</p>
                     <p className="text-white font-bold text-lg">{course.packs}</p>
                   </div>
                   <div>
-                    <p className="text-gray-600 text-xs font-[family-name:var(--font-display)] tracking-widest mb-1">ROUNDS</p>
+                    <p className="text-gray-600 text-xs font-[family-name:var(--font-display)] tracking-label mb-1">ROUNDS</p>
                     <p className="text-white font-bold text-lg">{course.rounds}</p>
                   </div>
                   <div>
-                    <p className="text-gray-600 text-xs font-[family-name:var(--font-display)] tracking-widest mb-1">FOCUS</p>
+                    <p className="text-gray-600 text-xs font-[family-name:var(--font-display)] tracking-label mb-1">FOCUS</p>
                     <p className="text-white font-bold text-sm" style={{ lineHeight: "1.6" }}>{course.focus}</p>
                   </div>
                 </div>
 
                 {/* Setup */}
                 <div className="mb-5">
-                  <p className="text-xs font-[family-name:var(--font-display)] tracking-widest text-gray-500 mb-2">SETUP</p>
+                  <p className="text-xs font-[family-name:var(--font-display)] tracking-label text-gray-500 mb-2">SETUP</p>
                   <p className="text-gray-300 text-sm" style={{ lineHeight: "1.85" }}>{course.setup}</p>
                 </div>
 
                 {/* Execution */}
                 <div className="mb-6">
-                  <p className="text-xs font-[family-name:var(--font-display)] tracking-widest text-gray-500 mb-3">HOW TO RUN IT</p>
+                  <p className="text-xs font-[family-name:var(--font-display)] tracking-label text-gray-500 mb-3">HOW TO RUN IT</p>
                   <ol className="space-y-2">
                     {course.execution.map((step, i) => (
                       <li key={i} className="flex gap-3 text-gray-300 text-sm" style={{ lineHeight: "1.85" }}>
@@ -240,7 +240,7 @@ export default function TrainingPage() {
 
                 {/* Tip */}
                 <div className="bg-[#1a1a1a] border border-[#2a2a2a] px-5 py-4">
-                  <p className="text-xs font-[family-name:var(--font-display)] tracking-widest text-[#f05a1a] mb-2">PIP&apos;S TIP</p>
+                  <p className="text-xs font-[family-name:var(--font-display)] tracking-label text-[#f05a1a] mb-2">PIP&apos;S TIP</p>
                   <p className="text-gray-400 text-sm" style={{ lineHeight: "1.85" }}>{course.tip}</p>
                 </div>
 
@@ -276,7 +276,7 @@ export default function TrainingPage() {
                 </div>
                 <p className="text-gray-400 text-sm mb-5" style={{ lineHeight: "1.85" }}>{drill.description}</p>
                 <div className="border-t border-[#1a1a1a] pt-4">
-                  <p className="text-xs font-[family-name:var(--font-display)] tracking-widest text-[#f05a1a] mb-2">TIP</p>
+                  <p className="text-xs font-[family-name:var(--font-display)] tracking-label text-[#f05a1a] mb-2">TIP</p>
                   <p className="text-gray-500 text-xs" style={{ lineHeight: "1.85" }}>{drill.tip}</p>
                 </div>
               </div>
@@ -299,7 +299,7 @@ export default function TrainingPage() {
             {tips.map((tip) => (
               <div key={tip.title} className="bg-[#111111] border border-[#1a1a1a] p-6">
                 <div className="text-2xl mb-4">{tip.icon}</div>
-                <h4 className="font-[family-name:var(--font-display)] font-bold tracking-widest text-sm text-white mb-3">
+                <h4 className="font-[family-name:var(--font-display)] font-bold tracking-label text-sm text-white mb-3">
                   {tip.title.toUpperCase()}
                 </h4>
                 <p className="text-gray-500 text-sm" style={{ lineHeight: "1.85" }}>{tip.body}</p>
