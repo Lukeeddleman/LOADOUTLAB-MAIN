@@ -1,22 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { normalizeQuantity } from '@/lib/parcel';
+import {
+  fallbackShippingCents,
+  fetchUspsRates,
+  FLAT_FALLBACK_TOKEN,
+  parseAddress,
+  ShippoError,
+  type NormalizedRate,
+} from '@/lib/shippo';
 
 const PRODUCT_PRICE_CENTS = 1299; // $12.99
 
-interface Address {
-  name: string;
-  street1: string;
-  street2?: string;
-  city: string;
-  state: string;
-  zip: string;
-}
-
-interface Rate {
-  id: string;
-  service: string;
-  amount: string;
-}
+export const maxDuration = 30;
 
 export async function POST(req: NextRequest) {
   if (process.env.IN_STOCK === 'false') {
@@ -25,14 +21,67 @@ export async function POST(req: NextRequest) {
 
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
   const body = await req.json();
-  const { address, rate, quantity = 1 }: { address: Address; rate: Rate; quantity: number } = body;
 
-  if (!address || !rate) {
-    return NextResponse.json({ error: 'Missing address or shipping rate' }, { status: 400 });
+  const address = parseAddress(body.address ?? {});
+  if (!address) {
+    return NextResponse.json({ error: 'Missing or incomplete shipping address' }, { status: 400 });
+  }
+
+  const quantity = normalizeQuantity(body.quantity ?? 1);
+  if (quantity === null) {
+    return NextResponse.json({ error: 'Invalid quantity' }, { status: 400 });
+  }
+
+  const serviceToken = typeof body.serviceToken === 'string' ? body.serviceToken : '';
+  if (!serviceToken) {
+    return NextResponse.json({ error: 'Missing shipping selection' }, { status: 400 });
+  }
+
+  // ── Re-price shipping server-side ────────────────────────────────────────
+  // The browser only tells us WHICH service level it picked. We re-create the
+  // shipment here from the address and the server-sized parcel, so neither the
+  // shipping amount nor the box can be tampered with in the request body, and
+  // the rate we hand the webhook is freshly minted (no expiry window).
+  //
+  // If Shippo is unreachable we do NOT block the sale: we charge a server-side
+  // fallback price, flag the order, and let the webhook (or a human) sort the
+  // label out afterwards.
+  let rate: NormalizedRate | undefined;
+  let shippoReachable = true;
+
+  if (serviceToken === FLAT_FALLBACK_TOKEN) {
+    // The customer was quoted the flat rate because Shippo was already down at
+    // the quoting step. Honour that price rather than re-quoting behind their
+    // back — the webhook buys the real label once Shippo is back.
+    shippoReachable = false;
+  } else {
+    try {
+      const rates = await fetchUspsRates(address, quantity);
+      rate = rates.find(r => r.token === serviceToken);
+
+      // Shippo answered but no longer offers the chosen service. Don't silently
+      // downgrade someone who picked Express — let them re-pick, which works
+      // immediately since Shippo is clearly up.
+      if (!rate) {
+        return NextResponse.json(
+          { error: 'That shipping option is no longer available. Please re-select shipping.' },
+          { status: 409 },
+        );
+      }
+    } catch (err) {
+      if (!(err instanceof ShippoError)) throw err;
+      console.error('[create-checkout] Shippo unreachable, falling back to flat shipping:', err);
+      shippoReachable = false;
+    }
   }
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://kineticube.shop';
-  const shippingCents = Math.round(parseFloat(rate.amount) * 100);
+
+  const shippingCents = rate
+    ? Math.round(parseFloat(rate.amount) * 100)
+    : fallbackShippingCents(body.quotedShippingCents);
+
+  const shippingLabel = rate ? `USPS ${rate.service}` : 'USPS — calculated at fulfillment';
 
   // Create a customer with the pre-collected address so Stripe Tax
   // can calculate correctly without re-asking the customer.
@@ -75,7 +124,7 @@ export async function POST(req: NextRequest) {
           currency: 'usd',
           tax_behavior: 'exclusive',
           product_data: {
-            name: `Shipping — USPS ${rate.service}`,
+            name: `Shipping — ${shippingLabel}`,
             tax_code: 'txcd_92010001', // Shipping & handling
           },
           unit_amount: shippingCents,
@@ -93,7 +142,11 @@ export async function POST(req: NextRequest) {
       ship_to_city: address.city,
       ship_to_state: address.state,
       ship_to_zip: address.zip,
-      shippo_rate_id: rate.id,
+      shippo_rate_id: rate?.id ?? '',
+      // Kept so the webhook can re-quote the same service level if the rate
+      // above is missing because Shippo was down at checkout.
+      ship_service_token: serviceToken,
+      shippo_degraded: shippoReachable ? '' : 'true',
       quantity: String(quantity),
     },
   });

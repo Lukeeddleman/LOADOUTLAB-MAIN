@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import { escapeHtml } from '@/lib/html';
 
 export async function POST(req: NextRequest) {
   try {
+    // Constructed per-request: the Resend client throws on a missing key, and
+    // at module scope that turns a missing build-time env var into a failed
+    // deploy rather than a runtime error.
+    const resend = new Resend(process.env.RESEND_API_KEY);
+
     const body = await req.json();
     const { name, email, subject, message } = body;
 
@@ -28,11 +32,11 @@ export async function POST(req: NextRequest) {
         <div style="font-family: sans-serif; max-width: 600px; color: #222;">
           <h2 style="color: #f05a1a; margin-bottom: 4px;">New Contact Form Submission</h2>
           <hr style="border-color: #eee; margin-bottom: 16px;" />
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
-          <p><strong>Subject:</strong> ${subject || '(none)'}</p>
+          <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+          <p><strong>Email:</strong> <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
+          <p><strong>Subject:</strong> ${escapeHtml(subject || '(none)')}</p>
           <hr style="border-color: #eee; margin: 16px 0;" />
-          <p style="white-space: pre-wrap;">${message}</p>
+          <p style="white-space: pre-wrap;">${escapeHtml(message)}</p>
           <hr style="border-color: #eee; margin-top: 24px;" />
           <p style="color: #999; font-size: 12px;">Sent via kineticube.shop contact form. Hit reply to respond directly.</p>
         </div>

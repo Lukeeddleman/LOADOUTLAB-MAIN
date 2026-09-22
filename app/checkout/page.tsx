@@ -24,6 +24,8 @@ interface Rate {
   id: string;
   provider: string;
   service: string;
+  /** Stable servicelevel token — the only part of the rate the server trusts. */
+  token: string;
   amount: string;
   currency: string;
   estimated_days: number | null;
@@ -44,6 +46,22 @@ export default function CheckoutPage() {
   const [selectedRate, setSelectedRate] = useState<Rate | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  /** True when live rates were unavailable and we're quoting a flat rate. */
+  const [degraded, setDegraded] = useState(false);
+
+  // Shipping is quoted for a specific quantity (the parcel size depends on it),
+  // and the server re-prices against the quantity it's given. Changing quantity
+  // after quoting would show one shipping price and charge another, so send the
+  // customer back to re-quote.
+  function changeQuantity(next: number) {
+    setQuantity(next);
+    if (step === 2) {
+      setStep(1);
+      setRates([]);
+      setSelectedRate(null);
+      setError('Quantity changed — please confirm your address to update shipping.');
+    }
+  }
 
   const subtotal = PRODUCT_PRICE * quantity;
   const shipping = selectedRate ? parseFloat(selectedRate.amount) : null;
@@ -62,6 +80,7 @@ export default function CheckoutPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to get rates');
       if (!data.rates || data.rates.length === 0) throw new Error('No USPS rates available for that address');
+      setDegraded(Boolean(data.degraded));
       setRates(data.rates);
       setSelectedRate(data.rates[0]);
       setStep(2);
@@ -80,7 +99,15 @@ export default function CheckoutPage() {
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ address, rate: selectedRate, quantity }),
+        body: JSON.stringify({
+          address,
+          serviceToken: selectedRate.token,
+          quantity,
+          // Only consulted if Shippo is down when the server re-prices, so the
+          // customer isn't charged less than the figure they were just shown.
+          // The server clamps it to its own floor — it can't be tampered down.
+          quotedShippingCents: Math.round(parseFloat(selectedRate.amount) * 100),
+        }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to create checkout session');
@@ -119,12 +146,12 @@ export default function CheckoutPage() {
               {/* Quantity */}
               <div className="flex items-center gap-1 bg-[#1a1a1a] border border-[#2a2a2a] px-2 py-1">
                 <button
-                  onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                  onClick={() => changeQuantity(Math.max(1, quantity - 1))}
                   className="text-gray-500 hover:text-white w-5 text-center select-none"
                 >−</button>
                 <span className="text-white text-sm w-5 text-center">{quantity}</span>
                 <button
-                  onClick={() => setQuantity(q => Math.min(10, q + 1))}
+                  onClick={() => changeQuantity(Math.min(10, quantity + 1))}
                   className="text-gray-500 hover:text-white w-5 text-center select-none"
                 >+</button>
               </div>
@@ -254,6 +281,12 @@ export default function CheckoutPage() {
 
             <p className="text-xs font-[family-name:var(--font-display)] tracking-widest text-gray-500 mb-3">SELECT SHIPPING METHOD</p>
             <div className="space-y-3 mb-8">
+              {degraded && (
+                <p className="text-gray-500 text-xs mb-1">
+                  Live carrier rates are temporarily unavailable, so we&apos;re quoting our
+                  standard flat rate. Your order ships as normal.
+                </p>
+              )}
               {rates.map(rate => (
                 <button
                   key={rate.id}

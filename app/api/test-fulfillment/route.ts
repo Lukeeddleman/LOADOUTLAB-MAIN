@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { getParcel } from '@/lib/parcel';
 
 // ── DEV ONLY ─────────────────────────────────────────────────────────────────
 // Runs the full fulfillment pipeline with stub order data so you can verify
@@ -47,14 +48,8 @@ export async function POST() {
       body: JSON.stringify({
         address_from: SHIP_FROM,
         address_to: STUB_ADDRESS,
-        parcels: [{
-          length: '3.75',
-          width: '2.75',
-          height: '1.5',
-          distance_unit: 'in',
-          weight: '5',
-          mass_unit: 'oz',
-        }],
+        // Use the real 1-pack parcel so the test exercises production dimensions
+        parcels: [getParcel(1)],
         async: false,
       }),
     });
