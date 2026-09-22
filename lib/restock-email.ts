@@ -76,7 +76,7 @@ export function restockHtml(baseUrl: string): string {
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr>
             <td align="center" style="padding:0;">
-              <img src="${baseUrl}/product-front.png" width="598" alt="KinetiCube reactive powder targets"
+              <img src="${baseUrl}/email-cube-red.jpg" width="598" alt="A red KinetiCube reactive powder target"
                    style="display:block;border:0;outline:none;width:100%;max-width:598px;height:auto;" />
             </td>
           </tr>

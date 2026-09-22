@@ -132,7 +132,9 @@ export async function POST(req: NextRequest) {
           product_data: {
             name: 'KinetiCube™ — Reactive Powder Targets (6-Pack)',
             description: '6 cubes · 6 vivid colors · randomly assorted · Made in the USA',
-            images: [`${baseUrl}/product-front.png`],
+            // JPEG rather than the source .webp: Stripe's checkout renders this
+            // as a product thumbnail and webp isn't reliable there.
+            images: [`${baseUrl}/product-red.jpg`],
             tax_code: 'txcd_99999999', // General tangible personal property
           },
           unit_amount: PRODUCT_PRICE_CENTS,
