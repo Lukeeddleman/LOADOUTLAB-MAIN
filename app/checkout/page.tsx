@@ -176,7 +176,7 @@ export default function CheckoutPage() {
           </div>
 
           {available !== null && available > 0 && available <= 10 && (
-            <p className="text-[#f05a1a] text-xs font-[family-name:var(--font-display)] tracking-widest mt-3">
+            <p className="text-[#f05a1a] text-sm font-[family-name:var(--font-display)] font-semibold tracking-[0.18em] mt-3">
               ONLY {available} PACK{available === 1 ? '' : 'S'} LEFT IN THIS BATCH
             </p>
           )}

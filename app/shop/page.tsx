@@ -64,8 +64,11 @@ export default async function ShopPage() {
                   SOLD OUT
                 </span>
               ) : lowStock ? (
-                <span className="inline-flex items-center gap-2 bg-[#f05a1a] text-white text-xs font-[family-name:var(--font-display)] font-black tracking-widest px-3 py-1 btn-orange">
-                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                /* Barlow Condensed at weight 900 is narrow enough that small
+                   sizes run together. Bigger, one weight lighter, and much
+                   wider tracking keeps the urgency while staying readable. */
+                <span className="inline-flex items-center gap-2.5 bg-[#f05a1a] text-white text-sm font-[family-name:var(--font-display)] font-bold tracking-[0.2em] px-4 py-2 btn-orange">
+                  <span className="w-2 h-2 rounded-full bg-white animate-pulse shrink-0" />
                   HURRY — ONLY {stock} LEFT
                 </span>
               ) : (
@@ -132,7 +135,7 @@ export default async function ShopPage() {
                   BUY NOW — ${PRICE.toFixed(2)}
                 </Link>
                 {lowStock && (
-                  <p className="text-[#f05a1a] text-xs font-[family-name:var(--font-display)] tracking-widest text-center mb-4">
+                  <p className="text-[#f05a1a] text-sm font-[family-name:var(--font-display)] font-semibold tracking-[0.18em] text-center mb-4">
                     {stock === 1
                       ? 'LAST ONE IN THIS BATCH'
                       : `LOW STOCK — ${stock} PACKS LEFT IN THIS BATCH`}
