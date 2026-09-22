@@ -20,7 +20,7 @@ const STUB_ADDRESS = {
 };
 
 const SHIP_FROM = {
-  name: 'KinetiCube',
+  name: 'Kineticube',
   street1: process.env.SHIP_FROM_STREET1 ?? '1007 Hometown Pkwy',
   city: 'Kyle',
   state: 'TX',
@@ -113,7 +113,7 @@ export async function POST() {
       },
       body: JSON.stringify({
         printerId: Number(process.env.PRINTNODE_PRINTER_ID),
-        title: `[TEST] KinetiCube — ${STUB_ADDRESS.name}`,
+        title: `[TEST] Kineticube — ${STUB_ADDRESS.name}`,
         contentType: 'pdf_base64',
         content: pdfBase64,
         source: 'kineticube-test',
@@ -127,7 +127,7 @@ export async function POST() {
     // ── 4. Send order email ────────────────────────────────────────────────
     log.push('Sending order email...');
     await resend.emails.send({
-      from: 'KinetiCube Orders <noreply@kineticube.shop>',
+      from: 'Kineticube Orders <noreply@kineticube.shop>',
       to: 'support@kineticube.shop',
       subject: `[TEST] New Order — ${STUB_ADDRESS.name} · 1 6-pack`,
       html: `

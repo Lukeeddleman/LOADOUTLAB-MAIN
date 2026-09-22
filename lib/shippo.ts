@@ -117,7 +117,7 @@ export async function fetchUspsRates(
 ): Promise<NormalizedRate[]> {
   const payload = {
     address_from: {
-      name: 'KinetiCube',
+      name: 'Kineticube',
       street1: process.env.SHIP_FROM_STREET1,
       city: 'Kyle',
       state: 'TX',

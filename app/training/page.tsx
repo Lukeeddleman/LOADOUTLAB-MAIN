@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Training — KinetiCube™ Reactive Powder Targets",
-  description: "Drills, courses of fire, and range tips designed around KinetiCube reactive targets. One shot. Make it count.",
+  title: "Training — Kineticube™ Reactive Powder Targets",
+  description: "Drills, courses of fire, and range tips designed around Kineticube reactive targets. One shot. Make it count.",
 };
 
 const courses = [
@@ -119,7 +119,7 @@ const tips = [
   {
     icon: "⚠️",
     title: "High-Velocity Cartridges",
-    body: "KinetiCubes perform best with slower or heavier projectiles. High-velocity rounds like 5.56 NATO may pass through before the cube can fully react — you might need a second hit. This is physics, not a defect.",
+    body: "Kineticubes perform best with slower or heavier projectiles. High-velocity rounds like 5.56 NATO may pass through before the cube can fully react — you might need a second hit. This is physics, not a defect.",
   },
   {
     icon: "📐",
@@ -129,7 +129,7 @@ const tips = [
   {
     icon: "🧠",
     title: "Train the Mindset",
-    body: "The one-shot nature of KinetiCubes is a feature, not a limitation. Every missed cube is an immediate, unambiguous piece of feedback. Paper targets let you rationalize. These don't.",
+    body: "The one-shot nature of Kineticubes is a feature, not a limitation. Every missed cube is an immediate, unambiguous piece of feedback. Paper targets let you rationalize. These don't.",
   },
   {
     icon: "📸",
@@ -152,7 +152,7 @@ export default function TrainingPage() {
             TRAINING
           </h1>
           <p className="text-gray-400 text-base max-w-2xl" style={{ lineHeight: "1.8" }}>
-            Drills and courses of fire built around the way KinetiCubes work.
+            Drills and courses of fire built around the way Kineticubes work.
           </p>
         </div>
       </div>
@@ -169,7 +169,7 @@ export default function TrainingPage() {
             </p>
             <p className="text-gray-500 text-sm mt-5 max-w-2xl" style={{ lineHeight: "1.9" }}>
               Paper targets let you be sloppy. A ragged hole tells you nothing about which shot was the miss.
-              KinetiCubes give you instant, unambiguous feedback on every single round. Hit it and it&apos;s gone.
+              Kineticubes give you instant, unambiguous feedback on every single round. Hit it and it&apos;s gone.
               Miss it and everyone on the line knows. That pressure is the training.
             </p>
           </div>

@@ -61,7 +61,7 @@ if (!process.env.STRIPE_WEBHOOK_SECRET) {
 
 const stripe = new Stripe(stripeKey);
 
-console.log(bold('\nKinetiCube — order pipeline dry run'));
+console.log(bold('\nKineticube — order pipeline dry run'));
 console.log(dim('Test mode only. No real money, no real postage.\n'));
 
 // ── 1. Get a Shippo test rate, exactly as checkout would ───────────────────
@@ -77,7 +77,7 @@ if (DEGRADED) {
     headers: { Authorization: `ShippoToken ${shippoKey}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       address_from: {
-        name: 'KinetiCube',
+        name: 'Kineticube',
         street1: process.env.SHIP_FROM_STREET1 ?? '1007 Hometown Pkwy',
         city: 'Kyle',
         state: 'TX',
@@ -111,7 +111,7 @@ const paymentIntent = await stripe.paymentIntents.create({
   amount: 1299 + 700,
   currency: 'usd',
   payment_method_types: ['card'],
-  description: 'KinetiCube dry run',
+  description: 'Kineticube dry run',
 });
 console.log(green(paymentIntent.id));
 

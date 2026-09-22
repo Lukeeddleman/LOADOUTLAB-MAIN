@@ -9,7 +9,7 @@ export interface RestockSendResult {
   error?: string;
 }
 
-export const RESTOCK_SUBJECT = 'KinetiCube is back in stock';
+export const RESTOCK_SUBJECT = 'Kineticube is back in stock';
 
 // Email clients mostly ignore @font-face, so the brand's Barlow Condensed will
 // only load in a few (Apple Mail). The condensed fallbacks keep the tall,
@@ -84,7 +84,7 @@ export function restockHtml(baseUrl: string): string {
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr>
             <td align="center" bgcolor="${PANEL}" style="background-color:${PANEL};padding:0;">
-              <img src="${baseUrl}/email-cube-red.jpg" width="598" alt="A red KinetiCube reactive powder target"
+              <img src="${baseUrl}/email-cube-red.jpg" width="598" alt="A red Kineticube reactive powder target"
                    style="display:block;border:0;outline:none;width:100%;max-width:598px;height:auto;" />
             </td>
           </tr>
@@ -149,14 +149,14 @@ export function restockHtml(baseUrl: string): string {
         <p style="margin:0 0 10px 0;font-family:${BODY_FONT};font-size:12px;line-height:1.6;color:#8a8a8a;">
           You're receiving this because you signed up on
           <a href="${shopUrl}" style="color:${ORANGE};text-decoration:none;">kineticube.shop</a>
-          to be told when KinetiCube came back in stock. This is a one-time notice —
+          to be told when Kineticube came back in stock. This is a one-time notice —
           you've already been removed from that list and won't get anything else from us.
         </p>
         <p style="margin:0 0 10px 0;font-family:${BODY_FONT};font-size:12px;line-height:1.6;color:#8a8a8a;">
           Questions? Just reply to this email — it reaches us directly.
         </p>
         <p style="margin:0;font-family:${BODY_FONT};font-size:12px;line-height:1.6;color:#6a6a6a;">
-          KinetiCube · ${businessLocation}
+          Kineticube · ${businessLocation}
         </p>
       </td>
     </tr>
@@ -191,12 +191,12 @@ Made in the USA · Ships USPS from Texas · Non-explosive
 
 ---
 You're receiving this because you signed up on kineticube.shop to be told
-when KinetiCube came back in stock. This is a one-time notice — you've
+when Kineticube came back in stock. This is a one-time notice — you've
 already been removed from that list and won't get anything else from us.
 
 Questions? Just reply to this email.
 
-KinetiCube · ${businessLocation}
+Kineticube · ${businessLocation}
 `;
 }
 
@@ -223,7 +223,7 @@ export async function sendRestockEmails(emails: string[]): Promise<RestockSendRe
     try {
       const result = await resend.batch.send(
         chunk.map(to => ({
-          from: 'KinetiCube <noreply@kineticube.shop>',
+          from: 'Kineticube <noreply@kineticube.shop>',
           // A monitored reply address is both useful and a trust signal.
           replyTo: 'support@kineticube.shop',
           to,

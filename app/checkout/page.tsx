@@ -155,7 +155,7 @@ export default function CheckoutPage() {
           <p className="text-xs font-[family-name:var(--font-display)] tracking-label text-gray-500 mb-4">ORDER SUMMARY</p>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-white text-sm font-medium">KinetiCube™ 6-Pack</p>
+              <p className="text-white text-sm font-medium">Kineticube™ 6-Pack</p>
               <p className="text-gray-600 text-xs mt-0.5">Reactive Powder Targets</p>
             </div>
             <div className="flex items-center gap-3">

@@ -249,7 +249,7 @@ export default function Home() {
               </h2>
               <p className="text-gray-400 text-base 2xl:text-lg mb-8 max-w-md" style={{ lineHeight: "1.85" }}>
                 Every cube gets one shot — so make it count. We built a full library of drills,
-                courses of fire, and range tips designed specifically around the way KinetiCubes work.
+                courses of fire, and range tips designed specifically around the way Kineticubes work.
               </p>
               <Link
                 href="/training"

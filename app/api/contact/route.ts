@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
     }
 
     await resend.emails.send({
-      from: 'KinetiCube Contact Form <noreply@kineticube.shop>',
+      from: 'Kineticube Contact Form <noreply@kineticube.shop>',
       to: 'support@kineticube.shop',
       replyTo: email,
       subject: subject ? `[Contact] ${subject}` : `[Contact] Message from ${name}`,

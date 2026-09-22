@@ -130,7 +130,7 @@ export async function POST(req: NextRequest) {
           currency: 'usd',
           tax_behavior: 'exclusive',
           product_data: {
-            name: 'KinetiCube™ — Reactive Powder Targets (6-Pack)',
+            name: 'Kineticube™ — Reactive Powder Targets (6-Pack)',
             description: '6 cubes · 6 vivid colors · randomly assorted · Made in the USA',
             // JPEG rather than the source .webp: Stripe's checkout renders this
             // as a product thumbnail and webp isn't reliable there.

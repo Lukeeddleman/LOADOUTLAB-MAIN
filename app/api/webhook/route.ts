@@ -244,7 +244,7 @@ export async function POST(req: NextRequest) {
         },
         body: JSON.stringify({
           printerId: Number(process.env.PRINTNODE_PRINTER_ID),
-          title: `KinetiCube — ${ship_to_name}`,
+          title: `Kineticube — ${ship_to_name}`,
           contentType: 'pdf_base64',
           content: pdfBase64,
           source: 'kineticube.shop',
@@ -267,7 +267,7 @@ export async function POST(req: NextRequest) {
     const qty = Number(quantity ?? 1);
     const plural = qty > 1 ? 's' : '';
     const sendResult = await resend.emails.send({
-      from: 'KinetiCube Orders <noreply@kineticube.shop>',
+      from: 'Kineticube Orders <noreply@kineticube.shop>',
       to: 'support@kineticube.shop',
       subject: labelUrl
         ? `New Order — ${ship_to_name} · ${qty} 6-pack${plural}`

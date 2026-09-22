@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Order Confirmed — KinetiCube™',
+  title: 'Order Confirmed — Kineticube™',
 };
 
 export default function SuccessPage() {
@@ -14,7 +14,7 @@ export default function SuccessPage() {
           ORDER CONFIRMED
         </h1>
         <p className="text-gray-400 text-sm leading-relaxed mb-2">
-          Your KinetiCubes are on the way. Check your email for a receipt — we&apos;ll send tracking once your order ships.
+          Your Kineticubes are on the way. Check your email for a receipt — we&apos;ll send tracking once your order ships.
         </p>
         <p className="text-gray-600 text-sm mb-10">
           Questions?{' '}
