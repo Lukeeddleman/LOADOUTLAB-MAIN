@@ -1,13 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdmin } from '@/lib/admin-auth';
-import { clearWaitlist, getStock, getWaitlist, setStock } from '@/lib/stock';
+import {
+  clearWaitlist,
+  getStock,
+  getWaitlist,
+  setStock,
+  stockConfigReport,
+  StockUnavailableError,
+} from '@/lib/stock';
 
 export async function GET() {
   if (!(await isAdmin())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
   const [stock, waitlist] = await Promise.all([getStock(), getWaitlist()]);
-  return NextResponse.json({ stock, waitlist });
+  return NextResponse.json({ stock, waitlist, config: stockConfigReport() });
 }
 
 export async function POST(req: NextRequest) {
@@ -22,14 +29,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Enter a whole number, 0 or higher.' }, { status: 400 });
   }
 
-  const saved = await setStock(count);
-  if (saved === null) {
-    return NextResponse.json(
-      { error: 'Could not save. Check that Upstash is connected in Vercel.' },
-      { status: 502 },
-    );
+  try {
+    const saved = await setStock(count);
+    return NextResponse.json({ stock: saved });
+  } catch (err) {
+    // Say what actually went wrong — "not connected" was ambiguous between
+    // missing variables and a failed call.
+    const message =
+      err instanceof StockUnavailableError ? err.message : 'Could not save the stock count.';
+    console.error('[admin/stock]', err);
+    return NextResponse.json({ error: message }, { status: 502 });
   }
-  return NextResponse.json({ stock: saved });
 }
 
 export async function DELETE() {

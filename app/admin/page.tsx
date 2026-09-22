@@ -20,6 +20,7 @@ export default function AdminPage() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [saved, setSaved] = useState(false);
+  const [config, setConfig] = useState('');
 
   const load = useCallback(async () => {
     try {
@@ -33,6 +34,7 @@ export default function AdminPage() {
       setStock(data.stock);
       setDraft(data.stock === null ? '' : String(data.stock));
       setWaitlist(data.waitlist ?? []);
+      setConfig(data.config ?? '');
     } finally {
       setChecking(false);
     }
@@ -166,6 +168,11 @@ export default function AdminPage() {
                   ? 'Shop is showing the low-stock urgency message.'
                   : 'Shop is showing the normal in-stock badge.'}
           </p>
+          {config && (
+            <p className="text-gray-700 text-xs mt-3 border-t border-[#1a1a1a] pt-3">
+              Storage: {config}
+            </p>
+          )}
         </div>
 
         <form onSubmit={save} className="mb-10">
