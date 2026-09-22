@@ -4,6 +4,7 @@ import { Resend } from 'resend';
 import { escapeHtml } from '@/lib/html';
 import { normalizeQuantity } from '@/lib/parcel';
 import { fetchUspsRates, parseAddress } from '@/lib/shippo';
+import { decrementStock, LOW_STOCK_THRESHOLD } from '@/lib/stock';
 
 // Vercel enforces its own default timeout (10s Hobby / 15s Pro) unless we raise
 // it here. That matters a lot: if this function is killed mid-flight, Stripe
@@ -122,6 +123,13 @@ export async function POST(req: NextRequest) {
   let trackingUrlProvider: string | null = null;
   let labelQueued = false;
   let rateId = shippo_rate_id || '';
+
+  // ── Count the sale against stock ─────────────────────────────────────────
+  // Runs before the label work so it happens even if Shippo or the printer
+  // fails — the packs are sold either way. The duplicate guard above is what
+  // keeps a redelivered event from decrementing twice.
+  const soldQty = normalizeQuantity(quantity ?? 1) ?? 1;
+  const remainingStock = await decrementStock(soldQty);
 
   /** Buy a label for `rate`. Returns true on success. */
   async function purchaseLabel(rate: string): Promise<boolean> {
@@ -275,6 +283,21 @@ export async function POST(req: NextRequest) {
             ${escapeHtml(ship_to_city)}, ${escapeHtml(ship_to_state)} ${escapeHtml(ship_to_zip)}
           </p>
           <p><strong>Quantity:</strong> ${qty} 6-pack${plural} (${qty * 6} cubes)</p>
+
+          ${remainingStock !== null ? `
+          <p style="${remainingStock === 0
+            ? 'color:#cc0000;font-weight:bold;'
+            : remainingStock <= LOW_STOCK_THRESHOLD
+              ? 'color:#f05a1a;font-weight:bold;'
+              : 'color:#444;'}">
+            Stock remaining: ${remainingStock} pack${remainingStock === 1 ? '' : 's'}${
+              remainingStock === 0
+                ? ' — YOU ARE SOLD OUT. The shop is now showing a restock signup.'
+                : remainingStock <= LOW_STOCK_THRESHOLD
+                  ? ' — running low, time to print more.'
+                  : ''
+            }
+          </p>` : ''}
 
           ${trackingNumber ? `
           <p><strong>Tracking:</strong>

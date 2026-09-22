@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const US_STATES = [
   'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA',
@@ -49,6 +49,21 @@ export default function CheckoutPage() {
   const [error, setError] = useState('');
   /** True when live rates were unavailable and we're quoting a flat rate. */
   const [degraded, setDegraded] = useState(false);
+  /** Packs available, or null when there's no limit we know of. */
+  const [available, setAvailable] = useState<number | null>(null);
+
+  // Cap the quantity picker to what's actually in stock, so nobody fills in a
+  // whole address only to be rejected at the last step.
+  useEffect(() => {
+    fetch('/api/stock')
+      .then(res => res.json())
+      .then(data => {
+        if (typeof data.stock === 'number') setAvailable(data.stock);
+      })
+      .catch(() => {});
+  }, []);
+
+  const maxQuantity = available === null ? 10 : Math.min(10, available);
 
   // Shipping is quoted for a specific quantity (the parcel size depends on it),
   // and the server re-prices against the quantity it's given. Changing quantity
@@ -152,13 +167,19 @@ export default function CheckoutPage() {
                 >−</button>
                 <span className="text-white text-sm w-5 text-center">{quantity}</span>
                 <button
-                  onClick={() => changeQuantity(Math.min(10, quantity + 1))}
+                  onClick={() => changeQuantity(Math.min(maxQuantity, quantity + 1))}
                   className="text-gray-500 hover:text-white w-5 text-center select-none"
                 >+</button>
               </div>
               <span className="text-white font-bold w-16 text-right">${subtotal.toFixed(2)}</span>
             </div>
           </div>
+
+          {available !== null && available > 0 && available <= 10 && (
+            <p className="text-[#f05a1a] text-xs font-[family-name:var(--font-display)] tracking-widest mt-3">
+              ONLY {available} PACK{available === 1 ? '' : 'S'} LEFT IN THIS BATCH
+            </p>
+          )}
 
           {step === 2 && selectedRate && (
             <>

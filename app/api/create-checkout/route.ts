@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { normalizeQuantity } from '@/lib/parcel';
+import { getStock } from '@/lib/stock';
 import {
   fallbackShippingCents,
   fetchUspsRates,
@@ -30,6 +31,22 @@ export async function POST(req: NextRequest) {
   const quantity = normalizeQuantity(body.quantity ?? 1);
   if (quantity === null) {
     return NextResponse.json({ error: 'Invalid quantity' }, { status: 400 });
+  }
+
+  // A null count means we can't reach the counter — keep selling rather than
+  // blocking checkout over it. A real number is enforced.
+  const stock = await getStock();
+  if (stock !== null && stock < quantity) {
+    return NextResponse.json(
+      {
+        error:
+          stock === 0
+            ? 'Just sold out — nothing left in this batch.'
+            : `Only ${stock} pack${stock === 1 ? '' : 's'} left. Please lower the quantity.`,
+        available: stock,
+      },
+      { status: 409 },
+    );
   }
 
   const serviceToken = typeof body.serviceToken === 'string' ? body.serviceToken : '';
