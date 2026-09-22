@@ -117,6 +117,10 @@ export async function fetchUspsRates(
       state: 'TX',
       zip: process.env.SHIP_FROM_ZIP,
       country: 'US',
+      // USPS returns rates happily without these, then refuses the actual
+      // label purchase with "address_from.email must not be empty".
+      email: process.env.SHIP_FROM_EMAIL || 'support@kineticube.shop',
+      ...(process.env.SHIP_FROM_PHONE ? { phone: process.env.SHIP_FROM_PHONE } : {}),
     },
     address_to: {
       name: address.name,

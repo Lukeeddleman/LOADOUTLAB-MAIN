@@ -26,6 +26,8 @@ const SHIP_FROM = {
   state: 'TX',
   zip: process.env.SHIP_FROM_ZIP ?? '78640',
   country: 'US',
+  // USPS refuses the label purchase without a sender email.
+  email: process.env.SHIP_FROM_EMAIL || 'support@kineticube.shop',
 };
 
 export async function POST() {

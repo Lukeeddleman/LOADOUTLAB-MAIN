@@ -14,15 +14,16 @@ import { fetchUspsRates, parseAddress } from '@/lib/shippo';
 // `bodyParser: false` config that used to live here was never honoured.
 export const maxDuration = 60;
 
-// Budget, worst case: re-quote 12s + label 18s + PDF 8s + print 10s = 48s,
-// leaving headroom under maxDuration for the Stripe and Resend calls. The
-// realistic path is well under 15s. Note that the duplicate guard is claimed
-// before any of this runs, so even blowing the budget can't double-buy a label.
+// Budget: a failed label purchase retries once with a fresh quote, so the worst
+// case is label 15s + re-quote 10s + label 15s + PDF 8s + print 10s = 58s. That
+// only happens when calls hang rather than fail; the realistic path is under
+// 15s. The duplicate guard is claimed before any of this runs, so even blowing
+// the budget can't double-buy a label.
 /** How long a 'processing' claim blocks retries before we assume that run died. */
 const STALE_CLAIM_MS = 10 * 60 * 1000;
 
-const RATE_TIMEOUT_MS = 12_000;
-const SHIPPO_TIMEOUT_MS = 18_000;
+const RATE_TIMEOUT_MS = 10_000;
+const SHIPPO_TIMEOUT_MS = 15_000;
 const PDF_TIMEOUT_MS = 8_000;
 const PRINTNODE_TIMEOUT_MS = 10_000;
 
@@ -112,7 +113,6 @@ export async function POST(req: NextRequest) {
     ship_to_zip,
     shippo_rate_id,
     ship_service_token,
-    shippo_degraded,
     quantity,
   } = meta;
 
@@ -122,50 +122,8 @@ export async function POST(req: NextRequest) {
   let labelQueued = false;
   let rateId = shippo_rate_id || '';
 
-  // ── 1a. Recover a rate if checkout couldn't get one ──────────────────────
-  // Checkout deliberately completes the sale even when Shippo is unreachable.
-  // Shippo may well be back by now (the customer can sit on the Stripe page for
-  // minutes), so try once more here before giving up and asking for a manual
-  // label. The order is already paid for either way.
-  if (!rateId) {
-    const address = parseAddress({
-      name: ship_to_name,
-      street1: ship_to_street1,
-      street2: ship_to_street2,
-      city: ship_to_city,
-      state: ship_to_state,
-      zip: ship_to_zip,
-    });
-    const qty = normalizeQuantity(quantity ?? 1);
-
-    if (!address || qty === null) {
-      errors.push('No shipping rate on the order, and the address in metadata is unusable.');
-    } else {
-      try {
-        const rates = await fetchUspsRates(address, qty, RATE_TIMEOUT_MS);
-        const recovered = rates.find(r => r.token === ship_service_token) ?? rates[0];
-        if (recovered) {
-          rateId = recovered.id;
-          errors.push(
-            `Shipping was quoted at a flat rate because Shippo was down at checkout; ` +
-              `re-quoted here as ${recovered.service} at $${recovered.amount} — verify this ` +
-              `covers what the customer was charged.`,
-          );
-        } else {
-          errors.push('Re-quote returned no USPS rates — buy this label manually.');
-        }
-      } catch (err) {
-        errors.push(`Re-quote failed, buy this label manually: ${String(err)}`);
-      }
-    }
-  }
-
-  // ── 1b. Purchase Shippo label ────────────────────────────────────────────
-  if (!rateId) {
-    if (!shippo_degraded) {
-      errors.push('Session metadata has no shippo_rate_id — no label could be purchased.');
-    }
-  } else {
+  /** Buy a label for `rate`. Returns true on success. */
+  async function purchaseLabel(rate: string): Promise<boolean> {
     try {
       const labelRes = await fetch('https://api.goshippo.com/transactions/', {
         method: 'POST',
@@ -174,7 +132,7 @@ export async function POST(req: NextRequest) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          rate: rateId,
+          rate,
           label_file_type: 'PDF_4x6',
           async: false,
         }),
@@ -187,12 +145,66 @@ export async function POST(req: NextRequest) {
         labelUrl = labelData.label_url;
         trackingNumber = labelData.tracking_number;
         trackingUrlProvider = labelData.tracking_url_provider;
-      } else {
-        errors.push(`Shippo: ${JSON.stringify(labelData.messages ?? labelData)}`);
+        return true;
       }
+      errors.push(`Shippo: ${JSON.stringify(labelData.messages ?? labelData)}`);
     } catch (err) {
       errors.push(`Shippo fetch error: ${String(err)}`);
     }
+    return false;
+  }
+
+  /** Quote this order fresh, e.g. because the stored rate is stale or invalid. */
+  async function requote(): Promise<string> {
+    const address = parseAddress({
+      name: ship_to_name,
+      street1: ship_to_street1,
+      street2: ship_to_street2,
+      city: ship_to_city,
+      state: ship_to_state,
+      zip: ship_to_zip,
+    });
+    const qty = normalizeQuantity(quantity ?? 1);
+
+    if (!address || qty === null) {
+      errors.push('Cannot re-quote: the address stored on the order is unusable.');
+      return '';
+    }
+    try {
+      const rates = await fetchUspsRates(address, qty, RATE_TIMEOUT_MS);
+      const recovered = rates.find(r => r.token === ship_service_token) ?? rates[0];
+      if (!recovered) {
+        errors.push('Re-quote returned no USPS rates — buy this label manually.');
+        return '';
+      }
+      errors.push(
+        `Re-quoted as ${recovered.service} at $${recovered.amount} — check this covers ` +
+          `what the customer was charged.`,
+      );
+      return recovered.id;
+    } catch (err) {
+      errors.push(`Re-quote failed, buy this label manually: ${String(err)}`);
+      return '';
+    }
+  }
+
+  // ── 1. Get a label ───────────────────────────────────────────────────────
+  // Checkout deliberately completes the sale even when Shippo is unreachable,
+  // so there may be no rate here at all. And a rate stored at checkout can go
+  // bad afterwards — it expires, or it belongs to a shipment USPS later
+  // rejects. Either way the order is already paid for, so fall back to a fresh
+  // quote rather than stranding it.
+  if (rateId) {
+    const bought = await purchaseLabel(rateId);
+    if (!bought) {
+      errors.push('Stored rate failed — retrying with a fresh quote.');
+      rateId = '';
+    }
+  }
+
+  if (!labelUrl) {
+    rateId = await requote();
+    if (rateId) await purchaseLabel(rateId);
   }
 
   // ── 2. Send label to PrintNode ───────────────────────────────────────────
