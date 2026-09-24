@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import ProductGallery from "@/components/ProductGallery";
 import RestockNotify from "@/components/RestockNotify";
+import { productOrDefault } from "@/lib/products";
 import { getStock, LOW_STOCK_THRESHOLD } from "@/lib/stock";
 
 export const metadata: Metadata = {
@@ -9,7 +10,10 @@ export const metadata: Metadata = {
   description: "Get your Kineticube 6-Pack. Reactive powder targets with instant colorful visual feedback. Made in the USA.",
 };
 
-const PRICE = 12.99;
+// This page sells one specific product; everything about it comes from the
+// registry so a price change is one edit in one file.
+const PRODUCT = productOrDefault("kineticube");
+const PRICE = PRODUCT.priceCents / 100;
 
 const perks = [
   "6 cubes per pack",
@@ -27,7 +31,7 @@ export default async function ShopPage() {
   // IN_STOCK is a manual override — a kill switch to close the shop regardless
   // of what the counter says. Otherwise the live count decides.
   const forcedClosed = process.env.IN_STOCK === 'false';
-  const stock = forcedClosed ? 0 : await getStock();
+  const stock = forcedClosed ? 0 : await getStock(PRODUCT);
 
   // A null count means we genuinely don't know (Upstash not configured or
   // unreachable). Keep selling — losing sight of the counter is not a reason to

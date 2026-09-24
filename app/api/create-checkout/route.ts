@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { normalizeQuantity } from '@/lib/parcel';
+import { normalizeQuantityFor, productOrDefault } from '@/lib/products';
 import { getStock } from '@/lib/stock';
 import {
   fallbackShippingCents,
@@ -11,7 +11,6 @@ import {
   type NormalizedRate,
 } from '@/lib/shippo';
 
-const PRODUCT_PRICE_CENTS = 1299; // $12.99
 
 export const maxDuration = 30;
 
@@ -28,14 +27,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Missing or incomplete shipping address' }, { status: 400 });
   }
 
-  const quantity = normalizeQuantity(body.quantity ?? 1);
+  const product = productOrDefault(body.product);
+  const quantity = normalizeQuantityFor(product, body.quantity ?? 1);
   if (quantity === null) {
     return NextResponse.json({ error: 'Invalid quantity' }, { status: 400 });
   }
 
   // A null count means we can't reach the counter — keep selling rather than
   // blocking checkout over it. A real number is enforced.
-  const stock = await getStock();
+  const stock = await getStock(product);
   if (stock !== null && stock < quantity) {
     return NextResponse.json(
       {
@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
     shippoReachable = false;
   } else {
     try {
-      const rates = await fetchUspsRates(address, quantity);
+      const rates = await fetchUspsRates(address, quantity, product);
       rate = rates.find(r => r.token === serviceToken);
 
       // Shippo answered but no longer offers the chosen service. Don't silently
@@ -130,14 +130,14 @@ export async function POST(req: NextRequest) {
           currency: 'usd',
           tax_behavior: 'exclusive',
           product_data: {
-            name: 'Kineticube™ — Reactive Powder Targets (6-Pack)',
+            name: `${product.name} — ${product.tagline} (${product.unitLabel})`,
             description: '6 cubes · 6 vivid colors · randomly assorted · Made in the USA',
             // JPEG rather than the source .webp: Stripe's checkout renders this
             // as a product thumbnail and webp isn't reliable there.
-            images: [`${baseUrl}/product-red.jpg`],
+            images: [`${baseUrl}${product.checkoutImage}`],
             tax_code: 'txcd_99999999', // General tangible personal property
           },
-          unit_amount: PRODUCT_PRICE_CENTS,
+          unit_amount: product.priceCents,
         },
         quantity,
       },
@@ -170,6 +170,7 @@ export async function POST(req: NextRequest) {
       // above is missing because Shippo was down at checkout.
       ship_service_token: serviceToken,
       shippo_degraded: shippoReachable ? '' : 'true',
+      product: product.slug,
       quantity: String(quantity),
     },
   });

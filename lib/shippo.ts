@@ -1,4 +1,4 @@
-import { getParcel } from './parcel';
+import { DEFAULT_PRODUCT, type Product } from './products';
 
 export interface ShippingAddress {
   name: string;
@@ -113,11 +113,12 @@ interface ShippoRate {
 export async function fetchUspsRates(
   address: ShippingAddress,
   quantity: number,
+  product: Product = DEFAULT_PRODUCT,
   timeoutMs = 15000,
 ): Promise<NormalizedRate[]> {
   const payload = {
     address_from: {
-      name: 'Kineticube',
+      name: process.env.SHIP_FROM_NAME || 'Loadout Lab',
       street1: process.env.SHIP_FROM_STREET1,
       city: 'Kyle',
       state: 'TX',
@@ -139,7 +140,7 @@ export async function fetchUspsRates(
       // Without this Shippo has no recipient to send tracking updates to.
       ...(address.email ? { email: address.email } : {}),
     },
-    parcels: [getParcel(quantity)],
+    parcels: [product.parcelFor(quantity)],
     async: false,
   };
 

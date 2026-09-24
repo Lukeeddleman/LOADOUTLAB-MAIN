@@ -1,8 +1,16 @@
 import { Redis } from '@upstash/redis';
 import { connection } from 'next/server';
 
-const STOCK_KEY = 'kineticube:stock';
-const WAITLIST_KEY = 'kineticube:waitlist';
+import { DEFAULT_PRODUCT, type Product } from './products';
+
+/**
+ * Every function here takes the product whose count it is touching, and
+ * defaults to Kineticube so callers written before there was more than one
+ * product keep working unchanged.
+ *
+ * The keys live on the product. See lib/products.ts for why Kineticube's
+ * are the bare legacy names rather than the namespaced scheme.
+ */
 
 export { LOW_STOCK_THRESHOLD } from './stock-config';
 
@@ -53,7 +61,7 @@ function getRedis(): Redis {
  * Callers must treat null as "unknown", NOT as zero. Losing the connection to
  * a stock counter is not a reason to stop selling.
  */
-export async function getStock(): Promise<number | null> {
+export async function getStock(product: Product = DEFAULT_PRODUCT): Promise<number | null> {
   // Reading stock must never be baked into a prerender, or the shop page would
   // serve whatever the count happened to be at build time. See connection():
   // it excludes this and anything rendering it from prerendering.
@@ -61,7 +69,7 @@ export async function getStock(): Promise<number | null> {
 
   try {
     const redis = getRedis();
-    const value = await redis.get<number>(STOCK_KEY);
+    const value = await redis.get<number>(product.stockKey);
     if (typeof value !== 'number' || !Number.isFinite(value)) return null;
     return Math.max(0, Math.trunc(value));
   } catch (err) {
@@ -76,11 +84,11 @@ export async function getStock(): Promise<number | null> {
  * Unlike the read path, this throws StockUnavailableError with a usable reason:
  * a human is waiting on the answer and needs to know what to fix.
  */
-export async function setStock(count: number): Promise<number> {
+export async function setStock(count: number, product: Product = DEFAULT_PRODUCT): Promise<number> {
   const redis = getRedis();
   const safe = Math.max(0, Math.trunc(count));
   try {
-    await redis.set(STOCK_KEY, safe);
+    await redis.set(product.stockKey, safe);
     return safe;
   } catch (err) {
     console.error('[stock] write failed:', err);
@@ -96,14 +104,14 @@ export async function setStock(count: number): Promise<number> {
  * DECRBY is atomic, so two orders landing at once can't both read the same
  * starting number and oversell. Clamps at zero so a miscount can't go negative.
  */
-export async function decrementStock(by: number): Promise<number | null> {
+export async function decrementStock(by: number, product: Product = DEFAULT_PRODUCT): Promise<number | null> {
   if (by <= 0) return null;
 
   try {
     const redis = getRedis();
-    const remaining = await redis.decrby(STOCK_KEY, Math.trunc(by));
+    const remaining = await redis.decrby(product.stockKey, Math.trunc(by));
     if (remaining < 0) {
-      await redis.set(STOCK_KEY, 0);
+      await redis.set(product.stockKey, 0);
       return 0;
     }
     return remaining;
@@ -114,11 +122,11 @@ export async function decrementStock(by: number): Promise<number | null> {
 }
 
 /** Record an email to notify when stock returns. Returns false if it couldn't be saved. */
-export async function addToWaitlist(email: string): Promise<boolean> {
+export async function addToWaitlist(email: string, product: Product = DEFAULT_PRODUCT): Promise<boolean> {
   try {
     const redis = getRedis();
     // A set, so the same person signing up twice is a no-op.
-    await redis.sadd(WAITLIST_KEY, email.toLowerCase());
+    await redis.sadd(product.waitlistKey, email.toLowerCase());
     return true;
   } catch (err) {
     console.error('[stock] waitlist add failed:', err);
@@ -126,20 +134,20 @@ export async function addToWaitlist(email: string): Promise<boolean> {
   }
 }
 
-export async function getWaitlist(): Promise<string[]> {
+export async function getWaitlist(product: Product = DEFAULT_PRODUCT): Promise<string[]> {
   try {
     const redis = getRedis();
-    return (await redis.smembers(WAITLIST_KEY)) ?? [];
+    return (await redis.smembers(product.waitlistKey)) ?? [];
   } catch (err) {
     console.error('[stock] waitlist read failed:', err);
     return [];
   }
 }
 
-export async function clearWaitlist(): Promise<boolean> {
+export async function clearWaitlist(product: Product = DEFAULT_PRODUCT): Promise<boolean> {
   try {
     const redis = getRedis();
-    await redis.del(WAITLIST_KEY);
+    await redis.del(product.waitlistKey);
     return true;
   } catch (err) {
     console.error('[stock] waitlist clear failed:', err);

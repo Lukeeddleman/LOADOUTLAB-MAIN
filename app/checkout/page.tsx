@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { productOrDefault } from '@/lib/products';
 
 const US_STATES = [
   'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA',
@@ -9,7 +10,10 @@ const US_STATES = [
   'VA','WA','WV','WI','WY',
 ];
 
-const PRODUCT_PRICE = 12.99;
+// Checkout is shared across products. Today there is one, so it resolves to
+// the default; when there are more this reads the slug from the URL.
+const PRODUCT = productOrDefault('kineticube');
+const PRODUCT_PRICE = PRODUCT.priceCents / 100;
 
 interface Address {
   name: string;
@@ -91,7 +95,7 @@ export default function CheckoutPage() {
       const res = await fetch('/api/shipping-rates', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...address, quantity }),
+        body: JSON.stringify({ ...address, quantity, product: PRODUCT.slug }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to get rates');
@@ -119,6 +123,7 @@ export default function CheckoutPage() {
           address,
           serviceToken: selectedRate.token,
           quantity,
+          product: PRODUCT.slug,
           // Only consulted if Shippo is down when the server re-prices, so the
           // customer isn't charged less than the figure they were just shown.
           // The server clamps it to its own floor — it can't be tampered down.

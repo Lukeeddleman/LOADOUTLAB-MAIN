@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
-import { getParcel } from '@/lib/parcel';
+import { DEFAULT_PRODUCT } from '@/lib/products';
 
 // ── DEV ONLY ─────────────────────────────────────────────────────────────────
 // Runs the full fulfillment pipeline with stub order data so you can verify
@@ -51,7 +51,7 @@ export async function POST() {
         address_from: SHIP_FROM,
         address_to: STUB_ADDRESS,
         // Use the real 1-pack parcel so the test exercises production dimensions
-        parcels: [getParcel(1)],
+        parcels: [DEFAULT_PRODUCT.parcelFor(1)],
         async: false,
       }),
     });

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { productOrDefault } from '@/lib/products';
 import { addToWaitlist } from '@/lib/stock';
 
 export async function POST(req: NextRequest) {
@@ -9,7 +10,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Enter a valid email address.' }, { status: 400 });
   }
 
-  const saved = await addToWaitlist(email);
+  const saved = await addToWaitlist(email, productOrDefault(body.product));
   if (!saved) {
     return NextResponse.json(
       { error: 'Could not save that right now. Please try again later.' },
