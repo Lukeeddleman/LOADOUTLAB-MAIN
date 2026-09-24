@@ -110,6 +110,33 @@ Changes only take effect on a new deployment:
   request handlers, never at module scope — both Stripe and Resend throw on a
   missing key, which at module scope fails the build instead of the request.
 
+## The inventory dashboard
+
+`/admin/inventory`, behind the same admin password. It reads paid orders
+straight from Stripe — already a complete sales ledger back to day one, so
+there was no data to start collecting — and answers one question: start a print
+run, or not yet.
+
+Design decisions worth keeping:
+
+- **Read-only.** Nothing on this page can affect a live sale.
+- **Rates average over every day, including the quiet ones.** Averaging only
+  over days that had an order reports the pace of a *busy day*, not the pace of
+  the business, and badly overstates how fast stock is moving.
+- **Projections are a range, never a single number**, with a stated confidence
+  level. At this volume one 10-pack order can double a weekly average.
+- **Growth is capped at 2.5x when extrapolating**, and planning always uses the
+  more cautious of the two rates. Being early with a print run costs shelf
+  space; being late costs sales.
+- **Days are bucketed in the browser's timezone**, so "today" means today
+  wherever Luke is, with nothing to configure.
+- Orders predating quantity metadata count as one pack and say so on the page.
+
+Three settings live in Upstash so they're tunable without a redeploy:
+**turnaround** (deciding you need more → boxed and ready, *not* the time to
+print one pack), **cushion**, and **daily capacity**. Capacity is optional; left
+unset it reports as unknown rather than as a ceiling of zero.
+
 ## Testing without spending money
 
 ```bash
@@ -128,6 +155,9 @@ browser without sending anything.
 
 ```
 lib/
+  forecast.ts      sales-rate maths, days of cover, reorder point, capacity read
+  sales.ts         paid orders from Stripe (read-only; Stripe is the ledger)
+  planning.ts      turnaround / cushion / capacity settings, stored in Upstash
   parcel.ts        box sizing + quantity validation (shared, single source of truth)
   shippo.ts        rate lookup, address parsing, flat-rate fallback
   stock.ts         Upstash counter + waitlist; getStock() calls connection()
@@ -143,7 +173,22 @@ app/api/
   admin/           login, stock get/set, restock-preview
   notify/          restock waitlist signup
   test-fulfillment/ dev-only pipeline check
+  admin/sales/     the inventory forecast + planning settings
 ```
+
+## Shelved work
+
+**Bambu print-farm tracking lives on the `print-bridge` branch**, finished but
+parked — timing, not a problem with the approach. It adds a bridge that runs on
+the home PC (the always-on PrintNode machine), watches the farm over the
+printers' own LAN MQTT, and reports finished runs to the site. Printed cubes
+land as *pending* and only become sellable stock when Luke confirms they're
+boxed, because a finished plate hasn't been inspected, filled or packed.
+
+Its logic is tested — auth, de-duplication under retry, the offline queue, pack
+confirmation — but the MQTT half has never run against real printers. Resume
+with `git log print-bridge`; the commit message carries the reasoning and the
+branch has its own NOTES section.
 
 ## Open items
 
