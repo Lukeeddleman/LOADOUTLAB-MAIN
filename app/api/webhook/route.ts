@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { Resend } from 'resend';
 import { escapeHtml } from '@/lib/html';
+import { ordersFrom, supportTo } from '@/lib/email-config';
 import { normalizeQuantity } from '@/lib/parcel';
 import { fetchUspsRates, parseAddress } from '@/lib/shippo';
 import { decrementStock, LOW_STOCK_THRESHOLD } from '@/lib/stock';
@@ -267,8 +268,8 @@ export async function POST(req: NextRequest) {
     const qty = Number(quantity ?? 1);
     const plural = qty > 1 ? 's' : '';
     const sendResult = await resend.emails.send({
-      from: 'Kineticube Orders <noreply@kineticube.shop>',
-      to: 'support@kineticube.shop',
+      from: ordersFrom(),
+      to: supportTo(),
       subject: labelUrl
         ? `New Order — ${ship_to_name} · ${qty} 6-pack${plural}`
         : `⚠️ ACTION NEEDED — New Order (no label) — ${ship_to_name} · ${qty} 6-pack${plural}`,

@@ -24,7 +24,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Kineticube™ — Reactive Powder Targets",
     description: "Instant colorful visual feedback on every shot.",
-    url: "https://kineticube.shop",
+    // Follows whatever domain the shop is actually served on, so moving it
+    // doesn't leave link previews pointing at the old address.
+    url: process.env.NEXT_PUBLIC_BASE_URL || "https://kineticube.shop",
     siteName: "Kineticube",
     type: "website",
   },

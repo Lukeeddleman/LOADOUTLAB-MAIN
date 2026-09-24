@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { escapeHtml } from '@/lib/html';
+import { contactFrom, supportTo } from '@/lib/email-config';
 
 export async function POST(req: NextRequest) {
   try {
@@ -23,8 +24,8 @@ export async function POST(req: NextRequest) {
     }
 
     await resend.emails.send({
-      from: 'Kineticube Contact Form <noreply@kineticube.shop>',
-      to: 'support@kineticube.shop',
+      from: contactFrom(),
+      to: supportTo(),
       replyTo: email,
       subject: subject ? `[Contact] ${subject}` : `[Contact] Message from ${name}`,
       text: `Name: ${name}\nEmail: ${email}\nSubject: ${subject || '(none)'}\n\n${message}`,
