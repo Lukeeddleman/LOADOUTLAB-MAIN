@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import ContactForm from './ContactForm';
 
 export const metadata: Metadata = {
-  title: 'Contact — Kineticube™',
-  description: 'Get in touch with Kineticube. Order issues, bulk inquiries, wholesale, or general questions.',
+  title: 'Contact',
+  description: 'Get in touch with Loadout Lab. Order issues, bulk inquiries, wholesale, or general questions.',
 };
 
 export default function ContactPage() {

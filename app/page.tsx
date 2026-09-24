@@ -1,166 +1,95 @@
 import Link from "next/link";
 import Image from "next/image";
 
-const features = [
+/**
+ * Loadout Lab — the parent site.
+ *
+ * Built to the same rhythm as the Kineticube page: full-height hero, alternating
+ * #0d0d0d / #111111 sections at py-32, hairline orange dividers, and a gradient
+ * close. A shorter, lighter page under the same nav read as unfinished next to
+ * the product page it links to.
+ *
+ * Leads with a single product rather than a catalog grid. With one product on
+ * the shelf, a six-slot grid advertises the five that are missing. `products`
+ * below is the seam — a second entry is where this becomes a grid.
+ */
+
+interface Product {
+  slug: string;
+  name: string;
+  tagline: string;
+  blurb: string;
+  image: string;
+  price: string;
+  unit: string;
+  points: string[];
+}
+
+const products: Product[] = [
   {
-    icon: (
-      <svg width="40" height="40" viewBox="0 0 32 32" fill="none">
-        <circle cx="16" cy="16" r="14" stroke="#f05a1a" strokeWidth="2"/>
-        <circle cx="16" cy="16" r="8" stroke="#f05a1a" strokeWidth="2"/>
-        <circle cx="16" cy="16" r="2" fill="#f05a1a"/>
-        <line x1="16" y1="2" x2="16" y2="6" stroke="#f05a1a" strokeWidth="2"/>
-        <line x1="16" y1="26" x2="16" y2="30" stroke="#f05a1a" strokeWidth="2"/>
-        <line x1="2" y1="16" x2="6" y2="16" stroke="#f05a1a" strokeWidth="2"/>
-        <line x1="26" y1="16" x2="30" y2="16" stroke="#f05a1a" strokeWidth="2"/>
-      </svg>
-    ),
-    title: "Instant Visual Feedback",
-    desc: "1-inch targets that show exactly where every round hits — no walking downrange to check holes.",
-  },
-  {
-    icon: (
-      <svg width="40" height="40" viewBox="0 0 32 32" fill="none">
-        <path d="M16 2 L18 10 L26 10 L20 15 L22 23 L16 18 L10 23 L12 15 L6 10 L14 10 Z" fill="#f05a1a"/>
-      </svg>
-    ),
-    title: "Explosive Color",
-    desc: "10 vivid powder colors burst on impact. You'll see it from any distance.",
-  },
-  {
-    icon: (
-      <svg width="40" height="40" viewBox="0 0 32 32" fill="none">
-        <rect x="4" y="12" width="24" height="14" rx="2" stroke="#f05a1a" strokeWidth="2"/>
-        <path d="M10 12V8a6 6 0 0112 0v4" stroke="#f05a1a" strokeWidth="2" strokeLinecap="round"/>
-      </svg>
-    ),
-    title: "Sticks to Any Surface",
-    desc: "3M adhesive pad grips to steel, wood, paper, cardboard, concrete — and more.",
-  },
-  {
-    icon: (
-      <svg width="40" height="40" viewBox="0 0 32 32" fill="none">
-        <path d="M16 3 C16 3 6 8 6 18 C6 24 10.5 28 16 28 C21.5 28 26 24 26 18 C26 8 16 3 16 3Z" stroke="#f05a1a" strokeWidth="2" fill="none"/>
-        <path d="M11 18 L15 22 L21 14" stroke="#f05a1a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    ),
-    title: "Eco-Friendly PHA Shell",
-    desc: "Biodegradable material. Perform at the range without leaving a mess behind.",
+    slug: "kineticube",
+    name: "Kineticube",
+    tagline: "Reactive Powder Targets",
+    blurb:
+      "One-inch targets that burst into colour on impact. Stick them to steel, paper, wood or cardboard and read every hit from the firing line — no walking downrange to check holes, no guessing which round went where.",
+    image: "/product-hero.webp",
+    price: "$12.99",
+    unit: "6-pack",
+    points: ["10 vivid colours", "Sticks to any clean surface", "Biodegradable PHA shell"],
   },
 ];
 
-const steps = [
-  {
-    num: "1",
-    label: "PEEL",
-    desc: "Peel the target from its backing.",
-    icon: (
-      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-        <rect x="6" y="14" width="26" height="22" rx="2" stroke="#f05a1a" strokeWidth="2"/>
-        <path d="M32 14 L43 5 L43 25 Z" stroke="#f05a1a" strokeWidth="2" strokeLinejoin="round" fill="#f05a1a" fillOpacity="0.15"/>
-        <line x1="32" y1="14" x2="43" y2="25" stroke="#f05a1a" strokeWidth="1.5" strokeDasharray="3 2" strokeLinecap="round"/>
-        <path d="M38 8 Q44 6 43 5" stroke="#f05a1a" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
-      </svg>
-    ),
-  },
-  {
-    num: "2",
-    label: "STICK",
-    desc: "Stick firmly to any clean, dry surface.",
-    icon: (
-      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-        <rect x="4" y="38" width="40" height="4" rx="1" stroke="#f05a1a" strokeWidth="2"/>
-        <rect x="16" y="8" width="16" height="16" rx="2" stroke="#f05a1a" strokeWidth="2"/>
-        <line x1="24" y1="24" x2="24" y2="34" stroke="#f05a1a" strokeWidth="2" strokeLinecap="round"/>
-        <path d="M19 30 L24 36 L29 30" stroke="#f05a1a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        <line x1="6" y1="28" x2="13" y2="28" stroke="#f05a1a" strokeWidth="1.5" strokeLinecap="round"/>
-        <line x1="35" y1="28" x2="42" y2="28" stroke="#f05a1a" strokeWidth="1.5" strokeLinecap="round"/>
-        <line x1="4" y1="32" x2="11" y2="32" stroke="#f05a1a" strokeWidth="1.5" strokeLinecap="round"/>
-        <line x1="37" y1="32" x2="44" y2="32" stroke="#f05a1a" strokeWidth="1.5" strokeLinecap="round"/>
-      </svg>
-    ),
-  },
-  {
-    num: "3",
-    label: "SHOOT",
-    desc: "Aim for center for maximum reaction.",
-    icon: (
-      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-        <circle cx="24" cy="24" r="18" stroke="#f05a1a" strokeWidth="2"/>
-        <circle cx="24" cy="24" r="11" stroke="#f05a1a" strokeWidth="2"/>
-        <circle cx="24" cy="24" r="4" fill="#f05a1a"/>
-        <line x1="24" y1="2" x2="24" y2="10" stroke="#f05a1a" strokeWidth="2" strokeLinecap="round"/>
-        <line x1="24" y1="38" x2="24" y2="46" stroke="#f05a1a" strokeWidth="2" strokeLinecap="round"/>
-        <line x1="2" y1="24" x2="10" y2="24" stroke="#f05a1a" strokeWidth="2" strokeLinecap="round"/>
-        <line x1="38" y1="24" x2="46" y2="24" stroke="#f05a1a" strokeWidth="2" strokeLinecap="round"/>
-      </svg>
-    ),
-  },
-];
+const featured = products[0];
 
-const surfaces = [
+const values = [
   {
-    name: "STEEL",
+    title: "Useful At Any Level",
+    desc: "Gear that earns its place in the bag whether you're learning the fundamentals or drilling something you've done ten thousand times.",
     icon: (
-      <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-        <rect x="4" y="10" width="32" height="20" rx="2" stroke="#f05a1a" strokeWidth="1.5"/>
-        <line x1="4" y1="16" x2="36" y2="16" stroke="#f05a1a" strokeWidth="1" strokeDasharray="3 3"/>
-        <line x1="4" y1="20" x2="36" y2="20" stroke="#f05a1a" strokeWidth="1" strokeDasharray="3 3"/>
-        <line x1="4" y1="24" x2="36" y2="24" stroke="#f05a1a" strokeWidth="1" strokeDasharray="3 3"/>
+      <svg width="40" height="40" viewBox="0 0 32 32" fill="none">
+        <rect x="3" y="20" width="6" height="9" stroke="#f05a1a" strokeWidth="2" />
+        <rect x="13" y="13" width="6" height="16" stroke="#f05a1a" strokeWidth="2" />
+        <rect x="23" y="5" width="6" height="24" stroke="#f05a1a" strokeWidth="2" />
       </svg>
     ),
   },
   {
-    name: "PAPER",
+    title: "Made Here, By Us",
+    desc: "Produced in-house in Austin, not drop-shipped from a catalogue. If something's wrong with your order, you're talking to the person who made it.",
     icon: (
-      <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-        <path d="M8 5 H26 L32 11 V35 H8 Z" stroke="#f05a1a" strokeWidth="1.5" strokeLinejoin="round"/>
-        <path d="M26 5 V11 H32" stroke="#f05a1a" strokeWidth="1.5" strokeLinejoin="round"/>
-        <line x1="13" y1="18" x2="27" y2="18" stroke="#f05a1a" strokeWidth="1.5" strokeLinecap="round"/>
-        <line x1="13" y1="23" x2="27" y2="23" stroke="#f05a1a" strokeWidth="1.5" strokeLinecap="round"/>
-        <line x1="13" y1="28" x2="21" y2="28" stroke="#f05a1a" strokeWidth="1.5" strokeLinecap="round"/>
+      <svg width="40" height="40" viewBox="0 0 32 32" fill="none">
+        <path
+          d="M16 29s10-8.5 10-16A10 10 0 0 0 6 13c0 7.5 10 16 10 16Z"
+          stroke="#f05a1a"
+          strokeWidth="2"
+          strokeLinejoin="round"
+        />
+        <circle cx="16" cy="13" r="3.5" stroke="#f05a1a" strokeWidth="2" />
       </svg>
     ),
   },
   {
-    name: "CARDBOARD",
+    title: "Built Around Drills",
+    desc: "Every product starts as something we wanted for our own practice and couldn't buy — then gets tested on the range before it gets sold.",
     icon: (
-      <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-        <rect x="4" y="8" width="32" height="24" rx="2" stroke="#f05a1a" strokeWidth="1.5"/>
-        <path d="M4 17 Q8 13 12 17 Q16 21 20 17 Q24 13 28 17 Q32 21 36 17" stroke="#f05a1a" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
-        <path d="M4 25 Q8 21 12 25 Q16 29 20 25 Q24 21 28 25 Q32 29 36 25" stroke="#f05a1a" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+      <svg width="40" height="40" viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="12" stroke="#f05a1a" strokeWidth="2" />
+        <circle cx="16" cy="16" r="6" stroke="#f05a1a" strokeWidth="2" />
+        <circle cx="16" cy="16" r="1.5" fill="#f05a1a" />
+        <line x1="16" y1="1" x2="16" y2="5" stroke="#f05a1a" strokeWidth="2" strokeLinecap="round" />
+        <line x1="16" y1="27" x2="16" y2="31" stroke="#f05a1a" strokeWidth="2" strokeLinecap="round" />
+        <line x1="1" y1="16" x2="5" y2="16" stroke="#f05a1a" strokeWidth="2" strokeLinecap="round" />
+        <line x1="27" y1="16" x2="31" y2="16" stroke="#f05a1a" strokeWidth="2" strokeLinecap="round" />
       </svg>
     ),
   },
   {
-    name: "WOOD",
+    title: "Ships From Our Shelf",
+    desc: "Orders go out from stock we hold ourselves, with tracking on every parcel — not ordered in once you've paid.",
     icon: (
-      <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-        <rect x="4" y="8" width="32" height="24" rx="2" stroke="#f05a1a" strokeWidth="1.5"/>
-        <path d="M12 8 Q15 16 12 32" stroke="#f05a1a" strokeWidth="1" fill="none" strokeLinecap="round"/>
-        <path d="M20 8 Q23 18 21 32" stroke="#f05a1a" strokeWidth="1" fill="none" strokeLinecap="round"/>
-        <path d="M28 8 Q30 18 29 32" stroke="#f05a1a" strokeWidth="1" fill="none" strokeLinecap="round"/>
-      </svg>
-    ),
-  },
-  {
-    name: "CONCRETE",
-    icon: (
-      <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-        <rect x="3" y="7" width="15" height="9" rx="1" stroke="#f05a1a" strokeWidth="1.5"/>
-        <rect x="22" y="7" width="15" height="9" rx="1" stroke="#f05a1a" strokeWidth="1.5"/>
-        <rect x="3" y="20" width="15" height="9" rx="1" stroke="#f05a1a" strokeWidth="1.5"/>
-        <rect x="22" y="20" width="15" height="9" rx="1" stroke="#f05a1a" strokeWidth="1.5"/>
-        <rect x="12" y="33" width="16" height="3" rx="1" stroke="#f05a1a" strokeWidth="1.5"/>
-      </svg>
-    ),
-  },
-  {
-    name: "+ MORE",
-    icon: (
-      <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-        <circle cx="20" cy="20" r="15" stroke="#f05a1a" strokeWidth="1.5"/>
-        <line x1="20" y1="12" x2="20" y2="28" stroke="#f05a1a" strokeWidth="2" strokeLinecap="round"/>
-        <line x1="12" y1="20" x2="28" y2="20" stroke="#f05a1a" strokeWidth="2" strokeLinecap="round"/>
+      <svg width="40" height="40" viewBox="0 0 32 32" fill="none">
+        <path d="M4 10l12-5 12 5v12l-12 5-12-5V10Z" stroke="#f05a1a" strokeWidth="2" strokeLinejoin="round" />
+        <path d="M4 10l12 5 12-5M16 15v12" stroke="#f05a1a" strokeWidth="2" strokeLinejoin="round" />
       </svg>
     ),
   },
@@ -178,40 +107,45 @@ export default function Home() {
         <div className="relative max-w-[1440px] mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 2xl:gap-20 items-center py-20 2xl:py-32">
           <div>
             <div className="inline-block bg-[#f05a1a]/10 border border-[#f05a1a]/30 text-[#f05a1a] text-xs font-[family-name:var(--font-display)] tracking-label px-3 py-1 mb-6">
-              REACTIVE POWDER TARGETS
+              AUSTIN, TEXAS
             </div>
-            <h1 className="font-[family-name:var(--font-display)] font-black text-6xl md:text-7xl lg:text-8xl 2xl:text-9xl leading-none tracking-normal mb-6 2xl:mb-8">
-              STICK IT.<br />
-              SHOOT IT.<br />
-              <span className="text-[#f05a1a]">SEE IT.</span>
+            {/* Benefit first, category second: the headline sells the reason to
+                care, the line under it says plainly what we sell. */}
+            {/* Stops at 8xl rather than 9xl. "ROUND COUNT." is a far wider line
+                than Kineticube's "SHOOT IT.", and at 9xl it fills 98% of this
+                column — which makes the identical hero image beside it read as
+                undersized. Same trick, different words, different ceiling. */}
+            <h1 className="font-[family-name:var(--font-display)] font-black text-6xl md:text-7xl lg:text-8xl leading-none tracking-normal mb-6 2xl:mb-8">
+              MAKE EVERY<br />
+              ROUND <span className="text-[#f05a1a]">COUNT.</span>
             </h1>
             <p className="text-gray-400 text-lg 2xl:text-xl mb-8 max-w-md 2xl:max-w-xl leading-relaxed">
-              Kineticube reactive powder targets explode in a burst of color on impact —
-              giving you instant visual feedback on every single shot.
+              Firearms training accessories for every level — whether it&apos;s your first box of
+              ammo or your ten-thousandth.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
-                href="/shop"
+                href="/kineticube/shop"
                 className="btn-orange bg-[#f05a1a] hover:bg-[#c44a12] text-white font-[family-name:var(--font-display)] font-extrabold tracking-widest text-lg px-8 py-4 transition-colors"
               >
-                SHOP NOW — 6-PACK
+                SHOP NOW
               </Link>
               <Link
-                href="/#how-it-works"
+                href="/kineticube"
                 className="border border-gray-600 hover:border-white text-gray-300 hover:text-white font-[family-name:var(--font-display)] font-bold tracking-widest text-lg px-8 py-4 transition-colors"
               >
-                HOW IT WORKS
+                WHAT WE MAKE
               </Link>
             </div>
-            <div className="flex items-center gap-6 mt-8">
+            <div className="flex flex-wrap items-center gap-6 mt-8">
               <div className="flex items-center gap-2 text-sm text-gray-500">
                 <span className="text-[#f05a1a]">✓</span> Made in the USA
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-500">
-                <span className="text-[#f05a1a]">✓</span> Safe &amp; Non-Explosive
+                <span className="text-[#f05a1a]">✓</span> Ships from stock
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-500">
-                <span className="text-[#f05a1a]">✓</span> Eco-Friendly
+                <span className="text-[#f05a1a]">✓</span> Tracked delivery
               </div>
             </div>
           </div>
@@ -220,10 +154,13 @@ export default function Home() {
             <div className="relative float">
               <div className="absolute inset-0 bg-[#f05a1a] opacity-20 blur-3xl rounded-full scale-75" />
               <Image
-                src="/product-hero.webp"
-                alt="Kineticube reactive powder targets exploding with color"
+                src={featured.image}
+                alt={`${featured.name} — ${featured.tagline}`}
                 width={480}
                 height={480}
+                // Identical to /kineticube on purpose. 480 is exactly half of
+                // the 960px source, so it renders pixel-sharp at 2x; going
+                // bigger softens it until someone exports a larger hero shot.
                 className="relative drop-shadow-2xl rounded-lg w-full max-w-[480px] 2xl:max-w-[640px]"
                 priority
               />
@@ -232,152 +169,101 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── TRAINING CALLOUT ─── */}
+      {/* ─── THE PRODUCT ─── */}
       <section className="bg-[#111111] border-y border-[#1a1a1a] relative overflow-hidden">
         <div className="absolute inset-0 bg-[#f05a1a] opacity-[0.03] blur-[80px] pointer-events-none" />
-        <div className="max-w-[1440px] mx-auto px-6 py-20 2xl:py-28">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="relative max-w-[1440px] mx-auto px-6 py-24 2xl:py-32">
+          <div className="text-center mb-16">
+            <p className="text-[#f05a1a] font-[family-name:var(--font-display)] tracking-[0.3em] text-sm mb-4">
+              WHAT WE MAKE
+            </p>
+            <h2 className="font-[family-name:var(--font-display)] font-black text-4xl md:text-5xl 2xl:text-6xl tracking-normal">
+              THE <span className="text-[#f05a1a]">LINEUP</span>
+            </h2>
+          </div>
 
-            {/* Left: text */}
-            <div>
-              <p className="text-[#f05a1a] font-[family-name:var(--font-display)] tracking-[0.3em] text-xs mb-4">
-                FREE RANGE GUIDE
-              </p>
-              <h2 className="font-[family-name:var(--font-display)] font-black text-4xl md:text-5xl 2xl:text-6xl tracking-wide mb-5 leading-tight">
-                DON&apos;T JUST SHOOT.<br />
-                <span className="text-[#f05a1a]">TRAIN.</span>
-              </h2>
-              <p className="text-gray-400 text-base 2xl:text-lg mb-8 max-w-md" style={{ lineHeight: "1.85" }}>
-                Every cube gets one shot — so make it count. We built a full library of drills,
-                courses of fire, and range tips designed specifically around the way Kineticubes work.
-              </p>
-              <Link
-                href="/training"
-                className="inline-block border-2 border-[#f05a1a] hover:bg-[#f05a1a] text-[#f05a1a] hover:text-white font-[family-name:var(--font-display)] font-black tracking-widest text-base px-8 py-3.5 transition-colors"
-              >
-                VIEW DRILLS &amp; COURSES →
-              </Link>
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 2xl:gap-20 items-center">
+            <Link href={`/${featured.slug}`} className="block group order-2 lg:order-1">
+              <div className="relative aspect-square bg-[#0d0d0d] border border-[#242424] group-hover:border-[#f05a1a]/40 overflow-hidden transition-colors">
+                <Image
+                  src={featured.image}
+                  alt={`${featured.name} — ${featured.tagline}`}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+            </Link>
 
-            {/* Right: drill preview cards */}
-            <div className="grid grid-cols-2 gap-3">
-              {[
-                { icon: "🎯", name: "Cold Shot", desc: "One cube. One shot. No warm-up." },
-                { icon: "⬜", name: "The Box", desc: "4 cubes, non-linear transitions." },
-                { icon: "💪", name: "Strong / Weak", desc: "Dominant and support hand drills." },
-                { icon: "⚡", name: "The Draw", desc: "Obsess over your draw stroke." },
-              ].map((drill) => (
+            <div className="order-1 lg:order-2">
+              <h3 className="font-[family-name:var(--font-display)] font-black text-4xl md:text-5xl 2xl:text-6xl tracking-normal">
+                {featured.name.toUpperCase()}
+              </h3>
+              <p className="text-[#f05a1a] font-[family-name:var(--font-display)] tracking-label text-sm mt-3">
+                {featured.tagline.toUpperCase()}
+              </p>
+              <p className="text-gray-400 text-lg 2xl:text-xl mt-6 leading-relaxed">{featured.blurb}</p>
+
+              <ul className="mt-8 space-y-3">
+                {featured.points.map(point => (
+                  <li key={point} className="flex items-center gap-3 text-gray-300">
+                    <span className="text-[#f05a1a]">✓</span> {point}
+                  </li>
+                ))}
+              </ul>
+
+              <p className="text-white text-3xl 2xl:text-4xl font-[family-name:var(--font-display)] font-black mt-8">
+                {featured.price}
+                <span className="text-gray-500 text-lg font-normal"> / {featured.unit}</span>
+              </p>
+
+              <div className="flex flex-wrap gap-4 mt-8">
                 <Link
-                  key={drill.name}
-                  href="/training"
-                  className="bg-[#0d0d0d] border border-[#2a2a2a] hover:border-[#f05a1a]/50 p-5 transition-colors group"
+                  href={`/${featured.slug}/shop`}
+                  className="btn-orange bg-[#f05a1a] hover:bg-[#c44a12] text-white font-[family-name:var(--font-display)] font-extrabold tracking-widest text-lg px-8 py-4 transition-colors"
                 >
-                  <div className="text-2xl mb-2">{drill.icon}</div>
-                  <p className="font-[family-name:var(--font-display)] font-bold tracking-label text-sm text-white group-hover:text-[#f05a1a] transition-colors mb-1">
-                    {drill.name}
-                  </p>
-                  <p className="text-gray-600 text-xs" style={{ lineHeight: "1.6" }}>{drill.desc}</p>
+                  BUY NOW
                 </Link>
-              ))}
+                <Link
+                  href={`/${featured.slug}`}
+                  className="border border-gray-600 hover:border-white text-gray-300 hover:text-white font-[family-name:var(--font-display)] font-bold tracking-widest text-lg px-8 py-4 transition-colors"
+                >
+                  SEE THE DETAIL
+                </Link>
+              </div>
             </div>
-
           </div>
         </div>
       </section>
 
-      {/* ─── FEATURES ─── */}
+      {/* ─── WHY LOADOUT LAB ─── */}
       <section className="py-32 2xl:py-44 bg-[#0d0d0d] relative">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#f05a1a]/40 to-transparent" />
         <div className="max-w-[1440px] mx-auto px-6">
           <div className="text-center mb-20">
-            <p className="text-[#f05a1a] font-[family-name:var(--font-display)] tracking-[0.3em] text-sm mb-4">THE DIFFERENCE</p>
+            <p className="text-[#f05a1a] font-[family-name:var(--font-display)] tracking-[0.3em] text-sm mb-4">
+              THE DIFFERENCE
+            </p>
             <h2 className="font-[family-name:var(--font-display)] font-black text-4xl md:text-5xl 2xl:text-6xl tracking-normal">
-              WHY <span className="text-[#f05a1a]">KINETICUBE?</span>
+              WHY <span className="text-[#f05a1a]">LOADOUT LAB?</span>
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 2xl:gap-8">
-            {features.map((f) => (
+            {values.map(v => (
               <div
-                key={f.title}
+                key={v.title}
                 className="relative bg-[#141414] border border-[#242424] hover:border-[#f05a1a]/40 p-10 2xl:p-12 transition-all group flex gap-8 items-start overflow-hidden"
               >
                 <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#f05a1a]/20 group-hover:bg-[#f05a1a]/70 transition-colors duration-300" />
-                <div className="shrink-0 mt-1 group-hover:scale-110 transition-transform duration-300">{f.icon}</div>
+                <div className="shrink-0 mt-1 group-hover:scale-110 transition-transform duration-300">
+                  {v.icon}
+                </div>
                 <div>
                   <h3 className="font-[family-name:var(--font-display)] font-bold text-xl 2xl:text-2xl tracking-wide mb-3">
-                    {f.title}
+                    {v.title}
                   </h3>
-                  <p className="text-gray-400 leading-relaxed 2xl:text-lg">{f.desc}</p>
+                  <p className="text-gray-400 leading-relaxed 2xl:text-lg">{v.desc}</p>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── HOW IT WORKS ─── */}
-      <section id="how-it-works" className="py-32 2xl:py-44 bg-[#111111] relative">
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#f05a1a]/40 to-transparent" />
-        <div className="max-w-[1440px] mx-auto px-6">
-          <div className="text-center mb-20">
-            <p className="text-[#f05a1a] font-[family-name:var(--font-display)] tracking-[0.3em] text-sm mb-4">THREE STEPS</p>
-            <h2 className="font-[family-name:var(--font-display)] font-black text-4xl md:text-5xl 2xl:text-6xl tracking-normal">
-              HOW TO <span className="text-[#f05a1a]">USE</span>
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 2xl:gap-20">
-            {steps.map((s, i) => (
-              <div key={s.label} className="text-center relative">
-                {/* Ghost background number */}
-                <div
-                  className="absolute inset-x-0 top-0 flex justify-center pointer-events-none select-none"
-                  aria-hidden="true"
-                >
-                  <span className="font-[family-name:var(--font-display)] font-black text-[200px] 2xl:text-[260px] leading-none text-white opacity-[0.025]">
-                    {s.num}
-                  </span>
-                </div>
-                {i < steps.length - 1 && (
-                  <div className="hidden md:block absolute top-[104px] left-[calc(50%+40px)] w-[calc(100%-80px)] h-px bg-[#f05a1a]/30" />
-                )}
-                <div className="relative flex justify-center mb-6">{s.icon}</div>
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-[#f05a1a] font-[family-name:var(--font-display)] font-black text-3xl text-white mb-5">
-                  {s.num}
-                </div>
-                <h3 className="font-[family-name:var(--font-display)] font-extrabold text-2xl 2xl:text-3xl tracking-widest mb-3">
-                  {s.label}
-                </h3>
-                <p className="text-gray-400 leading-relaxed 2xl:text-lg">{s.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── STICKS ANYWHERE ─── */}
-      <section className="py-32 2xl:py-44 bg-[#0d0d0d] relative">
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#f05a1a]/40 to-transparent" />
-        <div className="max-w-[1440px] mx-auto px-6">
-          <div className="text-center mb-20">
-            <p className="text-[#f05a1a] font-[family-name:var(--font-display)] tracking-[0.3em] text-sm mb-4">3M ADHESIVE</p>
-            <h2 className="font-[family-name:var(--font-display)] font-black text-4xl md:text-5xl 2xl:text-6xl tracking-normal">
-              STICKS TO <span className="text-[#f05a1a]">ANYTHING.</span>
-            </h2>
-            <p className="text-gray-500 mt-5 text-lg 2xl:text-xl max-w-xl mx-auto leading-relaxed">
-              Industrial-grade 3M adhesive grips to virtually any surface at the range.
-            </p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 2xl:gap-6">
-            {surfaces.map((s) => (
-              <div
-                key={s.name}
-                className="relative bg-[#141414] border border-[#242424] hover:border-[#f05a1a]/40 p-8 2xl:p-10 flex flex-col items-center gap-5 transition-all group overflow-hidden"
-              >
-                <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#f05a1a]/0 group-hover:bg-[#f05a1a]/60 transition-colors duration-300" />
-                <div className="group-hover:scale-110 transition-transform duration-300">{s.icon}</div>
-                <span className="font-[family-name:var(--font-display)] tracking-label text-sm text-gray-500 group-hover:text-gray-200 transition-colors">
-                  {s.name}
-                </span>
               </div>
             ))}
           </div>
@@ -390,16 +276,16 @@ export default function Home() {
         <div className="absolute inset-0 bg-[#f05a1a] opacity-5 blur-[80px]" />
         <div className="relative max-w-3xl mx-auto px-6 text-center">
           <h2 className="font-[family-name:var(--font-display)] font-black text-5xl md:text-6xl 2xl:text-7xl tracking-normal mb-6">
-            READY TO <span className="text-[#f05a1a]">SHOOT?</span>
+            GET MORE FROM <span className="text-[#f05a1a]">RANGE DAY.</span>
           </h2>
           <p className="text-gray-400 mb-10 text-lg 2xl:text-xl leading-relaxed">
-            6-pack. 10 colors. 1 inch. Sticks anywhere. Explodes on impact.
+            Start with the targets that show you every hit from the firing line.
           </p>
           <Link
-            href="/shop"
+            href="/kineticube/shop"
             className="inline-block btn-orange bg-[#f05a1a] hover:bg-[#c44a12] text-white font-[family-name:var(--font-display)] font-extrabold tracking-widest text-xl px-12 py-5 transition-colors"
           >
-            GET YOUR 6-PACK
+            SHOP KINETICUBE
           </Link>
         </div>
       </section>

@@ -29,6 +29,7 @@ const SHIP_TO = {
 
 const green = s => `\x1b[32m${s}\x1b[0m`;
 const red = s => `\x1b[31m${s}\x1b[0m`;
+const yellow = s => `\x1b[33m${s}\x1b[0m`;
 const bold = s => `\x1b[1m${s}\x1b[0m`;
 const dim = s => `\x1b[2m${s}\x1b[0m`;
 
@@ -169,7 +170,7 @@ async function deliver(attempt) {
 
 // ── 4. Deliver it twice — the second one is the real test ──────────────────
 console.log('\n3. Delivering the order to your webhook...');
-await deliver(1);
+const first = await deliver(1);
 
 console.log('\n4. Delivering the SAME order again, the way Stripe would on a retry...');
 const second = await deliver(2);
@@ -178,13 +179,29 @@ const second = await deliver(2);
 console.log(bold('\n─────────────────────────────────────────────'));
 
 const guarded = second.includes('already_fulfilled');
+// Only a bought label closes an order — a failed attempt is meant to stay
+// retryable. Without this distinction the run cried "DUPLICATE PROTECTION DID
+// NOT KICK IN" whenever the first attempt couldn't buy a label, which is the
+// guard behaving exactly as designed, and sent us hunting a bug that wasn't
+// there.
+const labelBought = first.includes('"label":"bought"');
+
 if (guarded) {
   console.log(green(bold('✓ DUPLICATE PROTECTION WORKS')));
   console.log('  The repeat order was ignored. You will not be charged twice');
   console.log('  for postage, and only one label should have printed.');
+} else if (!labelBought) {
+  console.log(yellow(bold('— INCONCLUSIVE: the first attempt never bought a label')));
+  console.log('  So the retry was SUPPOSED to run again — a failed order stays');
+  console.log('  retryable on purpose, or one bad run would strand a paid order');
+  console.log('  forever. This is not a duplicate-protection failure.');
+  console.log('');
+  console.log('  Fix the label error listed above, then run this again to');
+  console.log('  actually test the guard. Usually a missing SHIP_FROM_ setting.');
 } else {
   console.log(red(bold('✗ DUPLICATE PROTECTION DID NOT KICK IN')));
-  console.log('  The second delivery was processed instead of skipped.');
+  console.log('  A label was bought, and the retry was processed anyway —');
+  console.log('  meaning a Stripe retry would buy a SECOND label.');
   console.log('  Do not deploy this — send me the output above.');
 }
 

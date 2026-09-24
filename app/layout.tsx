@@ -16,18 +16,31 @@ const barlow = Barlow({
   weight: ["400", "500", "600"],
 });
 
+// Site-wide defaults for the parent brand. Individual product pages override
+// title and description with their own — /kineticube keeps selling Kineticube,
+// this just stops every page claiming to be the product.
 export const metadata: Metadata = {
-  title: "Kineticube™ — Reactive Powder Targets",
+  title: {
+    default: "Loadout Lab — Firearms Training Accessories",
+    template: "%s | Loadout Lab",
+  },
   description:
-    "Stick it. Shoot it. See it. Kineticube reactive powder targets give you instant colorful visual feedback on every shot. Made in the USA.",
-  keywords: ["reactive targets", "powder targets", "shooting targets", "range targets", "kineticube"],
+    "Firearms training accessories built to get more out of every range trip. Reactive targets and training aids, made in Austin, Texas.",
+  keywords: [
+    "firearms training accessories",
+    "training aids",
+    "reactive targets",
+    "shooting targets",
+    "range gear",
+    "loadout lab",
+  ],
   openGraph: {
-    title: "Kineticube™ — Reactive Powder Targets",
-    description: "Instant colorful visual feedback on every shot.",
+    title: "Loadout Lab — Firearms Training Accessories",
+    description: "Make every round count. Training accessories for every level.",
     // Follows whatever domain the shop is actually served on, so moving it
     // doesn't leave link previews pointing at the old address.
-    url: process.env.NEXT_PUBLIC_BASE_URL || "https://kineticube.shop",
-    siteName: "Kineticube",
+    url: process.env.NEXT_PUBLIC_BASE_URL || "https://loadoutlab.com",
+    siteName: "Loadout Lab",
     type: "website",
   },
 };

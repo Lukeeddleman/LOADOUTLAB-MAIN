@@ -13,11 +13,11 @@ export default function Footer() {
                 <path d="M35 35 L65 65 M65 35 L35 65" stroke="#0d0d0d" strokeWidth="8" strokeLinecap="round"/>
               </svg>
               <span className="font-[family-name:var(--font-display)] font-black tracking-wider text-white">
-                KINETICUBE™
+                LOADOUT LAB
               </span>
             </div>
             <p className="text-gray-500 text-sm leading-relaxed">
-              Reactive powder targets that give you instant visual feedback on every shot. Made in the USA.
+              Firearms training accessories built to get more out of every range trip. Designed and made in Austin, Texas.
             </p>
           </div>
 
@@ -29,9 +29,9 @@ export default function Footer() {
             <ul className="space-y-2">
               {[
                 { label: "Home", href: "/" },
-                { label: "Shop", href: "/shop" },
-                { label: "Training", href: "/training" },
-                { label: "How It Works", href: "/#how-it-works" },
+                { label: "Shop", href: "/kineticube/shop" },
+                { label: "Training", href: "/kineticube/training" },
+                { label: "How It Works", href: "/kineticube#how-it-works" },
                 { label: "Contact", href: "/contact" },
               ].map((l) => (
                 <li key={l.href}>
@@ -72,7 +72,7 @@ export default function Footer() {
 
         <div className="border-t border-[#1a1a1a] pt-6 flex flex-col md:flex-row items-center justify-between gap-2">
           <p className="text-gray-600 text-xs">
-            © {new Date().getFullYear()} Kineticube™. All rights reserved. Made in the USA 🇺🇸
+            © {new Date().getFullYear()} Loadout Lab. All rights reserved. Made in the USA 🇺🇸
           </p>
           <p className="text-gray-700 text-xs">
             Biodegradable PHA Shell · Safe &amp; Non-Explosive

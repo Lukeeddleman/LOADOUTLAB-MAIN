@@ -3,7 +3,7 @@ import Stripe from 'stripe';
 import { Resend } from 'resend';
 import { escapeHtml } from '@/lib/html';
 import { ordersFrom, supportTo } from '@/lib/email-config';
-import { normalizeQuantity } from '@/lib/parcel';
+import { normalizeQuantityFor, productOrDefault } from '@/lib/products';
 import { fetchUspsRates, parseAddress } from '@/lib/shippo';
 import { decrementStock, LOW_STOCK_THRESHOLD } from '@/lib/stock';
 
@@ -119,6 +119,11 @@ export async function POST(req: NextRequest) {
     quantity,
   } = meta;
 
+  // Orders placed before products had names carry no slug, and all of those
+  // were Kineticube — so an unknown slug falls back rather than failing a
+  // paid order we already have the money for.
+  const product = productOrDefault(meta.product);
+
   let labelUrl: string | null = null;
   let trackingNumber: string | null = null;
   let trackingUrlProvider: string | null = null;
@@ -129,8 +134,8 @@ export async function POST(req: NextRequest) {
   // Runs before the label work so it happens even if Shippo or the printer
   // fails — the packs are sold either way. The duplicate guard above is what
   // keeps a redelivered event from decrementing twice.
-  const soldQty = normalizeQuantity(quantity ?? 1) ?? 1;
-  const remainingStock = await decrementStock(soldQty);
+  const soldQty = normalizeQuantityFor(product, quantity ?? 1) ?? 1;
+  const remainingStock = await decrementStock(soldQty, product);
 
   /** Buy a label for `rate`. Returns true on success. */
   async function purchaseLabel(rate: string): Promise<boolean> {
@@ -177,14 +182,14 @@ export async function POST(req: NextRequest) {
       state: ship_to_state,
       zip: ship_to_zip,
     });
-    const qty = normalizeQuantity(quantity ?? 1);
+    const qty = normalizeQuantityFor(product, quantity ?? 1);
 
     if (!address || qty === null) {
       errors.push('Cannot re-quote: the address stored on the order is unusable.');
       return '';
     }
     try {
-      const rates = await fetchUspsRates(address, qty, RATE_TIMEOUT_MS);
+      const rates = await fetchUspsRates(address, qty, product, RATE_TIMEOUT_MS);
       const recovered = rates.find(r => r.token === ship_service_token) ?? rates[0];
       if (!recovered) {
         errors.push('Re-quote returned no USPS rates — buy this label manually.');

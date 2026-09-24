@@ -317,7 +317,7 @@ export default function TrainingPage() {
             One pack. Six shots. Zero excuses.
           </p>
           <Link
-            href="/shop"
+            href="/kineticube/shop"
             className="inline-block bg-[#f05a1a] hover:bg-[#c44a12] text-white font-[family-name:var(--font-display)] font-black tracking-widest text-lg px-12 py-4 transition-colors"
           >
             GET YOUR KINETICUBES →
