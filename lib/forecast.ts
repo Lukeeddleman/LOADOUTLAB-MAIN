@@ -72,6 +72,21 @@ export interface Forecast {
     monthlyTarget: number;
     status: 'unknown' | 'ok' | 'order-soon' | 'order-now' | 'sold-out';
   };
+  /**
+   * Whether the print farm can outrun demand. Null throughout when Luke hasn't
+   * given a capacity — an unknown ceiling is not a ceiling of zero.
+   */
+  capacity: {
+    perDay: number;
+    /** False means sales are outrunning production: a throughput problem. */
+    keepingUp: boolean | null;
+    /** Spare packs per day at the planning rate. Negative means a shortfall. */
+    headroomPerDay: number | null;
+    /** Share of the farm's output already spoken for, 0–1+. */
+    utilization: number | null;
+    /** Printing days needed to rebuild from the trigger to a full cushion. */
+    daysToRebuild: number | null;
+  };
   confidence: { level: 'low' | 'medium' | 'good'; reasons: string[] };
   daily: DailyPoint[];
 }
@@ -161,6 +176,8 @@ export interface ForecastInput {
   stock: number | null;
   leadTimeDays: number;
   safetyDays: number;
+  /** Packs per day the farm can produce. 0 or omitted means "not known". */
+  dailyCapacityPacks?: number;
   timeZone: string;
   /** Overridable so tests don't depend on the clock. */
   now?: Date;
@@ -171,6 +188,7 @@ export function buildForecast({
   stock,
   leadTimeDays,
   safetyDays,
+  dailyCapacityPacks = 0,
   timeZone,
   now = new Date(),
 }: ForecastInput): Forecast {
@@ -253,6 +271,17 @@ export function buildForecast({
     else status = 'ok';
   }
 
+  // Capacity is judged against the same cautious rate used for planning, so a
+  // shop that is only just keeping up doesn't read as comfortable.
+  const hasCapacity = dailyCapacityPacks > 0;
+  const capacity: Forecast['capacity'] = {
+    perDay: dailyCapacityPacks,
+    keepingUp: hasCapacity ? dailyCapacityPacks >= planningRate : null,
+    headroomPerDay: hasCapacity ? round(dailyCapacityPacks - planningRate) : null,
+    utilization: hasCapacity ? round(planningRate / dailyCapacityPacks, 3) : null,
+    daysToRebuild: hasCapacity ? Math.ceil(reorderPoint / dailyCapacityPacks) : null,
+  };
+
   const reasons: string[] = [];
   if (historyDays < 14) {
     reasons.push(`Only ${historyDays} day${historyDays === 1 ? '' : 's'} of sales history.`);
@@ -314,6 +343,7 @@ export function buildForecast({
       monthlyTarget: Math.ceil(planningRate * 30),
       status,
     },
+    capacity,
     confidence: { level, reasons },
     daily,
   };

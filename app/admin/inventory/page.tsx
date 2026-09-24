@@ -71,6 +71,7 @@ export default function InventoryPage() {
   const [showTable, setShowTable] = useState(false);
   const [leadDraft, setLeadDraft] = useState('');
   const [safetyDraft, setSafetyDraft] = useState('');
+  const [capacityDraft, setCapacityDraft] = useState('');
   const [savingPlan, setSavingPlan] = useState(false);
 
   // Failures are collected into `message` and applied in `finally` rather than
@@ -105,6 +106,9 @@ export default function InventoryPage() {
       setPlanning(data.planning);
       setLeadDraft(String(data.planning.leadTimeDays));
       setSafetyDraft(String(data.planning.safetyDays));
+      setCapacityDraft(
+        data.planning.dailyCapacityPacks ? String(data.planning.dailyCapacityPacks) : '',
+      );
       setMeta({ assumed: data.assumedQuantityOrders ?? 0, truncated: Boolean(data.truncated) });
     } finally {
       setError(message);
@@ -124,7 +128,13 @@ export default function InventoryPage() {
       const res = await fetch('/api/admin/sales', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ leadTimeDays: Number(leadDraft), safetyDays: Number(safetyDraft) }),
+        body: JSON.stringify({
+          leadTimeDays: Number(leadDraft),
+          safetyDays: Number(safetyDraft),
+          // Blank means "not known", which the forecast treats as no ceiling
+          // rather than a ceiling of zero.
+          dailyCapacityPacks: capacityDraft.trim() === '' ? 0 : Number(capacityDraft),
+        }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Could not save.');
@@ -179,7 +189,7 @@ export default function InventoryPage() {
     );
   }
 
-  const { totals, windows, trend, projection, plan, confidence, daily } = forecast;
+  const { totals, windows, trend, projection, plan, capacity, confidence, daily } = forecast;
   const status = STATUS[plan.status];
   const chart = daily.slice(-CHART_DAYS);
   const peak = Math.max(1, ...chart.map(d => d.packs));
@@ -237,15 +247,15 @@ export default function InventoryPage() {
               : plan.status === 'sold-out'
                 ? 'You are sold out. Every visitor is seeing the restock signup instead of a buy button.'
                 : plan.status === 'order-now'
-                  ? `Start a print run. At your current pace you'd drop below a safe cushion before a new batch is ready.`
+                  ? `Start a print run. At your current pace you'd drop below a safe cushion before replacements are ready to ship.`
                   : plan.status === 'order-soon'
-                    ? `You're above the trigger, but not by much. Plan your next batch.`
+                    ? `You're above the trigger, but not by much. Line up your next print run.`
                     : `Stock is comfortable. Next print run isn't urgent.`}
           </p>
           {plan.status !== 'unknown' && !noSales && (
             <p className="text-gray-500 text-sm mt-2">
-              You have {forecast.stock} packs. The trigger is {plan.reorderPoint} — that&apos;s{' '}
-              {plan.leadTimeDays} days to make a batch plus {plan.safetyDays} days of cushion, at{' '}
+              You have {forecast.stock} packs. The trigger is {plan.reorderPoint} — that&apos;s a{' '}
+              {plan.leadTimeDays}-day turnaround plus {plan.safetyDays} days of cushion, at{' '}
               {Math.max(projection.pacePerDay, projection.growthPerDay)} packs a day.
             </p>
           )}
@@ -427,16 +437,73 @@ export default function InventoryPage() {
           </div>
         </div>
 
+        {/* Throughput is the real ceiling on this business: a sales rate above
+            what the farm can print cannot be fixed by reordering earlier. */}
+        <div className={`${cardClass} mb-8`}>
+          <p className={labelClass}>CAN YOU KEEP UP?</p>
+          {capacity.perDay === 0 ? (
+            <p className="text-gray-400 text-sm mt-2 leading-snug">
+              Tell me how many packs a day you can make when you&apos;re printing — the field below
+              — and this will tell you whether your sales pace is something you can actually supply.
+              It&apos;s the difference between needing to print sooner and needing to print faster.
+            </p>
+          ) : (
+            (() => {
+              const util = capacity.utilization ?? 0;
+              const tone =
+                util > 1 ? STATUS['order-now'] : util >= 0.75 ? STATUS['order-soon'] : STATUS.ok;
+              return (
+                <>
+                  <p className="text-white text-lg mt-2 leading-snug">
+                    {capacity.keepingUp
+                      ? `Yes. You can make ${capacity.perDay} packs a day and demand needs about ${Math.max(projection.pacePerDay, projection.growthPerDay)} — ${capacity.headroomPerDay} a day spare.`
+                      : `No. Demand needs about ${Math.max(projection.pacePerDay, projection.growthPerDay)} packs a day and you can make ${capacity.perDay}. That's a production problem, not a stocking one — printing earlier won't close a gap this size.`}
+                  </p>
+
+                  <div className="mt-4">
+                    <div className="flex justify-between text-xs mb-1">
+                      <span
+                        className="font-[family-name:var(--font-display)] tracking-label"
+                        style={{ color: tone.color }}
+                      >
+                        {tone.mark} {Math.round(util * 100)}% OF YOUR OUTPUT SPOKEN FOR
+                      </span>
+                      <span className="text-gray-600">{capacity.perDay}/day capacity</span>
+                    </div>
+                    <div className="h-2 bg-[#0d0d0d] border border-[#1f1f1f] overflow-hidden">
+                      <div
+                        className="h-full"
+                        style={{
+                          width: `${Math.min(100, util * 100)}%`,
+                          background: tone.color,
+                          borderRadius: '0 2px 2px 0',
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  {capacity.daysToRebuild !== null && (
+                    <p className="text-gray-600 text-xs mt-3 leading-snug">
+                      Printing flat out, rebuilding from the {plan.reorderPoint}-pack trigger back
+                      to a full cushion is about {capacity.daysToRebuild} day
+                      {capacity.daysToRebuild === 1 ? '' : 's'} at the bench.
+                    </p>
+                  )}
+                </>
+              );
+            })()
+          )}
+        </div>
+
         <form onSubmit={savePlanning} className={`${cardClass} mb-8`}>
           <p className={labelClass}>PLANNING ASSUMPTIONS</p>
           <p className="text-gray-500 text-sm mb-4 mt-1">
-            These two numbers decide when the alert above fires. Adjust them as you learn your real
-            pace.
+            These decide when the alert above fires. Adjust them as you learn your real pace.
           </p>
-          <div className="grid sm:grid-cols-[1fr_1fr_auto] gap-3 items-end">
+          <div className="grid sm:grid-cols-[1fr_1fr_1fr_auto] gap-3 items-end">
             <div>
               <label className={labelClass} htmlFor="lead">
-                DAYS TO MAKE A BATCH
+                TURNAROUND — DAYS
               </label>
               <input
                 id="lead"
@@ -448,10 +515,13 @@ export default function InventoryPage() {
                 value={leadDraft}
                 onChange={e => setLeadDraft(e.target.value)}
               />
+              <p className="text-gray-700 text-xs mt-1 leading-snug">
+                From deciding you need more, to boxed and ready. Not the time to make one pack.
+              </p>
             </div>
             <div>
               <label className={labelClass} htmlFor="safety">
-                DAYS OF CUSHION
+                CUSHION — DAYS
               </label>
               <input
                 id="safety"
@@ -463,6 +533,28 @@ export default function InventoryPage() {
                 value={safetyDraft}
                 onChange={e => setSafetyDraft(e.target.value)}
               />
+              <p className="text-gray-700 text-xs mt-1 leading-snug">
+                Spare days of stock held back against a sudden rush.
+              </p>
+            </div>
+            <div>
+              <label className={labelClass} htmlFor="capacity">
+                PACKS YOU CAN MAKE / DAY
+              </label>
+              <input
+                id="capacity"
+                type="number"
+                min={0}
+                max={1000}
+                step={0.5}
+                placeholder="not set"
+                className={inputClass}
+                value={capacityDraft}
+                onChange={e => setCapacityDraft(e.target.value)}
+              />
+              <p className="text-gray-700 text-xs mt-1 leading-snug">
+                Full packs a day when you&apos;re actively printing. Leave blank if unsure.
+              </p>
             </div>
             <button
               type="submit"

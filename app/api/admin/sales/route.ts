@@ -46,6 +46,7 @@ export async function GET(req: NextRequest) {
       stock,
       leadTimeDays: planning.leadTimeDays,
       safetyDays: planning.safetyDays,
+      dailyCapacityPacks: planning.dailyCapacityPacks,
       timeZone,
     });
 
