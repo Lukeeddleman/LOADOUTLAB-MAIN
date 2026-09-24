@@ -37,7 +37,7 @@ const BORDER = '#1f1f1f';
  * sitting on a colour it can't be read against.
  */
 export function restockHtml(baseUrl: string): string {
-  const shopUrl = `${baseUrl}/shop`;
+  const shopUrl = `${baseUrl}/kineticube/shop`;
   const businessLocation = process.env.BUSINESS_ADDRESS || 'Kyle, Texas, USA';
 
   return `<!DOCTYPE html>
@@ -186,7 +186,7 @@ in small runs right here in Texas.
 You asked us to let you know the moment they were back. Batches are small
 and they tend to move quickly.
 
-Grab a pack: ${baseUrl}/shop
+Grab a pack: ${baseUrl}/kineticube/shop
 
 Made in the USA · Ships USPS from Texas · Non-explosive
 
