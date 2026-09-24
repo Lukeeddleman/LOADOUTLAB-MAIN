@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { supportTo } from '@/lib/email-config';
 import ContactForm from './ContactForm';
 
 export const metadata: Metadata = {
@@ -38,10 +39,10 @@ export default function ContactPage() {
                 <div>
                   <p className="text-gray-500 text-xs font-[family-name:var(--font-display)] tracking-label mb-1">EMAIL</p>
                   <a
-                    href="mailto:support@kineticube.shop"
+                    href={`mailto:${supportTo()}`}
                     className="text-white text-sm hover:text-[#f05a1a] transition-colors"
                   >
-                    support@kineticube.shop
+                    {supportTo()}
                   </a>
                 </div>
               </div>

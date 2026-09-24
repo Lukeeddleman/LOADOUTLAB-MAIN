@@ -1,3 +1,4 @@
+import { shipFromEmail } from './email-config';
 import { DEFAULT_PRODUCT, type Product } from './products';
 
 export interface ShippingAddress {
@@ -126,7 +127,7 @@ export async function fetchUspsRates(
       country: 'US',
       // USPS returns rates happily without these, then refuses the actual
       // label purchase with "address_from.email must not be empty".
-      email: process.env.SHIP_FROM_EMAIL || 'support@kineticube.shop',
+      email: shipFromEmail(),
       ...(process.env.SHIP_FROM_PHONE ? { phone: process.env.SHIP_FROM_PHONE } : {}),
     },
     address_to: {

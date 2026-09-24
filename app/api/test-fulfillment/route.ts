@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { ordersFrom, shipFromEmail, supportTo } from '@/lib/email-config';
 import { DEFAULT_PRODUCT } from '@/lib/products';
 
 // ── DEV ONLY ─────────────────────────────────────────────────────────────────
@@ -27,7 +28,7 @@ const SHIP_FROM = {
   zip: process.env.SHIP_FROM_ZIP ?? '78640',
   country: 'US',
   // USPS refuses the label purchase without a sender email.
-  email: process.env.SHIP_FROM_EMAIL || 'support@kineticube.shop',
+  email: shipFromEmail(),
 };
 
 export async function POST() {
@@ -127,8 +128,8 @@ export async function POST() {
     // ── 4. Send order email ────────────────────────────────────────────────
     log.push('Sending order email...');
     await resend.emails.send({
-      from: 'Kineticube Orders <noreply@kineticube.shop>',
-      to: 'support@kineticube.shop',
+      from: ordersFrom(),
+      to: supportTo(),
       subject: `[TEST] New Order — ${STUB_ADDRESS.name} · 1 6-pack`,
       html: `
         <div style="font-family:sans-serif;max-width:600px;color:#222;">

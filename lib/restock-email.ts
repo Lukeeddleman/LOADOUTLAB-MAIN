@@ -1,5 +1,5 @@
 import { Resend } from 'resend';
-import { restockFrom } from './email-config';
+import { restockFrom, supportTo } from './email-config';
 
 /** Resend accepts at most 100 messages per batch request. */
 const BATCH_SIZE = 100;
@@ -226,7 +226,7 @@ export async function sendRestockEmails(emails: string[]): Promise<RestockSendRe
         chunk.map(to => ({
           from: restockFrom(),
           // A monitored reply address is both useful and a trust signal.
-          replyTo: 'support@kineticube.shop',
+          replyTo: supportTo(),
           to,
           subject: RESTOCK_SUBJECT,
           html,
@@ -235,7 +235,7 @@ export async function sendRestockEmails(emails: string[]): Promise<RestockSendRe
           // opt-out more favourably than mail that doesn't, even when the list
           // is one-shot like this one.
           headers: {
-            'List-Unsubscribe': '<mailto:support@kineticube.shop?subject=unsubscribe>',
+            'List-Unsubscribe': `<mailto:${supportTo()}?subject=unsubscribe>`,
           },
         })),
       );

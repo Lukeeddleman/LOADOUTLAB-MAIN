@@ -1,38 +1,44 @@
 /**
  * Where transactional email comes from and goes to.
  *
- * These were hardcoded to @kineticube.shop, which ties every order
- * notification to that one domain staying healthy. When the .shop registry went
- * down in September 2026 the shop was unreachable *and* order emails had
- * nowhere to land — a sale could have completed with no way to hear about it.
+ * Originally hardcoded to @kineticube.shop, which tied every order
+ * notification to one domain staying healthy. The .shop registry then went
+ * down twice in a day, and the GoDaddy mailboxes on that domain expired — so
+ * the addresses moved to loadoutlab.com, and every one of them is overridable
+ * from the Vercel dashboard without a code change.
  *
- * Now they're environment variables, defaulting to the original addresses so
- * nothing changes until Luke sets them. That means a working inbox can be
- * swapped in from the Vercel dashboard in a minute, without a code change,
- * which is exactly what an outage leaves time for.
+ * SUPPORT_EMAIL is the one that matters most: if it points somewhere Luke
+ * isn't reading, sales happen silently. Set it to a mailbox that definitely
+ * works, even a personal one, rather than a nice-looking address that doesn't
+ * exist yet.
  */
 
-/** Sender for order and restock email. Must be a domain verified in Resend. */
-export function ordersFrom(): string {
-  return process.env.ORDERS_FROM_EMAIL || 'Kineticube Orders <noreply@kineticube.shop>';
+/** The address customers are shown and can reply to. */
+export function supportTo(): string {
+  return process.env.SUPPORT_EMAIL || 'support@loadoutlab.com';
 }
 
-/** Sender for the restock announcement. */
+/** Sender for order notifications. Domain must be verified in Resend. */
+export function ordersFrom(): string {
+  return process.env.ORDERS_FROM_EMAIL || 'Loadout Lab Orders <noreply@loadoutlab.com>';
+}
+
+/** Sender for the back-in-stock announcement. */
 export function restockFrom(): string {
-  return process.env.RESTOCK_FROM_EMAIL || 'Kineticube <noreply@kineticube.shop>';
+  return process.env.RESTOCK_FROM_EMAIL || 'Kineticube <noreply@loadoutlab.com>';
 }
 
 /** Sender for contact-form relays. */
 export function contactFrom(): string {
-  return process.env.CONTACT_FROM_EMAIL || 'Kineticube Contact Form <noreply@kineticube.shop>';
+  return process.env.CONTACT_FROM_EMAIL || 'Loadout Lab Contact Form <noreply@loadoutlab.com>';
 }
 
 /**
- * Where Luke actually reads his mail.
+ * Sender address on the shipping label.
  *
- * This is the important one: if it points at a domain that's down, he stops
- * hearing about paid orders. Set SUPPORT_EMAIL to any working address.
+ * USPS refuses to issue a label when this is empty, and it is where undelivered
+ * post comes back to — so it should stay a real, monitored mailbox.
  */
-export function supportTo(): string {
-  return process.env.SUPPORT_EMAIL || 'support@kineticube.shop';
+export function shipFromEmail(): string {
+  return process.env.SHIP_FROM_EMAIL || supportTo();
 }

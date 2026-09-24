@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { supportTo } from '@/lib/email-config';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -19,10 +20,10 @@ export default function SuccessPage() {
         <p className="text-gray-600 text-sm mb-10">
           Questions?{' '}
           <a
-            href="mailto:support@kineticube.shop"
+            href={`mailto:${supportTo()}`}
             className="text-[#f05a1a] hover:underline"
           >
-            support@kineticube.shop
+            {supportTo()}
           </a>
         </p>
         <Link
