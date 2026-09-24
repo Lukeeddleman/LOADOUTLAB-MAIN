@@ -43,14 +43,18 @@ export default function Home() {
           <p className="text-xs font-[family-name:var(--font-display)] tracking-label text-[#f05a1a] mb-4">
             AUSTIN, TEXAS
           </p>
+          {/* Benefit first, category second. The headline sells the reason to
+              care; the line under it says plainly what we sell, so nobody has
+              to guess — and so the words people actually search for are on the
+              page. */}
           <h1 className="font-[family-name:var(--font-display)] font-black text-5xl md:text-7xl tracking-normal leading-[0.95] max-w-4xl">
-            SHOOTING ACCESSORIES
+            MAKE EVERY
             <br />
-            AND TRAINING AIDS
+            ROUND COUNT
           </h1>
-          {/* TODO(luke): replace with your own positioning line. */}
           <p className="text-gray-400 text-lg md:text-xl mt-6 max-w-2xl leading-relaxed">
-            Gear built to make range time count — designed, made and shipped by us.
+            Firearms training accessories for every level — whether it&apos;s your first box of
+            ammo or your ten-thousandth.
           </p>
         </div>
       </section>
@@ -120,10 +124,11 @@ export default function Home() {
           </div>
           <div>
             <h3 className="font-[family-name:var(--font-display)] font-bold tracking-label text-sm text-[#f05a1a]">
-              BUILT FROM RANGE TIME
+              USEFUL AT ANY LEVEL
             </h3>
             <p className="text-gray-400 mt-3 leading-relaxed">
-              Every product starts as something we wanted for our own practice and could not buy.
+              Gear that earns its place in the bag whether you are learning the fundamentals or
+              drilling something you have done ten thousand times.
             </p>
           </div>
           <div>

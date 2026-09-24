@@ -1,5 +1,15 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+
+// The product keeps its own search identity rather than inheriting the parent
+// brand's — people look for "reactive targets", not for Loadout Lab.
+export const metadata: Metadata = {
+  title: "Kineticube™ — Reactive Powder Targets",
+  description:
+    "Stick it. Shoot it. See it. Kineticube reactive powder targets give you instant colorful visual feedback on every shot. Made in the USA.",
+  keywords: ["reactive targets", "powder targets", "shooting targets", "range targets", "kineticube"],
+};
 
 const features = [
   {
