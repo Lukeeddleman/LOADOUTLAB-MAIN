@@ -111,7 +111,11 @@ export default function Home() {
             </div>
             {/* Benefit first, category second: the headline sells the reason to
                 care, the line under it says plainly what we sell. */}
-            <h1 className="font-[family-name:var(--font-display)] font-black text-6xl md:text-7xl lg:text-8xl 2xl:text-9xl leading-none tracking-normal mb-6 2xl:mb-8">
+            {/* Stops at 8xl rather than 9xl. "ROUND COUNT." is a far wider line
+                than Kineticube's "SHOOT IT.", and at 9xl it fills 98% of this
+                column — which makes the identical hero image beside it read as
+                undersized. Same trick, different words, different ceiling. */}
+            <h1 className="font-[family-name:var(--font-display)] font-black text-6xl md:text-7xl lg:text-8xl leading-none tracking-normal mb-6 2xl:mb-8">
               MAKE EVERY<br />
               ROUND <span className="text-[#f05a1a]">COUNT.</span>
             </h1>
@@ -154,6 +158,9 @@ export default function Home() {
                 alt={`${featured.name} — ${featured.tagline}`}
                 width={480}
                 height={480}
+                // Identical to /kineticube on purpose. 480 is exactly half of
+                // the 960px source, so it renders pixel-sharp at 2x; going
+                // bigger softens it until someone exports a larger hero shot.
                 className="relative drop-shadow-2xl rounded-lg w-full max-w-[480px] 2xl:max-w-[640px]"
                 priority
               />
