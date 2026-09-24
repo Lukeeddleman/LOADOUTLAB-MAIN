@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import Link from 'next/link';
 import { LOW_STOCK_THRESHOLD } from '@/lib/stock-config';
 
 const inputClass =
@@ -156,12 +157,20 @@ export default function AdminPage() {
             </h1>
             <p className="text-gray-500 text-sm mt-1">Packs on hand</p>
           </div>
-          <button
-            onClick={logout}
-            className="text-gray-600 hover:text-white text-xs font-[family-name:var(--font-display)] tracking-label"
-          >
-            SIGN OUT
-          </button>
+          <div className="flex items-center gap-5">
+            <Link
+              href="/admin/inventory"
+              className="text-[#f05a1a] hover:underline text-xs font-[family-name:var(--font-display)] tracking-label"
+            >
+              INVENTORY →
+            </Link>
+            <button
+              onClick={logout}
+              className="text-gray-600 hover:text-white text-xs font-[family-name:var(--font-display)] tracking-label"
+            >
+              SIGN OUT
+            </button>
+          </div>
         </div>
       </div>
 
