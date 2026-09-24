@@ -5,17 +5,24 @@ import { useState } from "react";
 /**
  * Site-wide navigation for Loadout Lab.
  *
- * Deliberately short. This is the parent brand's nav, so it carries the company
- * and its products — not one product's internal sections. Kineticube's own
- * links (how it works, the drills) live on the Kineticube pages, which keeps
- * this from growing a row per product as the shelf fills up.
+ * Carries the product's own sections — how it works, the drills — alongside the
+ * company links. With one product that's the right call: a two-item nav reads
+ * as an unfinished site, and burying the drills page costs a genuinely useful
+ * page its only route in.
+ *
+ * When a second product lands, the product-specific entries below move to a
+ * sub-nav on the product pages, or this grows a row per product and stops
+ * working. `links` is the seam for that.
  *
  * The wordmark is text rather than the logo image: the logo has the words built
  * into it at 3:2, so at navbar height they'd be too small to read.
  */
 
 const links = [
+  { href: "/", label: "HOME" },
   { href: "/kineticube", label: "KINETICUBE" },
+  { href: "/kineticube#how-it-works", label: "HOW IT WORKS" },
+  { href: "/kineticube/training", label: "TRAINING" },
   { href: "/contact", label: "CONTACT" },
 ];
 
@@ -32,7 +39,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-6 2xl:gap-8">
           {links.map(link => (
             <Link
               key={link.href}
