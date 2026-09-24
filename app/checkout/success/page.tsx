@@ -26,7 +26,7 @@ export default function SuccessPage() {
           </a>
         </p>
         <Link
-          href="/shop"
+          href="/kineticube/shop"
           className="inline-block bg-[#f05a1a] hover:bg-[#c44a12] text-white font-[family-name:var(--font-display)] font-black tracking-widest px-10 py-4 transition-colors"
         >
           BACK TO SHOP

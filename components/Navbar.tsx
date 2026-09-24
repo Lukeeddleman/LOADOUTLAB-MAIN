@@ -24,20 +24,20 @@ export default function Navbar() {
           <Link href="/" className="text-sm font-[family-name:var(--font-display)] font-semibold tracking-label text-gray-300 hover:text-white transition-colors">
             HOME
           </Link>
-          <Link href="/shop" className="text-sm font-[family-name:var(--font-display)] font-semibold tracking-label text-gray-300 hover:text-white transition-colors">
+          <Link href="/kineticube/shop" className="text-sm font-[family-name:var(--font-display)] font-semibold tracking-label text-gray-300 hover:text-white transition-colors">
             SHOP
           </Link>
-          <Link href="/#how-it-works" className="text-sm font-[family-name:var(--font-display)] font-semibold tracking-label text-gray-300 hover:text-white transition-colors">
+          <Link href="/kineticube#how-it-works" className="text-sm font-[family-name:var(--font-display)] font-semibold tracking-label text-gray-300 hover:text-white transition-colors">
             HOW IT WORKS
           </Link>
-          <Link href="/training" className="text-sm font-[family-name:var(--font-display)] font-semibold tracking-label text-gray-300 hover:text-white transition-colors">
+          <Link href="/kineticube/training" className="text-sm font-[family-name:var(--font-display)] font-semibold tracking-label text-gray-300 hover:text-white transition-colors">
             TRAINING
           </Link>
           <Link href="/contact" className="text-sm font-[family-name:var(--font-display)] font-semibold tracking-label text-gray-300 hover:text-white transition-colors">
             CONTACT
           </Link>
           <Link
-            href="/shop"
+            href="/kineticube/shop"
             className="bg-[#f05a1a] hover:bg-[#c44a12] text-white font-[family-name:var(--font-display)] font-bold tracking-label text-sm px-5 py-2 transition-colors"
           >
             BUY NOW
@@ -68,11 +68,11 @@ export default function Navbar() {
       {open && (
         <div className="md:hidden bg-[#1a1a1a] border-t border-[#2a2a2a] px-4 py-4 flex flex-col gap-4">
           <Link href="/" onClick={() => setOpen(false)} className="font-[family-name:var(--font-display)] tracking-widest text-gray-300 hover:text-white">HOME</Link>
-          <Link href="/shop" onClick={() => setOpen(false)} className="font-[family-name:var(--font-display)] tracking-widest text-gray-300 hover:text-white">SHOP</Link>
-          <Link href="/#how-it-works" onClick={() => setOpen(false)} className="font-[family-name:var(--font-display)] tracking-widest text-gray-300 hover:text-white">HOW IT WORKS</Link>
-          <Link href="/training" onClick={() => setOpen(false)} className="font-[family-name:var(--font-display)] tracking-widest text-gray-300 hover:text-white">TRAINING</Link>
+          <Link href="/kineticube/shop" onClick={() => setOpen(false)} className="font-[family-name:var(--font-display)] tracking-widest text-gray-300 hover:text-white">SHOP</Link>
+          <Link href="/kineticube#how-it-works" onClick={() => setOpen(false)} className="font-[family-name:var(--font-display)] tracking-widest text-gray-300 hover:text-white">HOW IT WORKS</Link>
+          <Link href="/kineticube/training" onClick={() => setOpen(false)} className="font-[family-name:var(--font-display)] tracking-widest text-gray-300 hover:text-white">TRAINING</Link>
           <Link href="/contact" onClick={() => setOpen(false)} className="font-[family-name:var(--font-display)] tracking-widest text-gray-300 hover:text-white">CONTACT</Link>
-          <Link href="/shop" onClick={() => setOpen(false)} className="bg-[#f05a1a] text-white font-[family-name:var(--font-display)] font-bold tracking-widest text-center py-2">BUY NOW</Link>
+          <Link href="/kineticube/shop" onClick={() => setOpen(false)} className="bg-[#f05a1a] text-white font-[family-name:var(--font-display)] font-bold tracking-widest text-center py-2">BUY NOW</Link>
         </div>
       )}
     </nav>
