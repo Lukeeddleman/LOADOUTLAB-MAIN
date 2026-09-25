@@ -1,5 +1,6 @@
 import { Resend } from 'resend';
 import { restockFrom, supportTo } from './email-config';
+import { siteUrl } from './site';
 
 /** Resend accepts at most 100 messages per batch request. */
 const BATCH_SIZE = 100;
@@ -148,9 +149,9 @@ export function restockHtml(baseUrl: string): string {
     <tr>
       <td bgcolor="${PANEL}" style="background-color:${PANEL};padding:20px 32px 26px 32px;">
         <p style="margin:0 0 10px 0;font-family:${BODY_FONT};font-size:12px;line-height:1.6;color:#8a8a8a;">
-          You're receiving this because you signed up on
-          <a href="${shopUrl}" style="color:${ORANGE};text-decoration:none;">kineticube.shop</a>
-          to be told when Kineticube came back in stock. This is a one-time notice —
+          You're receiving this because you asked
+          <a href="${shopUrl}" style="color:${ORANGE};text-decoration:none;">Loadout Lab</a>
+          to tell you when Kineticube came back in stock. This is a one-time notice —
           you've already been removed from that list and won't get anything else from us.
         </p>
         <p style="margin:0 0 10px 0;font-family:${BODY_FONT};font-size:12px;line-height:1.6;color:#8a8a8a;">
@@ -191,8 +192,8 @@ Grab a pack: ${baseUrl}/kineticube/shop
 Made in the USA · Ships USPS from Texas · Non-explosive
 
 ---
-You're receiving this because you signed up on kineticube.shop to be told
-when Kineticube came back in stock. This is a one-time notice — you've
+You're receiving this because you asked Loadout Lab to tell you when
+Kineticube came back in stock. This is a one-time notice — you've
 already been removed from that list and won't get anything else from us.
 
 Questions? Just reply to this email.
@@ -211,7 +212,7 @@ export async function sendRestockEmails(emails: string[]): Promise<RestockSendRe
   if (emails.length === 0) return { sent: 0, failed: 0 };
 
   const resend = new Resend(process.env.RESEND_API_KEY);
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kineticube.shop';
+  const baseUrl = siteUrl();
   const html = restockHtml(baseUrl);
   const text = restockText(baseUrl);
 

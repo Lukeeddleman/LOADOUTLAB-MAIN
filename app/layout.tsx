@@ -3,6 +3,7 @@ import { Barlow_Condensed, Barlow } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { siteUrl } from "@/lib/site";
 
 const barlowCondensed = Barlow_Condensed({
   variable: "--font-display",
@@ -39,7 +40,7 @@ export const metadata: Metadata = {
     description: "Make every round count. Training accessories for every level.",
     // Follows whatever domain the shop is actually served on, so moving it
     // doesn't leave link previews pointing at the old address.
-    url: process.env.NEXT_PUBLIC_BASE_URL || "https://loadoutlab.com",
+    url: siteUrl(),
     siteName: "Loadout Lab",
     type: "website",
   },

@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
           <hr style="border-color: #eee; margin: 16px 0;" />
           <p style="white-space: pre-wrap;">${escapeHtml(message)}</p>
           <hr style="border-color: #eee; margin-top: 24px;" />
-          <p style="color: #999; font-size: 12px;">Sent via kineticube.shop contact form. Hit reply to respond directly.</p>
+          <p style="color: #999; font-size: 12px;">Sent via loadoutlab.com contact form. Hit reply to respond directly.</p>
         </div>
       `,
     });

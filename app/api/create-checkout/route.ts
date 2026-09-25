@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { normalizeQuantityFor, productOrDefault } from '@/lib/products';
 import { getStock } from '@/lib/stock';
+import { siteUrl } from '@/lib/site';
 import {
   fallbackShippingCents,
   fetchUspsRates,
@@ -92,7 +93,7 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://kineticube.shop';
+  const baseUrl = siteUrl();
 
   const shippingCents = rate
     ? Math.round(parseFloat(rate.amount) * 100)

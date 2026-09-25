@@ -51,7 +51,7 @@ These are deliberate business decisions, not oversights.
 
 ## Deployment config that isn't in this repo
 
-**The Stripe webhook endpoint must be `https://www.kineticube.shop/api/webhook`.**
+**The Stripe webhook endpoint must be `https://www.loadoutlab.com/api/webhook`.**
 The apex domain 308-redirects to `www`, and Stripe does not follow redirects —
 it marks the delivery failed. This cost an afternoon.
 
@@ -64,7 +64,8 @@ Changes only take effect on a new deployment:
 | `SHIPPO_API_KEY` | |
 | `SHIP_FROM_STREET1`, `SHIP_FROM_ZIP` | |
 | `SHIP_FROM_PHONE` | **Required** — USPS refuses labels without it |
-| `SHIP_FROM_EMAIL` | Optional, defaults to support@kineticube.shop |
+| `SALES_EMAIL` | **Where order notifications land.** Must be a mailbox that is actually read — a sale nobody hears about is worse than an unbranded address. `SUPPORT_EMAIL` is still honoured as the old name for it. |
+| `SHIP_FROM_EMAIL` | Optional, defaults to `SALES_EMAIL` |
 | `PRINTNODE_API_KEY`, `PRINTNODE_PRINTER_ID` | |
 | `RESEND_API_KEY` | |
 | `ADMIN_SECRET` | Password for `/admin` |

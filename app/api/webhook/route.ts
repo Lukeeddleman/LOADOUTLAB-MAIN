@@ -253,7 +253,7 @@ export async function POST(req: NextRequest) {
           title: `Kineticube — ${ship_to_name}`,
           contentType: 'pdf_base64',
           content: pdfBase64,
-          source: 'kineticube.shop',
+          source: 'loadoutlab.com',
         }),
         signal: AbortSignal.timeout(PRINTNODE_TIMEOUT_MS),
       });

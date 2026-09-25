@@ -207,7 +207,7 @@ if (guarded) {
 
 console.log(`\n${bold('Now check:')}`);
 console.log('  • Exactly ONE label came out of your printer');
-console.log('  • ONE order email arrived at support@kineticube.shop');
+console.log('  • ONE order email arrived at your SALES_EMAIL inbox');
 console.log(dim('\n  (The label is a Shippo test label — not valid postage, costs nothing.)\n'));
 
 if (!guarded) process.exit(1);
