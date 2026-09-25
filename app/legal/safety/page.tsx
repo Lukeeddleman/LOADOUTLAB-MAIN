@@ -109,7 +109,7 @@ export default function SafetyAndUse() {
       <p>
         Anyone under 18 using these must be directly supervised by a responsible
         adult, and must be wearing eye protection. Our products are sold to adults
-        only — see our <Link href="/legal/terms">Terms of Sale</Link>.
+        only — see our <Link href="/legal/terms">Terms of Service</Link>.
       </p>
 
       <h2>Storage, cleanup and disposal</h2>
@@ -137,7 +137,7 @@ export default function SafetyAndUse() {
         By using our products you accept the risks of shooting, and you are
         responsible for using them safely and lawfully — including obeying your
         range&rsquo;s rules and the laws where you are. Our{" "}
-        <Link href="/legal/terms">Terms of Sale</Link> set out the limits of our
+        <Link href="/legal/terms">Terms of Service</Link> set out the limits of our
         liability.
       </p>
     </>

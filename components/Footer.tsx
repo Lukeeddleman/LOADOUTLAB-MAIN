@@ -77,7 +77,7 @@ export default function Footer() {
               {[
                 { label: "Shipping", href: "/legal/shipping" },
                 { label: "Returns & Refunds", href: "/legal/returns" },
-                { label: "Terms of Sale", href: "/legal/terms" },
+                { label: "Terms of Service", href: "/legal/terms" },
                 { label: "Privacy", href: "/legal/privacy" },
                 { label: "Safety & Use", href: "/legal/safety" },
               ].map((l) => (

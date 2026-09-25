@@ -3,15 +3,15 @@ import Link from "next/link";
 import { BUSINESS, legalEmail, postalAddress } from "@/lib/legal";
 
 export const metadata: Metadata = {
-  title: "Terms of Sale",
+  title: "Terms of Service",
   description:
-    "The terms that apply when you buy from Loadout Lab: ordering, pricing, payment, warranty and liability.",
+    "The terms that apply when you buy from Loadout Lab or use this site: ordering, pricing, payment, warranty, acceptable use and liability.",
 };
 
-export default function TermsOfSale() {
+export default function TermsOfService() {
   return (
     <>
-      <h1>Terms of Sale</h1>
+      <h1>Terms of Service</h1>
       <p className="lede">
         These terms apply when you buy from {BUSINESS.name} or use this site. They
         are written to be read, not to be skimmed past — if anything here is
@@ -110,10 +110,45 @@ export default function TermsOfSale() {
 
       <h2>Your use of this site</h2>
       <p>
-        The content here — text, photographs, video, logos and the Kineticube name —
-        belongs to us. You are welcome to share links, post photos of your own
-        targets, and review us honestly. You may not resell our product as your own,
-        copy the site, or use our branding in a way that suggests we endorse you.
+        You are welcome to browse, buy, share links, post photos of your own
+        targets, and review us honestly — good or bad.
+      </p>
+      <p>What we ask you not to do:</p>
+      <ul>
+        <li>
+          Interfere with the site — scraping it at volume, probing it for
+          weaknesses, or trying to reach parts of it that are not public.
+        </li>
+        <li>
+          Order under a false identity, with someone else&rsquo;s payment method,
+          or for resale as your own product.
+        </li>
+        <li>
+          Use the site for anything unlawful, or to arrange a purchase that would
+          be unlawful where you are.
+        </li>
+      </ul>
+      <p>
+        If someone does any of that, we may refuse or cancel their orders and
+        decline to serve them in future. We would rather never need this
+        paragraph.
+      </p>
+
+      <h3>Our content</h3>
+      <p>
+        The text, photographs, video, logos, and the Kineticube and Loadout Lab
+        names belong to us. Sharing and linking is fine; copying the site, passing
+        our photography off as your own, or using our branding in a way that
+        suggests we endorse you is not.
+      </p>
+
+      <h3>The site itself</h3>
+      <p>
+        We work to keep the site accurate and available, but we do not guarantee
+        either. Stock counts, shipping estimates and prices can change, and
+        occasionally something breaks. If an error on the site affects your order,
+        tell us and we will put it right — that is a stronger promise than most
+        uptime language, and an easier one to keep.
       </p>
 
       <h2>Governing law</h2>

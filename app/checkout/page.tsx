@@ -376,7 +376,7 @@ export default function CheckoutPage() {
             <p className="text-gray-600 text-xs text-center mt-3 leading-relaxed">
               By placing this order you agree to our{' '}
               <Link href="/legal/terms" className="text-gray-400 hover:text-[#f05a1a] underline underline-offset-2 transition-colors">
-                Terms of Sale
+                Terms of Service
               </Link>
               ,{' '}
               <Link href="/legal/returns" className="text-gray-400 hover:text-[#f05a1a] underline underline-offset-2 transition-colors">

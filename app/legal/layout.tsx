@@ -13,7 +13,7 @@ import { BUSINESS } from "@/lib/legal";
 const policies = [
   { href: "/legal/shipping", label: "Shipping" },
   { href: "/legal/returns", label: "Returns & Refunds" },
-  { href: "/legal/terms", label: "Terms of Sale" },
+  { href: "/legal/terms", label: "Terms of Service" },
   { href: "/legal/privacy", label: "Privacy" },
   { href: "/legal/safety", label: "Safety & Use" },
 ];
