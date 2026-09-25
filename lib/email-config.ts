@@ -13,9 +13,15 @@
  * exist yet.
  */
 
-/** The address customers are shown and can reply to. */
+/**
+ * The address customers are shown, and where order notifications land.
+ *
+ * SALES_EMAIL is the name to use. SUPPORT_EMAIL is still honoured because it
+ * was the original name and may already be set in Vercel — dropping it would
+ * silently send order notifications back to the default.
+ */
 export function supportTo(): string {
-  return process.env.SUPPORT_EMAIL || 'support@loadoutlab.com';
+  return process.env.SALES_EMAIL || process.env.SUPPORT_EMAIL || 'sales@loadoutlab.com';
 }
 
 /** Sender for order notifications. Domain must be verified in Resend. */
