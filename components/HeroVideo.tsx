@@ -15,10 +15,17 @@
  * At 390x900 only ~24% of the frame survives, and the cube itself spans
  * ~25%, so it gets clipped on both sides.
  *
- * Capping the video to a 3:4 box lets ~42% of the frame through, which
- * clears the cube with room to spare. It stays full-bleed horizontally, so
- * it still reads as footage rather than a letterboxed panel, and the black
- * above and below is invisible against black-background footage.
+ * Capping the video to a 2:3 box lets ~37.5% of the frame through. It stays
+ * full-bleed horizontally, so it still reads as footage rather than a
+ * letterboxed panel, and the black above and below is invisible against
+ * black-background footage.
+ *
+ * 2:3 is close to the ceiling, not a taste call. Sampling the clip, the
+ * widest a cube ever reaches is 36.5% of the frame width from centre — so
+ * below about 601px of box height the cube starts getting clipped again,
+ * which is the bug this was fixing in the first place. Anything taller than
+ * 2:3 buys a bigger picture by re-breaking it. If this still reads small,
+ * the fix is a tighter re-crop of the source, not a taller box.
  *
  * Desktop is unaffected: from `md` up the box is wide enough that cover
  * shows the whole frame anyway.
@@ -34,7 +41,7 @@
  */
 export default function HeroVideo() {
   // Shared so the still fallback crops identically to the video it replaces.
-  const fit = "w-full object-cover aspect-[3/4] md:aspect-auto md:h-full";
+  const fit = "w-full object-cover aspect-[2/3] md:aspect-auto md:h-full";
 
   return (
     <div
