@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer className="bg-[#0a0a0a] border-t border-[#1a1a1a] mt-auto">
       <div className="max-w-[1440px] mx-auto px-6 py-12 2xl:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-3">
@@ -17,7 +17,7 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-gray-500 text-sm leading-relaxed">
-              Firearms training accessories built to get more out of every range trip. Designed and made in Austin, Texas.
+              Firearms training accessories built to get more out of every range trip. Designed and made in Kyle, Texas.
             </p>
           </div>
 
@@ -64,6 +64,27 @@ export default function Footer() {
                   >
                     {s.label}
                   </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          {/* Legal */}
+          <div>
+            <h4 className="font-[family-name:var(--font-display)] font-bold tracking-label text-[#f05a1a] mb-3 text-sm">
+              LEGAL
+            </h4>
+            <ul className="space-y-2">
+              {[
+                { label: "Shipping", href: "/legal/shipping" },
+                { label: "Returns & Refunds", href: "/legal/returns" },
+                { label: "Terms of Sale", href: "/legal/terms" },
+                { label: "Privacy", href: "/legal/privacy" },
+                { label: "Safety & Use", href: "/legal/safety" },
+              ].map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} className="text-gray-400 hover:text-white text-sm transition-colors">
+                    {l.label}
+                  </Link>
                 </li>
               ))}
             </ul>

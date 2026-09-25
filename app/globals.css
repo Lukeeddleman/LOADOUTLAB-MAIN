@@ -84,3 +84,111 @@ body {
     animation: none;
   }
 }
+
+/* ── Policy pages ─────────────────────────────────────────────────────────
+   Shared typography for /legal/*, so the five policies stay identical
+   without each page carrying its own copy of a long class list. Body text
+   here is lighter than the marketing copy elsewhere on the site: these are
+   pages people read a paragraph of to answer one question, usually when
+   something has already gone wrong. */
+.legal-prose h1 {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 900;
+  font-size: clamp(2.25rem, 6vw, 3.25rem);
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  margin-bottom: 0.5rem;
+}
+
+.legal-prose .lede {
+  color: #9a9a9a;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  margin-bottom: 2.5rem;
+}
+
+.legal-prose h2 {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 800;
+  font-size: 1.4rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin-top: 2.75rem;
+  margin-bottom: 0.9rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #1f1f1f;
+}
+
+.legal-prose h2:first-of-type {
+  margin-top: 2rem;
+}
+
+.legal-prose h3 {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  color: #f05a1a;
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.legal-prose p,
+.legal-prose li {
+  color: #b4b4b4;
+  line-height: 1.8;
+}
+
+.legal-prose p {
+  margin-bottom: 1.1rem;
+}
+
+.legal-prose ul {
+  list-style: none;
+  margin: 0 0 1.25rem 0;
+  padding: 0;
+}
+
+.legal-prose li {
+  position: relative;
+  padding-left: 1.4rem;
+  margin-bottom: 0.6rem;
+}
+
+.legal-prose li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 6px;
+  height: 6px;
+  background: #f05a1a;
+}
+
+.legal-prose strong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.legal-prose a {
+  color: #f05a1a;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(240, 90, 26, 0.35);
+}
+
+.legal-prose a:hover {
+  border-bottom-color: #f05a1a;
+}
+
+/* Pulled-out warning, used on the safety page. */
+.legal-prose .callout {
+  border-left: 3px solid #f05a1a;
+  background: #141414;
+  padding: 1.1rem 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.legal-prose .callout p:last-child {
+  margin-bottom: 0;
+}

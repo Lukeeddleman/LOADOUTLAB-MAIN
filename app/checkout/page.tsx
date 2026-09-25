@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { productOrDefault } from '@/lib/products';
 
 const US_STATES = [
@@ -367,6 +368,25 @@ export default function CheckoutPage() {
             </button>
             <p className="text-gray-700 text-xs text-center mt-3">
               Secure checkout powered by Stripe
+            </p>
+            {/* Shown at the point of payment, not buried in the footer: this is
+                the wording Stripe looks for as evidence when defending a
+                dispute, and it only counts if the customer saw it before
+                paying. */}
+            <p className="text-gray-600 text-xs text-center mt-3 leading-relaxed">
+              By placing this order you agree to our{' '}
+              <Link href="/legal/terms" className="text-gray-400 hover:text-[#f05a1a] underline underline-offset-2 transition-colors">
+                Terms of Sale
+              </Link>
+              ,{' '}
+              <Link href="/legal/returns" className="text-gray-400 hover:text-[#f05a1a] underline underline-offset-2 transition-colors">
+                Refund Policy
+              </Link>{' '}
+              and{' '}
+              <Link href="/legal/safety" className="text-gray-400 hover:text-[#f05a1a] underline underline-offset-2 transition-colors">
+                Safety &amp; Use
+              </Link>{' '}
+              guidance, and confirm you are 18 or older.
             </p>
           </div>
         )}

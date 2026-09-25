@@ -1,6 +1,7 @@
 import { Resend } from 'resend';
 import { restockFrom, supportTo } from './email-config';
 import { siteUrl } from './site';
+import { postalAddress } from './legal';
 
 /** Resend accepts at most 100 messages per batch request. */
 const BATCH_SIZE = 100;
@@ -39,7 +40,7 @@ const BORDER = '#1f1f1f';
  */
 export function restockHtml(baseUrl: string): string {
   const shopUrl = `${baseUrl}/kineticube/shop`;
-  const businessLocation = process.env.BUSINESS_ADDRESS || 'Kyle, Texas, USA';
+  const businessLocation = process.env.BUSINESS_ADDRESS || postalAddress();
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -175,7 +176,7 @@ export function restockHtml(baseUrl: string): string {
 
 /** Plain-text alternative. Its absence is itself a spam signal. */
 export function restockText(baseUrl: string): string {
-  const businessLocation = process.env.BUSINESS_ADDRESS || 'Kyle, Texas, USA';
+  const businessLocation = process.env.BUSINESS_ADDRESS || postalAddress();
   return `KINETICUBE — STICK IT. SHOOT IT. SEE IT.
 
 BACK IN STOCK
