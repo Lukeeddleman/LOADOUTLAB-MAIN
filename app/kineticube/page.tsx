@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import VideoBackdrop from "@/components/VideoBackdrop";
+import HeroVideo from "@/components/HeroVideo";
 
 // The product keeps its own search identity rather than inheriting the parent
 // brand's — people look for "reactive targets", not for Loadout Lab.
@@ -179,13 +179,13 @@ const surfaces = [
 export default function Home() {
   return (
     <>
-      <VideoBackdrop />
-
       {/* ─── HERO ─── */}
       {/* Full-bleed video rather than the split text/image layout the parent
           brand's homepage uses. Sharing that layout made this page read as a
           second copy of the homepage instead of the product's own front door. */}
       <section className="relative min-h-[92vh] flex items-center justify-center overflow-hidden">
+        <HeroVideo />
+
         {/* Scrim. Darkest at the top so the sticky navbar has something solid
             to sit against, lightest through the middle where the powder burst
             happens, then settling into the page colour so the video doesn't
@@ -257,7 +257,7 @@ export default function Home() {
       </section>
 
       {/* ─── TRAINING CALLOUT ─── */}
-      <section className="bg-[#111111]/[0.88] border-y border-[#1a1a1a] relative overflow-hidden">
+      <section className="bg-[#111111] border-y border-[#1a1a1a] relative overflow-hidden">
         <div className="absolute inset-0 bg-[#f05a1a] opacity-[0.03] blur-[80px] pointer-events-none" />
         <div className="max-w-[1440px] mx-auto px-6 py-20 2xl:py-28">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -310,7 +310,7 @@ export default function Home() {
       </section>
 
       {/* ─── FEATURES ─── */}
-      <section className="py-32 2xl:py-44 bg-[#0d0d0d]/[0.88] relative">
+      <section className="py-32 2xl:py-44 bg-[#0d0d0d] relative">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#f05a1a]/40 to-transparent" />
         <div className="max-w-[1440px] mx-auto px-6">
           <div className="text-center mb-20">
@@ -340,7 +340,7 @@ export default function Home() {
       </section>
 
       {/* ─── HOW IT WORKS ─── */}
-      <section id="how-it-works" className="py-32 2xl:py-44 bg-[#111111]/[0.88] relative">
+      <section id="how-it-works" className="py-32 2xl:py-44 bg-[#111111] relative">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#f05a1a]/40 to-transparent" />
         <div className="max-w-[1440px] mx-auto px-6">
           <div className="text-center mb-20">
@@ -379,7 +379,7 @@ export default function Home() {
       </section>
 
       {/* ─── STICKS ANYWHERE ─── */}
-      <section className="py-32 2xl:py-44 bg-[#0d0d0d]/[0.88] relative">
+      <section className="py-32 2xl:py-44 bg-[#0d0d0d] relative">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#f05a1a]/40 to-transparent" />
         <div className="max-w-[1440px] mx-auto px-6">
           <div className="text-center mb-20">
@@ -409,7 +409,7 @@ export default function Home() {
       </section>
 
       {/* ─── CTA ─── */}
-      <section className="py-40 2xl:py-56 bg-gradient-to-b from-[#1a0a00]/90 to-[#0d0d0d]/[0.92] relative overflow-hidden">
+      <section className="py-40 2xl:py-56 bg-gradient-to-b from-[#1a0a00] to-[#0d0d0d] relative overflow-hidden">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#f05a1a]/40 to-transparent" />
         <div className="absolute inset-0 bg-[#f05a1a] opacity-5 blur-[80px]" />
         <div className="relative max-w-3xl mx-auto px-6 text-center">

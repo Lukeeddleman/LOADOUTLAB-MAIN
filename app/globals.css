@@ -50,11 +50,11 @@ body {
   animation: float 3s ease-in-out infinite;
 }
 
-/* ── Background video ─────────────────────────────────────────────────────
-   A page-length video is exactly the kind of motion that triggers vestibular
-   symptoms, so anyone who has asked their OS for reduced motion gets the
-   poster frame instead. The wrapper carries that frame as a background
-   image, so hiding the video here leaves a still shot rather than a hole. */
+/* ── Hero video ───────────────────────────────────────────────────────────
+   Looping footage of things detonating is exactly the kind of motion that
+   triggers vestibular symptoms, so anyone who has asked their OS for reduced
+   motion gets the poster frame instead. The wrapper carries that frame as a
+   background image, so hiding the video here leaves a still shot, not a hole. */
 @media (prefers-reduced-motion: reduce) {
   .video-backdrop {
     display: none;
