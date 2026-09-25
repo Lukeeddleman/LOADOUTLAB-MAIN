@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
+import VideoBackdrop from "@/components/VideoBackdrop";
 
 // The product keeps its own search identity rather than inheriting the parent
 // brand's — people look for "reactive targets", not for Loadout Lab.
@@ -179,71 +179,85 @@ const surfaces = [
 export default function Home() {
   return (
     <>
-      {/* ─── HERO ─── */}
-      <section className="relative min-h-[92vh] flex items-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0d0d0d] via-[#0d0d0d] to-[#1a0a00]" />
-        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-[#f05a1a] opacity-10 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#f05a1a] opacity-5 rounded-full blur-[100px] pointer-events-none" />
+      <VideoBackdrop />
 
-        <div className="relative max-w-[1440px] mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 2xl:gap-20 items-center py-20 2xl:py-32">
-          <div>
-            <div className="inline-block bg-[#f05a1a]/10 border border-[#f05a1a]/30 text-[#f05a1a] text-xs font-[family-name:var(--font-display)] tracking-label px-3 py-1 mb-6">
-              REACTIVE POWDER TARGETS
-            </div>
-            <h1 className="font-[family-name:var(--font-display)] font-black text-6xl md:text-7xl lg:text-8xl 2xl:text-9xl leading-none tracking-normal mb-6 2xl:mb-8">
-              STICK IT.<br />
-              SHOOT IT.<br />
-              <span className="text-[#f05a1a]">SEE IT.</span>
-            </h1>
-            <p className="text-gray-400 text-lg 2xl:text-xl mb-8 max-w-md 2xl:max-w-xl leading-relaxed">
-              Kineticube reactive powder targets explode in a burst of color on impact —
-              giving you instant visual feedback on every single shot.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Link
-                href="/kineticube/shop"
-                className="btn-orange bg-[#f05a1a] hover:bg-[#c44a12] text-white font-[family-name:var(--font-display)] font-extrabold tracking-widest text-lg px-8 py-4 transition-colors"
-              >
-                SHOP NOW — 6-PACK
-              </Link>
-              <Link
-                href="#how-it-works"
-                className="border border-gray-600 hover:border-white text-gray-300 hover:text-white font-[family-name:var(--font-display)] font-bold tracking-widest text-lg px-8 py-4 transition-colors"
-              >
-                HOW IT WORKS
-              </Link>
-            </div>
-            <div className="flex items-center gap-6 mt-8">
-              <div className="flex items-center gap-2 text-sm text-gray-500">
-                <span className="text-[#f05a1a]">✓</span> Made in the USA
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-500">
-                <span className="text-[#f05a1a]">✓</span> Safe &amp; Non-Explosive
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-500">
-                <span className="text-[#f05a1a]">✓</span> Eco-Friendly
-              </div>
-            </div>
+      {/* ─── HERO ─── */}
+      {/* Full-bleed video rather than the split text/image layout the parent
+          brand's homepage uses. Sharing that layout made this page read as a
+          second copy of the homepage instead of the product's own front door. */}
+      <section className="relative min-h-[92vh] flex items-center justify-center overflow-hidden">
+        {/* Scrim. Darkest at the top so the sticky navbar has something solid
+            to sit against, lightest through the middle where the powder burst
+            happens, then settling into the page colour so the video doesn't
+            end on a hard horizontal line. */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/45 to-[#0d0d0d] pointer-events-none" />
+
+        <div className="relative max-w-3xl 2xl:max-w-4xl mx-auto px-6 py-24 2xl:py-32 text-center">
+          <div className="inline-block bg-[#f05a1a]/10 border border-[#f05a1a]/30 text-[#f05a1a] text-xs font-[family-name:var(--font-display)] tracking-label px-3 py-1 mb-6 backdrop-blur-sm">
+            REACTIVE POWDER TARGETS
           </div>
 
-          <div className="flex justify-center lg:justify-end">
-            <div className="relative float">
-              <div className="absolute inset-0 bg-[#f05a1a] opacity-20 blur-3xl rounded-full scale-75" />
-              <Image
-                src="/product-hero.webp"
-                alt="Kineticube reactive powder targets exploding with color"
-                width={480}
-                height={480}
-                className="relative drop-shadow-2xl rounded-lg w-full max-w-[480px] 2xl:max-w-[640px]"
-                priority
-              />
+          {/* The drop shadows are not decoration. The burst behind this type
+              goes from near-black to bright powder within a few frames, so
+              without them the headline drops out every time a cube blows. */}
+          <h1 className="font-[family-name:var(--font-display)] font-black text-6xl sm:text-7xl md:text-8xl 2xl:text-9xl leading-none tracking-normal mb-5 drop-shadow-[0_2px_30px_rgba(0,0,0,0.9)]">
+            KINETICUBE
+          </h1>
+
+          <p className="font-[family-name:var(--font-display)] font-bold text-2xl md:text-3xl 2xl:text-4xl tracking-widest text-gray-200 mb-7 drop-shadow-[0_2px_16px_rgba(0,0,0,0.9)]">
+            STICK IT. SHOOT IT. <span className="text-[#f05a1a]">SEE IT.</span>
+          </p>
+
+          <p className="text-gray-300 text-lg 2xl:text-xl mb-10 max-w-xl mx-auto leading-relaxed drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)]">
+            Reactive powder targets that burst into color on impact — instant
+            visual feedback on every single shot.
+          </p>
+
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Link
+              href="/kineticube/shop"
+              className="btn-orange bg-[#f05a1a] hover:bg-[#c44a12] text-white font-[family-name:var(--font-display)] font-extrabold tracking-widest text-lg px-8 py-4 transition-colors"
+            >
+              SHOP NOW — 6-PACK
+            </Link>
+            <Link
+              href="#how-it-works"
+              className="border border-gray-500 hover:border-white bg-black/30 backdrop-blur-sm text-gray-200 hover:text-white font-[family-name:var(--font-display)] font-bold tracking-widest text-lg px-8 py-4 transition-colors"
+            >
+              HOW IT WORKS
+            </Link>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-6 mt-8">
+            <div className="flex items-center gap-2 text-sm text-gray-400">
+              <span className="text-[#f05a1a]">✓</span> Made in the USA
+            </div>
+            <div className="flex items-center gap-2 text-sm text-gray-400">
+              <span className="text-[#f05a1a]">✓</span> Safe &amp; Non-Explosive
+            </div>
+            <div className="flex items-center gap-2 text-sm text-gray-400">
+              <span className="text-[#f05a1a]">✓</span> Eco-Friendly
             </div>
           </div>
         </div>
+
+        {/* Scroll cue. A full-height hero gives no hint that anything follows
+            it, and on a phone the fold lands right under the buttons. */}
+        <Link
+          href="#how-it-works"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-400 hover:text-white transition-colors"
+        >
+          <span className="font-[family-name:var(--font-display)] font-bold tracking-label text-xs">
+            SHOP BELOW
+          </span>
+          <svg className="scroll-cue" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </Link>
       </section>
 
       {/* ─── TRAINING CALLOUT ─── */}
-      <section className="bg-[#111111] border-y border-[#1a1a1a] relative overflow-hidden">
+      <section className="bg-[#111111]/[0.88] border-y border-[#1a1a1a] relative overflow-hidden">
         <div className="absolute inset-0 bg-[#f05a1a] opacity-[0.03] blur-[80px] pointer-events-none" />
         <div className="max-w-[1440px] mx-auto px-6 py-20 2xl:py-28">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -296,7 +310,7 @@ export default function Home() {
       </section>
 
       {/* ─── FEATURES ─── */}
-      <section className="py-32 2xl:py-44 bg-[#0d0d0d] relative">
+      <section className="py-32 2xl:py-44 bg-[#0d0d0d]/[0.88] relative">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#f05a1a]/40 to-transparent" />
         <div className="max-w-[1440px] mx-auto px-6">
           <div className="text-center mb-20">
@@ -326,7 +340,7 @@ export default function Home() {
       </section>
 
       {/* ─── HOW IT WORKS ─── */}
-      <section id="how-it-works" className="py-32 2xl:py-44 bg-[#111111] relative">
+      <section id="how-it-works" className="py-32 2xl:py-44 bg-[#111111]/[0.88] relative">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#f05a1a]/40 to-transparent" />
         <div className="max-w-[1440px] mx-auto px-6">
           <div className="text-center mb-20">
@@ -365,7 +379,7 @@ export default function Home() {
       </section>
 
       {/* ─── STICKS ANYWHERE ─── */}
-      <section className="py-32 2xl:py-44 bg-[#0d0d0d] relative">
+      <section className="py-32 2xl:py-44 bg-[#0d0d0d]/[0.88] relative">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#f05a1a]/40 to-transparent" />
         <div className="max-w-[1440px] mx-auto px-6">
           <div className="text-center mb-20">
@@ -395,7 +409,7 @@ export default function Home() {
       </section>
 
       {/* ─── CTA ─── */}
-      <section className="py-40 2xl:py-56 bg-gradient-to-b from-[#1a0a00] to-[#0d0d0d] relative overflow-hidden">
+      <section className="py-40 2xl:py-56 bg-gradient-to-b from-[#1a0a00]/90 to-[#0d0d0d]/[0.92] relative overflow-hidden">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#f05a1a]/40 to-transparent" />
         <div className="absolute inset-0 bg-[#f05a1a] opacity-5 blur-[80px]" />
         <div className="relative max-w-3xl mx-auto px-6 text-center">
