@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { siteUrl } from "@/lib/site";
+import { Analytics } from "@vercel/analytics/next";
 
 const barlowCondensed = Barlow_Condensed({
   variable: "--font-display",
@@ -57,6 +58,7 @@ export default function RootLayout({
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
