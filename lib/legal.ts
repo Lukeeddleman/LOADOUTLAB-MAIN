@@ -39,7 +39,7 @@ export const BUSINESS = {
   zip: '',
 
   /** Shown on every policy so customers can see how current they are. */
-  effectiveDate: 'September 24, 2026',
+  effectiveDate: 'October 20, 2026',
 
   /** Days after delivery a return can be started. */
   returnWindowDays: 30,
