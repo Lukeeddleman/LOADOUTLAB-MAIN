@@ -2,19 +2,44 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { escapeHtml } from '@/lib/html';
 import { contactFrom, supportTo } from '@/lib/email-config';
+import { verifyContactToken } from '@/lib/turnstile';
 
 export async function POST(req: NextRequest) {
   try {
-    // Constructed per-request: the Resend client throws on a missing key, and
-    // at module scope that turns a missing build-time env var into a failed
-    // deploy rather than a runtime error.
-    const resend = new Resend(process.env.RESEND_API_KEY);
-
-    const body = await req.json();
-    const { name, email, subject, message } = body;
+    let body;
+    try {
+      body = await req.json();
+    } catch {
+      return NextResponse.json({ error: 'Invalid form submission.' }, { status: 400 });
+    }
+    if (!body || typeof body !== 'object' || Array.isArray(body)) {
+      return NextResponse.json({ error: 'Invalid form submission.' }, { status: 400 });
+    }
+    const { website, turnstileToken } = body;
+    if (website !== undefined && typeof website !== 'string') {
+      return NextResponse.json({ error: 'Invalid form submission.' }, { status: 400 });
+    }
+    if (website?.trim()) {
+      // Quietly discard the spam without calling Cloudflare or sending an email.
+      return NextResponse.json({ success: true });
+    }
+    if (typeof body.name !== 'string' || typeof body.email !== 'string' ||
+        typeof body.message !== 'string' ||
+        (body.subject !== undefined && typeof body.subject !== 'string')) {
+      return NextResponse.json({ error: 'Invalid form submission.' }, { status: 400 });
+    }
+    const name = body.name.trim();
+    const email = body.email.trim();
+    const subject = (body.subject || '').trim();
+    const message = body.message.trim();
 
     if (!name || !email || !message) {
       return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
+    }
+
+    if (name.length > 120 || email.length > 254 || subject.length > 120 ||
+        message.length > 10000 || /[\r\n]/.test(name + subject)) {
+      return NextResponse.json({ error: 'Please check the length and format of your message.' }, { status: 400 });
     }
 
     // Basic email validation
@@ -23,7 +48,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid email address.' }, { status: 400 });
     }
 
-    await resend.emails.send({
+    const verification = await verifyContactToken(turnstileToken);
+    if (verification === 'invalid') {
+      return NextResponse.json({ error: 'Please complete the spam verification and try again.' }, { status: 403 });
+    }
+    if (verification === 'unavailable') {
+      return NextResponse.json({ error: 'Spam verification is temporarily unavailable. Please try again or email us directly.' }, { status: 503 });
+    }
+
+    // Construct only after validation; no email is attempted for rejected submissions.
+    const resend = new Resend(process.env.RESEND_API_KEY);
+    const result = await resend.emails.send({
       from: contactFrom(),
       to: supportTo(),
       replyTo: email,
@@ -44,9 +79,14 @@ export async function POST(req: NextRequest) {
       `,
     });
 
+    if (result.error) {
+      console.error('[contact] Email provider rejected the message.');
+      return NextResponse.json({ error: 'Your message could not be sent. Please try again or email us directly.' }, { status: 502 });
+    }
+
     return NextResponse.json({ success: true });
-  } catch (err) {
-    console.error('[contact]', err);
+  } catch {
+    console.error('[contact] Contact submission failed.');
     return NextResponse.json({ error: 'Something went wrong. Please try again.' }, { status: 500 });
   }
 }

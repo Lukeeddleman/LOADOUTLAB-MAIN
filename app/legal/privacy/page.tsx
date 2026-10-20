@@ -55,6 +55,11 @@ export default function PrivacyPolicy() {
         Your name, email, subject and message are emailed straight to us. They are
         not saved to any database — they live in our inbox like any other email.
       </p>
+      <p>
+        Cloudflare Turnstile checks browser and network signals to help prevent
+        automated spam. Your browser connects to Cloudflare for this check, and
+        our server verifies the resulting token before sending your message.
+      </p>
 
       <h3>Automatically</h3>
       <p>
@@ -101,6 +106,10 @@ export default function PrivacyPolicy() {
         </li>
         <li>
           <strong>Vercel</strong> — hosts the site and serves these pages.
+        </li>
+        <li>
+          <strong>Cloudflare Turnstile</strong> — protects the contact form from
+          spam using browser and network information, including your IP address.
         </li>
       </ul>
       <p>
