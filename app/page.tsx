@@ -31,11 +31,11 @@ const products: Product[] = [
     name: "Kineticube",
     tagline: "Reactive Powder Targets",
     blurb:
-      "One-inch targets that burst into colour on impact. Stick them to steel, paper, wood or cardboard and read every hit from the firing line — no walking downrange to check holes, no guessing which round went where.",
+      "One-inch targets that burst into color on impact. Stick them to steel, paper, wood or cardboard and read every hit from the firing line — no walking downrange to check holes, no guessing which round went where.",
     image: "/product-hero.webp",
     price: "$12.99",
     unit: "6-pack",
-    points: ["10 vivid colours", "Sticks to any clean surface", "Biodegradable PHA shell"],
+    points: ["6 vivid colors", "Sticks to any clean surface", "Biodegradable PHA shell"],
   },
 ];
 

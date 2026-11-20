@@ -18,7 +18,7 @@ const PRICE = PRODUCT.priceCents / 100;
 const perks = [
   "6 cubes per pack",
   "1 inch targets — built for precision",
-  "6 vivid powder colors — randomly assorted",
+  "6 vivid powder colors — one of each in every pack",
   "Color-matched corners so you always know what's inside",
   "Instant visual feedback on every shot",
   "3M adhesive — sticks to any surface",
@@ -114,21 +114,6 @@ export default async function ShopPage() {
               ))}
             </ul>
 
-            {/* Cartridge compatibility disclaimer */}
-            <div className="bg-[#1a1200] border border-yellow-600/40 px-4 py-4 mb-6">
-              <div className="flex items-start gap-3">
-                <span className="text-yellow-400 text-base mt-0.5">⚠️</span>
-                <div>
-                  <p className="text-yellow-400 font-[family-name:var(--font-display)] font-bold tracking-label text-xs mb-1">
-                    CARTRIDGE COMPATIBILITY
-                  </p>
-                  <p className="text-yellow-200/80 text-sm leading-relaxed">
-                    Kineticubes perform best with slower or heavier projectiles. High-velocity cartridges such as 5.56 NATO may require more than one impact for full powder release.
-                  </p>
-                </div>
-              </div>
-            </div>
-
             {/* Buy button */}
             {inStock ? (
               <>
@@ -166,12 +151,12 @@ export default async function ShopPage() {
             {/* Color info */}
             <div className="border-t border-[#1a1a1a] pt-6">
               <h3 className="font-[family-name:var(--font-display)] font-bold tracking-label text-sm text-gray-400 mb-3">
-                6 COLORS — RANDOMLY ASSORTED
+                6 COLORS — ONE OF EACH
               </h3>
               <p className="text-gray-500 text-sm leading-relaxed">
-                Every 6-pack contains a surprise mix of our 6 vivid powder colors.
-                Each cube&apos;s corners are color-matched to the powder inside — so you always
-                know what you&apos;re grabbing before you peel.
+                Every 6-pack contains one of each color — red, orange, yellow, green, blue,
+                and pink. Each cube&apos;s corners are color-matched to the powder inside —
+                so you always know what you&apos;re grabbing before you peel.
               </p>
             </div>
           </div>

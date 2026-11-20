@@ -117,11 +117,6 @@ const tips = [
     body: "Pistol: 5–15 yards is the sweet spot. Rifle/carbine: 10–50 yards. The further you go, the more honest the target gets. Start closer than you think you need to.",
   },
   {
-    icon: "⚠️",
-    title: "High-Velocity Cartridges",
-    body: "Kineticubes perform best with slower or heavier projectiles. High-velocity rounds like 5.56 NATO may pass through before the cube can fully react — you might need a second hit. This is physics, not a defect.",
-  },
-  {
     icon: "📐",
     title: "Surface Tips",
     body: "The 3M adhesive sticks best to smooth, flat, dry surfaces — cardboard, painted wood, steel plates, range barrels. Rough or wet surfaces reduce hold. Press firmly for 30 seconds after placing.",

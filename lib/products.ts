@@ -75,8 +75,8 @@ const kineticube: Product = {
   image: '/product-hero.webp',
   checkoutImage: '/product-red.jpg',
   blurb:
-    'One-inch targets that burst into colour on impact. Stick them to steel, paper, wood or cardboard and read every hit from the firing line — no walking downrange to check holes, no guessing which round went where.',
-  points: ['10 vivid colours', 'Sticks to any clean surface', 'Biodegradable PHA shell'],
+    'One-inch targets that burst into color on impact. Stick them to steel, paper, wood or cardboard and read every hit from the firing line — no walking downrange to check holes, no guessing which round went where.',
+  points: ['6 vivid colors', 'Sticks to any clean surface', 'Biodegradable PHA shell'],
 };
 
 export const PRODUCTS: Product[] = [kineticube];

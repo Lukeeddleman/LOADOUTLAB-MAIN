@@ -15,7 +15,7 @@ import type { PlanningSettings } from '@/lib/planning';
 
 // Validated against the #111111 card surface: the series hue passes every check
 // in the palette validator, and each status step passes lightness, chroma and
-// contrast. Status is never colour alone — every badge carries its own words.
+// contrast. Status is never color alone — every badge carries its own words.
 const SERIES = '#f05a1a';
 const STATUS: Record<Forecast['plan']['status'], { color: string; label: string; mark: string }> = {
   'sold-out': { color: '#f85149', label: 'SOLD OUT', mark: '■' },
@@ -233,7 +233,7 @@ export default function InventoryPage() {
       <div className="max-w-5xl mx-auto px-4 py-8">
         {error && <p className="text-red-400 text-xs mb-6">{error}</p>}
 
-        {/* The headline verdict. Colour is backed by words, never on its own. */}
+        {/* The headline verdict. Color is backed by words, never on its own. */}
         <div className="border-l-4 p-5 mb-8 bg-[#111111]" style={{ borderColor: status.color }}>
           <p
             className="font-[family-name:var(--font-display)] font-bold tracking-label text-sm"
