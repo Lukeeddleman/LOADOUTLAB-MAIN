@@ -55,7 +55,7 @@ export default function SafetyAndUse() {
 
       <h2>Eye protection is not optional</h2>
       <p>
-        These targets are designed to burst on impact and throw coloured powder.
+        These targets are designed to burst on impact and throw colored powder.
         <strong> Everyone on the firing line — shooters and spectators — must wear
         impact-rated eye protection</strong>, and hearing protection as normal.
       </p>

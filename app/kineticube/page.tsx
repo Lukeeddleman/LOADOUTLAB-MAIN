@@ -34,7 +34,7 @@ const features = [
       </svg>
     ),
     title: "Explosive Color",
-    desc: "10 vivid powder colors burst on impact. You'll see it from any distance.",
+    desc: "6 vivid powder colors burst on impact. You'll see it from any distance.",
   },
   {
     icon: (
@@ -188,7 +188,7 @@ export default function Home() {
 
         {/* Scrim. Darkest at the top so the sticky navbar has something solid
             to sit against, lightest through the middle where the powder burst
-            happens, then settling into the page colour so the video doesn't
+            happens, then settling into the page color so the video doesn't
             end on a hard horizontal line. */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/45 to-[#0d0d0d] pointer-events-none" />
 
@@ -417,7 +417,7 @@ export default function Home() {
             READY TO <span className="text-[#f05a1a]">SHOOT?</span>
           </h2>
           <p className="text-gray-400 mb-10 text-lg 2xl:text-xl leading-relaxed">
-            6-pack. 10 colors. 1 inch. Sticks anywhere. Explodes on impact.
+            6-pack. All 6 colors. 1 inch. Sticks anywhere. Explodes on impact.
           </p>
           <Link
             href="/kineticube/shop"

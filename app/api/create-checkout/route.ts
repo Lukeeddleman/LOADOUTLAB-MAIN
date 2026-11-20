@@ -132,7 +132,7 @@ export async function POST(req: NextRequest) {
           tax_behavior: 'exclusive',
           product_data: {
             name: `${product.name} — ${product.tagline} (${product.unitLabel})`,
-            description: '6 cubes · 6 vivid colors · randomly assorted · Made in the USA',
+            description: '6 cubes · one of each color · Made in the USA',
             // JPEG rather than the source .webp: Stripe's checkout renders this
             // as a product thumbnail and webp isn't reliable there.
             images: [`${baseUrl}${product.checkoutImage}`],

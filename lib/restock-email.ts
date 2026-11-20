@@ -36,7 +36,7 @@ const BORDER = '#1f1f1f';
  * card that carries its own background renders the same whatever surrounds it.
  * On Gmail that reads as a dark card on white; where the page background does
  * survive it's seamless. Both look deliberate, and no text is ever left
- * sitting on a colour it can't be read against.
+ * sitting on a color it can't be read against.
  */
 export function restockHtml(baseUrl: string): string {
   const shopUrl = `${baseUrl}/kineticube/shop`;
